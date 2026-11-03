@@ -99,7 +99,12 @@ Either way the result is recorded and the mission moves to the next bet.
 
 ## Deviations
 
-All recorded before any H2 data was generated.
+All recorded before any H2 evaluation data was seen.
+
+3. **Execution moved to GitHub Actions.** The first full run on Colab stopped during
+   tuning, after 8 of 140 jobs, for an undetermined reason. That runtime was also running
+   other work we do not own, at a load near 8 on 2 cores. Those 8 tuning rows are
+   discarded, and the run starts over on its own machine.
 
 1. **Power rule for an H2a kill.** UPGD's sigmoid normalisation keeps most gates near
    0.5. If the gate barely varies, `both_util` and `both_rand` are almost the same

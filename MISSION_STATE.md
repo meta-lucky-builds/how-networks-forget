@@ -3,9 +3,9 @@
 Durable state for a long-running research mission. Anyone resuming, human or
 agent, starts here, then reads `docs/CHARTER.md`.
 
-**Last heartbeat:** 2026-11-03T21:25Z
+**Last heartbeat:** 2026-11-03T22:00Z
 **Working branch:** `research/bio-to-ai`
-**Phase:** 3, H1 stopped on a negative result, H2 running
+**Phase:** 3, H1 stopped on a negative result, H2 running on GitHub Actions
 
 ## Standing instructions from the project owner
 
@@ -41,10 +41,13 @@ agent, starts here, then reads `docs/CHARTER.md`.
 
 ## In progress
 
-- H2 on Colab, in `/content/clu`: tests, then smoke, then the full run (about 2.5 h
-  by estimate, 2 workers). The runtime is ephemeral and the repo holds the only
-  durable copy of the code, so results must be copied back and committed. If the
-  runtime is lost, re-upload and rerun; results are deterministic.
+- H2 full run on GitHub Actions (`.github/workflows/h2.yml`). Results commit to
+  `results/h2_shared_state/`. If `summary.json` is absent after a run ends, edit
+  `.github/run-requests/h2` and push to resume from the committed checkpoint. Check
+  with `gh run list -R meta-lucky-builds/clu --workflow h2`.
+- **The Colab runtime is shared with work we do not own** (`experiments/thread_a.py`,
+  `mechinterp`), possibly another session of the owner's. Never kill those processes or
+  delete cells that are not ours. Use Colab only for small tests, and expect delays.
 
 ## Bets
 
