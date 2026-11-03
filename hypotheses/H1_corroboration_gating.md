@@ -130,4 +130,14 @@ the mission moves to the next bet.
 
 ## Deviations
 
-None yet.
+1. **Before any data was generated, Stage A.** The preregistration did not say how a
+   commit is applied. The first implementation used the slow tracking rate `alpha`,
+   which would make a failure uninterpretable, since a corroborated change would
+   still be absorbed slowly. `deferred` and `deferred_nocheck` both gain a tuned
+   `commit_alpha` in [alpha, 1]. The search budget stays at 30 configurations. This
+   favours the deferred family over `monotone` and `robust` by one extra parameter,
+   and should be remembered when reading a narrow win.
+2. **Stage A assumptions fixed in code.** Changepoint and outlier are independent
+   per step, so `bayes` has a fourth joint branch. `bayes` receives each context's
+   true (h, p). The `deferred_nocheck` gate clause requires a CI excluding 0, the
+   stricter reading; the laxer result is also reported.
