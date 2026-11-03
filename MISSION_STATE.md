@@ -22,6 +22,12 @@ agent, starts here, then reads `docs/CHARTER.md`.
 - Make small decisions autonomously; the owner is away. Act safely.
 - Resume automatically after usage limits, and use usage carefully without
   lowering quality.
+- Keep good context and usage habits. Adapt: refine or form new hypotheses and
+  approaches as evidence arrives, and do not stay in a local optimum when a line
+  is not yielding anything. In practice: keep several bets open, give each a
+  preset kill criterion, and record why any line was dropped.
+- Keep context small: subagents write detail to repo files and reply briefly;
+  this file is the summary a resume depends on.
 
 ## Done
 
