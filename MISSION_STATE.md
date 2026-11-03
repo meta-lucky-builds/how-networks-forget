@@ -3,7 +3,7 @@
 Durable state for a long-running research mission. Anyone resuming, human or
 agent, starts here, then reads `docs/CHARTER.md`.
 
-**Last heartbeat:** 2026-11-03T21:30Z
+**Last heartbeat:** 2026-11-03T21:25Z
 **Working branch:** `research/bio-to-ai`
 **Phase:** 3, H1 stopped on a negative result, H2 running
 
@@ -53,7 +53,7 @@ agent, starts here, then reads `docs/CHARTER.md`.
 | H1 | Commit surprising samples only after corroboration | **Stopped.** H1b (hedge predictions, defer weight commits) is parked in RESULT.md |
 | H2 | One multi-timescale state sets both protection and recycling (`synaptic.md` Exp 1, 2) | Running |
 | H3 | Gates must be self-generated, without task labels or blocks (`gating_metacognition.md` Exp 1) | Not started |
-| H4 | Replay dose set by relation to existing knowledge (`consolidation.md` E1, E2) | Not started |
+| H4 | Does schema consistency add anything beyond gradient interference? | Preregistered, not implemented; Colab is busy with H2 |
 
 Kill rules live in each preregistration. H1 failing its gate does not end the
 mission: record it and move to H2.
@@ -71,8 +71,12 @@ granularity is mixed. It remains an open test (`neuromodulation.md` Exp 2).
 
 1. Read H2 `summary.json`. Check `control_valid` and the manipulation check first,
    apply the power rule (`gate_std`), then record the verdict in `results/`.
-2. Meanwhile, preregister H3 or H4 with an analytic bound first (charter rule).
+2. Implement H4 with an Opus agent once usage allows, and run it after H2 frees the
+   runtime. H3 needs a GPU-scale network: find a CPU-sized form or a GPU runtime.
 3. Write `docs/MAPPINGS.md`, including negative results.
+
+Usage note: on 2026-11-03 the 5-hour window reached 66% about 75 minutes in, driven by
+five research agents and a large coordinator context. Wait cheaply while Colab runs.
 
 ## Execution notes
 
