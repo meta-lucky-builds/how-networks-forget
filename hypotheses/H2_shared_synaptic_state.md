@@ -99,4 +99,16 @@ Either way the result is recorded and the mission moves to the next bet.
 
 ## Deviations
 
-None yet.
+All recorded before any H2 data was generated.
+
+1. **Power rule for an H2a kill.** UPGD's sigmoid normalisation keeps most gates near
+   0.5. If the gate barely varies, `both_util` and `both_rand` are almost the same
+   treatment and matching them shows nothing. So if `gate_std` for `both_util` is below
+   0.05, an H2a kill is reported as uninformative rather than as a kill.
+2. **Assumptions fixed in code.** `both_rand` is yoked per step to the same-seed,
+   same-config `both_util` run, and the primary contrast uses `both_util`'s config. Its
+   own best config is a sensitivity check. Tuning streams of 40 tasks cannot hold a
+   gap of 40, so their repeats are all short-gap. Image pools for tuning and evaluation
+   are disjoint. Noise comes from a reused pool for speed: any one weight still sees
+   independent values across steps, but values are correlated across weights within a
+   refresh window.
