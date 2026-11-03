@@ -3,9 +3,9 @@
 Durable state for a long-running research mission. Anyone resuming, human or
 agent, starts here, then reads `docs/CHARTER.md`.
 
-**Last heartbeat:** 2026-11-04T00:00Z
+**Last heartbeat:** 2026-11-03T21:30Z
 **Working branch:** `research/bio-to-ai`
-**Phase:** 2, H1 Stage A running on Colab
+**Phase:** 3, H1 stopped on a negative result, H2 running
 
 ## Standing instructions from the project owner
 
@@ -34,21 +34,24 @@ agent, starts here, then reads `docs/CHARTER.md`.
 - Charter and protocol: `docs/CHARTER.md`
 - Literature notes: `docs/literature/` (four threads plus an adversarial prior-art
   check). Read depth is recorded per source; many primaries are abstract-level.
-- H1 preregistered: `hypotheses/H1_corroboration_gating.md`
-- H1 Stage A code at 14ec174. 39 tests pass on Colab.
+- H1 preregistered and run. **Negative: Stage A gate failed, H1 stopped.**
+  `results/h1_stage_a/RESULT.md`. Withholding on arrival costs about twice what
+  hedging costs under squared error. Search budget was not the cause.
+- H2 preregistered and implemented at 1274e77.
 
 ## In progress
 
-- H1 Stage A running on Colab, in `/content/clu`. The runtime is ephemeral and the
-  repo holds the only durable copy of the code, so results must be copied back and
-  committed. If the runtime is lost, re-upload and rerun; results are deterministic.
+- H2 on Colab, in `/content/clu`: tests, then smoke, then the full run (about 2.5 h
+  by estimate, 2 workers). The runtime is ephemeral and the repo holds the only
+  durable copy of the code, so results must be copied back and committed. If the
+  runtime is lost, re-upload and rerun; results are deterministic.
 
 ## Bets
 
 | Bet | Claim | Status |
 | --- | --- | --- |
-| H1 | Commit surprising samples only after corroboration | Stage A running |
-| H2 | One multi-timescale state sets both protection and recycling (`synaptic.md` Exp 1, 2) | Not started; next independent bet |
+| H1 | Commit surprising samples only after corroboration | **Stopped.** H1b (hedge predictions, defer weight commits) is parked in RESULT.md |
+| H2 | One multi-timescale state sets both protection and recycling (`synaptic.md` Exp 1, 2) | Running |
 | H3 | Gates must be self-generated, without task labels or blocks (`gating_metacognition.md` Exp 1) | Not started |
 | H4 | Replay dose set by relation to existing knowledge (`consolidation.md` E1, E2) | Not started |
 
@@ -66,11 +69,10 @@ granularity is mixed. It remains an open test (`neuromodulation.md` Exp 2).
 
 ## Next
 
-1. Read Stage A `summary.json`, check `sanity_anomalies`, commit results, apply the
-   gate as written.
-2. Pass: implement Stage B (scale to 2 CPU cores, log the reduction as a deviation).
-   Fail: record why and start H2.
-3. Write `docs/MAPPINGS.md`.
+1. Read H2 `summary.json`. Check `control_valid` and the manipulation check first,
+   apply the power rule (`gate_std`), then record the verdict in `results/`.
+2. Meanwhile, preregister H3 or H4 with an analytic bound first (charter rule).
+3. Write `docs/MAPPINGS.md`, including negative results.
 
 ## Execution notes
 

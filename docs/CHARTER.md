@@ -24,6 +24,10 @@ A biological analogy earns nothing by itself. Each mapping must state:
 - **Preregister before running.** Hypothesis, metric, seeds, analysis and kill
   criterion are committed to `hypotheses/` before the experiment executes. Any
   later change is logged as a deviation.
+- **Bound it first.** Before preregistering, derive whatever analytic bound the
+  claim allows, including the best any policy of that class could score. H1 lost
+  its Stage A to a bound that takes a few lines, and that could have been known
+  before any code was written.
 - **Ablation and null controls.** Every mechanism has an off switch with matched
   parameter count and a shuffled or random-signal control, so that "it helped"
   cannot just mean "it added capacity or noise".

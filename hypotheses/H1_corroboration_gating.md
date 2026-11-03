@@ -1,7 +1,8 @@
 # H1: Corroboration-gated plasticity
 
-**Status:** preregistered, not yet run. Committed before any H1 code exists.
-Later changes go in the Deviations section at the end.
+**Status:** STOPPED. Stage A gate failed; Stage B did not run. See
+`results/h1_stage_a/RESULT.md`. The text below is the preregistration as committed
+before any H1 code existed, apart from this status line and the Deviations section.
 
 ## Hypothesis
 
