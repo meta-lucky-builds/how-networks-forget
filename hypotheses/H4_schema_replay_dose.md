@@ -119,4 +119,18 @@ A CIFAR-100 version is out of scope on this CPU runtime.
 
 ## Deviations
 
-None yet.
+1. **Stage 0 added, before any H4 code or data**, under the charter rule that followed H2.
+   Run 3 schema-network seeds, disjoint from the evaluation seeds and not used in the
+   verdict. The full run starts only if all of these hold:
+   - Positive control: fine-tuning a new class with zero replay gives `drop` of at least
+     5 points, and the top ladder rung lowers it by at least half. Otherwise replay dose
+     cannot vary here.
+   - `new_acc` reaches at least 70% at the medium length, so every condition learns.
+   - First-order validity check, at the short length, r at least 0.5 across events.
+   - Variance inflation of condition against `distance` and `overlap` at most 5.
+   - Under half of `dose` values are censored.
+
+   If a check fails, H4 stops with that reason recorded. The raw effect is deliberately not
+   a Stage 0 check, because that would select on the outcome. It stays in the full analysis
+   as preregistered. Fashion-MNIST alone is used for H4: the EMNIST-style set is dropped
+   for runtime, and the design already allows this. The full run executes on GitHub Actions.

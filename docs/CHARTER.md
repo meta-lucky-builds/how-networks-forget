@@ -28,6 +28,10 @@ A biological analogy earns nothing by itself. Each mapping must state:
   claim allows, including the best any policy of that class could score. H1 lost
   its Stage A to a bound that takes a few lines, and that could have been known
   before any code was written.
+- **Stage 0 before any full run.** Run a small pilot on its own seeds, with a positive
+  control that shows each primary metric can move, and preset checks that the phenomenon
+  and the tension under test exist in this setup. Failing means no full run. H2 spent
+  165 minutes on a stream whose retention metric could not register retention.
 - **Ablation and null controls.** Every mechanism has an off switch with matched
   parameter count and a shuffled or random-signal control, so that "it helped"
   cannot just mean "it added capacity or noise".
