@@ -283,7 +283,7 @@ def run_curve(data, regime, seed, lr, steps):
         if t == 0:
             out["w0_acc"] = probe(net, a, 0, data, "mask", 0, seen, lr, seed)
         if t == 0 or t in lags:
-            none_c = np.mean([probe(net, c, -i, data, "none", 0, seen, lr, seed) for i, c in ((1, c1), (2, c2))])
+            none_c = np.mean([probe(net, c, i, data, "none", 0, seen, lr, seed) for i, c in ((1001, c1), (1002, c2))])
             out[f"none_A_{t}"], out[f"none_C_{t}"] = probe(net, a, 0, data, "none", 0, seen, lr, seed), float(none_c)
     out["final_acc"] = probe(net, tasks[max(lags)], max(lags), data, "mask", 0, seen, lr, seed)
     return out
@@ -294,7 +294,7 @@ def run_seed(data, regime, seed, lr, steps, m_star, budgets, blind):
     lags = tuple(m for m in LAGS[regime] if m <= (m_star if blind else max(LAGS[regime])))
     last = max(lags)
     tasks = make_tasks(regime, seed, max(LAGS[regime]) + 1)
-    named = {"A": (tasks[0], 0), "C1": (tasks[-2], -1), "C2": (tasks[-1], -2)}
+    named = {"A": (tasks[0], 0), "C1": (tasks[-2], 1001), "C2": (tasks[-1], 1002)}
     net = init_weights(rng_for(seed, K_INIT), n_outputs(regime, max(LAGS[regime]) + 1))
     rng, rows, keys, w0 = rng_for(seed, K_TRAIN), [], keys_for(regime), None
 

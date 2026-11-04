@@ -92,10 +92,10 @@ def test_planted_access_cannot_change_readout():
 
 def test_planted_erasure_fractions():
     net = small_net()
-    assert all(np.array_equal(a, b) for a, b in zip(h5.planted_erasure(net, 0.0, 1), net))
-    total = h5.planted_erasure(net, 2.0, 1)
+    assert all(np.array_equal(a, b) for a, b in zip(h5.planted_erasure(net, 0.0, 99), net))
+    total = h5.planted_erasure(net, 2.0, 99)
     assert not np.any(total[0] == net[0])
-    partial = h5.planted_erasure(net, 0.5, 1)
+    partial = h5.planted_erasure(net, 0.5, 99)
     assert 0.3 < (partial[0] == net[0]).mean() < 0.7
 
 
