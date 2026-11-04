@@ -49,9 +49,8 @@ agent, starts here, then reads `docs/CHARTER.md`.
 
 ## In progress
 
-- H6 (CIFAR-100 probe test, owner request): the owner runs `experiments/h6_cifar.py run` on an RTX 5090 in a Jupyter-style
-  cloud and returns `h6_results.zip`. Waiting on that. Then check gates and record the verdict in `results/h6/RESULT.md`.
-  H5 is complete (`results/h5/RESULT.md`). Other lines stay paused.
+- H6 complete: probes overstate and mostly unrecovered, at budget 2 only (`results/h6/RESULT.md`). H5 is complete
+  (`results/h5/RESULT.md`). A budget sweep is the open follow-up. Other lines stay paused.
 - **The Colab runtime is shared with work we do not own** (`experiments/thread_a.py`,
   `mechinterp`), possibly another session of the owner's. Never kill those processes or
   delete cells that are not ours. Use Colab only for small tests, and expect delays.

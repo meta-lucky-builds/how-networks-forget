@@ -1,0 +1,844 @@
+{
+  "cifar_class": {
+    "config": {
+      "lr": 0.01,
+      "epochs": 20,
+      "m_star": 1,
+      "S_none": 0.0,
+      "w0_acc": 0.6875000298023224,
+      "final_acc": 0.8250000178813934
+    },
+    "budget": 2,
+    "probe_verdict": "probes overstate",
+    "split_verdict": "mostly unrecovered",
+    "gates_passed": true,
+    "checks": {
+      "sham_readout": {
+        "measured": -0.014745264750694567,
+        "limit": "abs <= 0.15",
+        "pass": true
+      },
+      "total_erasure_readout": {
+        "measured": 0.03547209464717033,
+        "limit": "abs <= 0.15",
+        "pass": true
+      },
+      "sham_finetune_low": {
+        "measured": -0.03367094186581959,
+        "limit": "abs <= 0.15",
+        "pass": true
+      },
+      "total_erasure_finetune_low": {
+        "measured": 0.009363041299296233,
+        "limit": "abs <= 0.15",
+        "pass": true
+      },
+      "planted_access_readout": {
+        "measured": 1.0,
+        "limit": ">= 0.8",
+        "pass": true
+      },
+      "planted_access_none": {
+        "measured": 0.12398483214292086,
+        "limit": "<= 0.6",
+        "pass": true
+      },
+      "matched_gap": {
+        "measured": 0.9599026297712743,
+        "limit": ">= 0.2",
+        "pass": true,
+        "matched_S_readout": 0.04009737022872569,
+        "matched_S_none": 0.05446674129146449
+      }
+    },
+    "probe_test": {
+      "naive_retention": 0.5523278285945042,
+      "naive_ci": [
+        0.5214357754565349,
+        0.5832022386449697
+      ],
+      "S_readout": 0.145991994372244,
+      "gap": 0.4063358342222603,
+      "gap_ci": [
+        0.3505936773678935,
+        0.4688550832151674
+      ],
+      "S_readout_fixed": 0.19610502336514365,
+      "gap_fixed": 0.35622280522936056,
+      "label": "probes overstate",
+      "acc_A_w0": 0.645450034737587,
+      "acc_A_later": 0.35650001615285876,
+      "acc_new_w0": 0.28601251244544984,
+      "acc_new_later": 0.30402501542121174
+    },
+    "same": {
+      "S_none": 0.0,
+      "S_readout": 0.145991994372244,
+      "S": {
+        "readout": 0.145991994372244,
+        "readout_early": 0.26428804133198464,
+        "finetune_low": 0.3904118926174146
+      },
+      "top_key": "finetune_low",
+      "access": 0.145991994372244,
+      "access_ci": [
+        0.07002303160808261,
+        0.21467280363295896
+      ],
+      "recoverable": 0.3904118926174146,
+      "recoverable_ci": [
+        0.33877604457936167,
+        0.4411398650823565
+      ],
+      "unrecovered": 0.6095881073825854,
+      "label": "mostly unrecovered"
+    },
+    "fixed": {
+      "S_none": 0.0,
+      "S_readout": 0.19610502336514365,
+      "S": {
+        "readout": 0.19610502336514365,
+        "readout_early": 0.38145003086564694,
+        "finetune_low": 0.3887013342946102
+      },
+      "top_key": "finetune_low",
+      "access": 0.19610502336514365,
+      "access_ci": [
+        0.1252962869357543,
+        0.2578202364796282
+      ],
+      "recoverable": 0.3887013342946102,
+      "recoverable_ci": [
+        0.3411326521118564,
+        0.4902331593688448
+      ],
+      "unrecovered": 0.6112986657053898,
+      "label": "mostly unrecovered"
+    },
+    "by_lag": {
+      "1/2": {
+        "same": {
+          "S_none": 0.0,
+          "S_readout": 0.145991994372244,
+          "S": {
+            "readout": 0.145991994372244,
+            "readout_early": 0.26428804133198464,
+            "finetune_low": 0.3904118926174146
+          },
+          "top_key": "finetune_low",
+          "access": 0.145991994372244,
+          "access_ci": [
+            0.07002303160808261,
+            0.21467280363295896
+          ],
+          "recoverable": 0.3904118926174146,
+          "recoverable_ci": [
+            0.33877604457936167,
+            0.4411398650823565
+          ],
+          "unrecovered": 0.6095881073825854,
+          "label": "mostly unrecovered"
+        },
+        "fixed": {
+          "S_none": 0.0,
+          "S_readout": 0.19610502336514365,
+          "S": {
+            "readout": 0.19610502336514365,
+            "readout_early": 0.38145003086564694,
+            "finetune_low": 0.3887013342946102
+          },
+          "top_key": "finetune_low",
+          "access": 0.19610502336514365,
+          "access_ci": [
+            0.1252962869357543,
+            0.2578202364796282
+          ],
+          "recoverable": 0.3887013342946102,
+          "recoverable_ci": [
+            0.3411326521118564,
+            0.4902331593688448
+          ],
+          "unrecovered": 0.6112986657053898,
+          "label": "mostly unrecovered"
+        },
+        "probe": {
+          "naive_retention": 0.5523278285945042,
+          "naive_ci": [
+            0.5214357754565349,
+            0.5832022386449697
+          ],
+          "S_readout": 0.145991994372244,
+          "gap": 0.4063358342222603,
+          "gap_ci": [
+            0.3505936773678935,
+            0.4688550832151674
+          ],
+          "S_readout_fixed": 0.19610502336514365,
+          "gap_fixed": 0.35622280522936056,
+          "label": "probes overstate",
+          "acc_A_w0": 0.645450034737587,
+          "acc_A_later": 0.35650001615285876,
+          "acc_new_w0": 0.28601251244544984,
+          "acc_new_later": 0.30402501542121174
+        },
+        "S_keys": {
+          "mask": 0.2040965170169162,
+          "none": 0.0,
+          "bn_recal": 0.23308369015834504,
+          "readout": 0.145991994372244,
+          "readout_early": 0.26428804133198464,
+          "finetune_low": 0.3904118926174146,
+          "restore_head": 0.2661394056569311,
+          "restore_body": 0.9725106956628738
+        }
+      },
+      "2/2": {
+        "same": {
+          "S_none": 0.0,
+          "S_readout": 0.06899669755671921,
+          "S": {
+            "readout": 0.06899669755671921,
+            "readout_early": 0.08923905534817593,
+            "finetune_low": 0.18206167371264928
+          },
+          "top_key": "finetune_low",
+          "access": 0.06899669755671921,
+          "access_ci": [
+            -0.03202484249313566,
+            0.16038954157808677
+          ],
+          "recoverable": 0.18206167371264928,
+          "recoverable_ci": [
+            0.1358013261889286,
+            0.269704179098027
+          ],
+          "unrecovered": 0.8179383262873507,
+          "label": "mostly unrecovered"
+        },
+        "fixed": {
+          "S_none": 0.0,
+          "S_readout": 0.1545122601657866,
+          "S": {
+            "readout": 0.1545122601657866,
+            "readout_early": 0.2942521279290428,
+            "finetune_low": 0.16830970383300545
+          },
+          "top_key": "readout_early",
+          "access": 0.1545122601657866,
+          "access_ci": [
+            0.05376982344370604,
+            0.24665262045874833
+          ],
+          "recoverable": 0.2942521279290428,
+          "recoverable_ci": [
+            0.13993708164068977,
+            0.4532792406561485
+          ],
+          "unrecovered": 0.7057478720709571,
+          "label": "mostly unrecovered"
+        },
+        "probe": {
+          "naive_retention": 0.5291656952843116,
+          "naive_ci": [
+            0.4856775933612973,
+            0.5718577176937631
+          ],
+          "S_readout": 0.06899669755671921,
+          "gap": 0.46016899772759234,
+          "gap_ci": [
+            0.39740962548325354,
+            0.536104057935008
+          ],
+          "S_readout_fixed": 0.1545122601657866,
+          "gap_fixed": 0.374653435118525,
+          "label": "probes overstate",
+          "acc_A_w0": 0.645450034737587,
+          "acc_A_later": 0.34155001640319826,
+          "acc_new_w0": 0.28601251244544984,
+          "acc_new_later": 0.3167500143870711
+        },
+        "S_keys": {
+          "mask": 0.0798955710408222,
+          "none": 0.0,
+          "bn_recal": 0.07244141265375512,
+          "readout": 0.06899669755671921,
+          "readout_early": 0.08923905534817593,
+          "finetune_low": 0.18206167371264928,
+          "restore_head": 0.10300808419604257,
+          "restore_body": 0.9724339109065303
+        }
+      },
+      "3/2": {
+        "same": {
+          "S_none": 0.0,
+          "S_readout": 0.06871847778863054,
+          "S": {
+            "readout": 0.06871847778863054,
+            "readout_early": 0.12451014989487189,
+            "finetune_low": 0.10765249064004165
+          },
+          "top_key": "readout_early",
+          "access": 0.06871847778863054,
+          "access_ci": [
+            -0.012251794019167463,
+            0.1380841464011149
+          ],
+          "recoverable": 0.12451014989487189,
+          "recoverable_ci": [
+            0.06769476960553904,
+            0.2682037071298453
+          ],
+          "unrecovered": 0.8754898501051281,
+          "label": "mostly unrecovered"
+        },
+        "fixed": {
+          "S_none": 0.0,
+          "S_readout": 0.17064857659971414,
+          "S": {
+            "readout": 0.17064857659971414,
+            "readout_early": 0.36577402939889,
+            "finetune_low": 0.08854377974223382
+          },
+          "top_key": "readout_early",
+          "access": 0.17064857659971414,
+          "access_ci": [
+            0.09686124259842173,
+            0.23335092467365512
+          ],
+          "recoverable": 0.36577402939889,
+          "recoverable_ci": [
+            0.20070045488806282,
+            0.4832104691160952
+          ],
+          "unrecovered": 0.63422597060111,
+          "label": "mostly unrecovered"
+        },
+        "probe": {
+          "naive_retention": 0.5381516698536535,
+          "naive_ci": [
+            0.5080136310429282,
+            0.5701630808899032
+          ],
+          "S_readout": 0.06871847778863054,
+          "gap": 0.46943319206502293,
+          "gap_ci": [
+            0.41137084690633524,
+            0.5385544715563564
+          ],
+          "S_readout_fixed": 0.17064857659971414,
+          "gap_fixed": 0.3675030932539394,
+          "label": "probes overstate",
+          "acc_A_w0": 0.645450034737587,
+          "acc_A_later": 0.3473500140011311,
+          "acc_new_w0": 0.28601251244544984,
+          "acc_new_later": 0.3226500146090984
+        },
+        "S_keys": {
+          "mask": 0.045725911735359566,
+          "none": 0.0,
+          "bn_recal": 0.039212770403757403,
+          "readout": 0.06871847778863054,
+          "readout_early": 0.12451014989487189,
+          "finetune_low": 0.10765249064004165,
+          "restore_head": 0.050102700628871774,
+          "restore_body": 0.9725874849960042
+        }
+      },
+      "5/2": {
+        "same": {
+          "S_none": 0.0,
+          "S_readout": -0.011789255438349838,
+          "S": {
+            "readout": -0.011789255438349838,
+            "readout_early": 0.051518627545685904,
+            "finetune_low": 0.039365290762468884
+          },
+          "top_key": "readout_early",
+          "access": -0.011789255438349838,
+          "access_ci": [
+            -0.10402016758867061,
+            0.08129604021497346
+          ],
+          "recoverable": 0.051518627545685904,
+          "recoverable_ci": [
+            0.008772148465529117,
+            0.1968537880111016
+          ],
+          "unrecovered": 0.9484813724543141,
+          "label": "mostly unrecovered"
+        },
+        "fixed": {
+          "S_none": 0.0,
+          "S_readout": 0.0853764566116063,
+          "S": {
+            "readout": 0.0853764566116063,
+            "readout_early": 0.3736120349987481,
+            "finetune_low": -0.00958812026137381
+          },
+          "top_key": "readout_early",
+          "access": 0.0853764566116063,
+          "access_ci": [
+            -0.0008023531371807429,
+            0.16905698915937156
+          ],
+          "recoverable": 0.3736120349987481,
+          "recoverable_ci": [
+            0.24638447522307558,
+            0.469017051550891
+          ],
+          "unrecovered": 0.6263879650012518,
+          "label": "mostly unrecovered"
+        },
+        "probe": {
+          "naive_retention": 0.4906654232356881,
+          "naive_ci": [
+            0.45464789854616333,
+            0.5278330776407479
+          ],
+          "S_readout": -0.011789255438349838,
+          "gap": 0.5024546786740379,
+          "gap_ci": [
+            0.43457512596154224,
+            0.5772106315137853
+          ],
+          "S_readout_fixed": 0.0853764566116063,
+          "gap_fixed": 0.4052889666240818,
+          "label": "probes overstate",
+          "acc_A_w0": 0.645450034737587,
+          "acc_A_later": 0.31670001447200774,
+          "acc_new_w0": 0.28601251244544984,
+          "acc_new_later": 0.3209375152364373
+        },
+        "S_keys": {
+          "mask": 0.005778127573682115,
+          "none": 0.0,
+          "bn_recal": 0.004813321302283109,
+          "readout": -0.011789255438349838,
+          "readout_early": 0.051518627545685904,
+          "finetune_low": 0.039365290762468884,
+          "restore_head": 0.01898527672216865,
+          "restore_body": 0.9742767725194952
+        }
+      }
+    }
+  },
+  "cifar_task": {
+    "config": {
+      "lr": 0.01,
+      "epochs": 10,
+      "m_star": 2,
+      "S_none": 0.4511212852328417,
+      "w0_acc": 0.6710000336170197,
+      "final_acc": 0.7745000422000885
+    },
+    "budget": 2,
+    "probe_verdict": "probes overstate",
+    "split_verdict": "mostly unrecovered",
+    "gates_passed": true,
+    "checks": {
+      "sham_readout": {
+        "measured": -0.0665196440742842,
+        "limit": "abs <= 0.15",
+        "pass": true
+      },
+      "total_erasure_readout": {
+        "measured": 0.047751926559124684,
+        "limit": "abs <= 0.15",
+        "pass": true
+      },
+      "sham_finetune_low": {
+        "measured": -0.005902954930039288,
+        "limit": "abs <= 0.15",
+        "pass": true
+      },
+      "total_erasure_finetune_low": {
+        "measured": 0.0029264608095159457,
+        "limit": "abs <= 0.15",
+        "pass": true
+      },
+      "planted_access_readout": {
+        "measured": 1.0,
+        "limit": ">= 0.8",
+        "pass": true
+      },
+      "planted_access_none": {
+        "measured": 0.41554376765521783,
+        "limit": "<= 0.6",
+        "pass": true
+      },
+      "matched_gap": {
+        "measured": 0.4603717587168501,
+        "limit": ">= 0.2",
+        "pass": true,
+        "matched_S_readout": 0.5396282412831499,
+        "matched_S_none": 0.4232374257412295
+      }
+    },
+    "probe_test": {
+      "naive_retention": 0.5941613655858442,
+      "naive_ci": [
+        0.5582824542876018,
+        0.6307942853487873
+      ],
+      "S_readout": 0.03767046225224573,
+      "gap": 0.5564909033335985,
+      "gap_ci": [
+        0.4644657900696704,
+        0.6741041113550765
+      ],
+      "S_readout_fixed": 0.1841216914699899,
+      "gap_fixed": 0.4100396741158543,
+      "label": "probes overstate",
+      "acc_A_w0": 0.5583500280976296,
+      "acc_A_later": 0.3317500151693821,
+      "acc_new_w0": 0.2806125143542886,
+      "acc_new_later": 0.321287514641881
+    },
+    "same": {
+      "S_none": 0.4213248785992187,
+      "S_readout": 0.03767046225224573,
+      "S": {
+        "readout": 0.03767046225224573,
+        "readout_early": 0.10867195663550275,
+        "finetune_low": 0.5357178629165869
+      },
+      "top_key": "finetune_low",
+      "access": -0.6629875765494676,
+      "access_ci": [
+        -0.8846434029022902,
+        -0.4675311642781979
+      ],
+      "recoverable": 0.19768084040050063,
+      "recoverable_ci": [
+        0.1279466941100098,
+        0.2630069472877869
+      ],
+      "unrecovered": 0.8023191595994994,
+      "label": "mostly unrecovered"
+    },
+    "fixed": {
+      "S_none": 0.427019045649476,
+      "S_readout": 0.1841216914699899,
+      "S": {
+        "readout": 0.1841216914699899,
+        "readout_early": 0.36429604486954686,
+        "finetune_low": 0.5393696908212307
+      },
+      "top_key": "finetune_low",
+      "access": -0.4239187224901937,
+      "access_ci": [
+        -0.6366214292277943,
+        -0.24630172028974814
+      ],
+      "recoverable": 0.1960809418161281,
+      "recoverable_ci": [
+        0.10825717166277264,
+        0.2746330535946458
+      ],
+      "unrecovered": 0.8039190581838719,
+      "label": "mostly unrecovered"
+    },
+    "by_lag": {
+      "1/2": {
+        "same": {
+          "S_none": 0.6069938244716533,
+          "S_readout": 0.2864665312790377,
+          "S": {
+            "readout": 0.2864665312790377,
+            "readout_early": 0.34833094611304344,
+            "finetune_low": 0.6842421132076094
+          },
+          "top_key": "finetune_low",
+          "access": -0.8155782609820507,
+          "access_ci": [
+            -1.0836588550289663,
+            -0.5827721720833567
+          ],
+          "recoverable": 0.19655744246793488,
+          "recoverable_ci": [
+            0.10434412916861915,
+            0.29073647183805595
+          ],
+          "unrecovered": 0.8034425575320652,
+          "label": "mostly unrecovered"
+        },
+        "fixed": {
+          "S_none": 0.6114057170498953,
+          "S_readout": 0.34308473884745194,
+          "S": {
+            "readout": 0.34308473884745194,
+            "readout_early": 0.4883889916220562,
+            "finetune_low": 0.6708354119001627
+          },
+          "top_key": "finetune_low",
+          "access": -0.6904913169731209,
+          "access_ci": [
+            -0.956166812039384,
+            -0.4644352404878791
+          ],
+          "recoverable": 0.15293507253656158,
+          "recoverable_ci": [
+            0.06478069773784707,
+            0.2333015656335805
+          ],
+          "unrecovered": 0.8470649274634384,
+          "label": "mostly unrecovered"
+        },
+        "probe": {
+          "naive_retention": 0.6732336308924405,
+          "naive_ci": [
+            0.6373180275630062,
+            0.7098054979196501
+          ],
+          "S_readout": 0.2864665312790377,
+          "gap": 0.3867670996134028,
+          "gap_ci": [
+            0.31805619390057277,
+            0.47388968108035123
+          ],
+          "S_readout_fixed": 0.34308473884745194,
+          "gap_fixed": 0.33014889204498854,
+          "label": "probes overstate",
+          "acc_A_w0": 0.5583500280976296,
+          "acc_A_later": 0.37590001672506335,
+          "acc_new_w0": 0.2806125143542886,
+          "acc_new_later": 0.29633751455694435
+        },
+        "S_keys": {
+          "none": 0.6069938244716533,
+          "bn_recal": 0.5956103188121845,
+          "readout": 0.2864665312790377,
+          "readout_early": 0.34833094611304344,
+          "finetune_low": 0.6842421132076094,
+          "restore_head": 0.6069938244716533,
+          "restore_body": 1.0
+        }
+      },
+      "2/2": {
+        "same": {
+          "S_none": 0.4213248785992187,
+          "S_readout": 0.03767046225224573,
+          "S": {
+            "readout": 0.03767046225224573,
+            "readout_early": 0.10867195663550275,
+            "finetune_low": 0.5357178629165869
+          },
+          "top_key": "finetune_low",
+          "access": -0.6629875765494676,
+          "access_ci": [
+            -0.8846434029022902,
+            -0.4675311642781979
+          ],
+          "recoverable": 0.19768084040050063,
+          "recoverable_ci": [
+            0.1279466941100098,
+            0.2630069472877869
+          ],
+          "unrecovered": 0.8023191595994994,
+          "label": "mostly unrecovered"
+        },
+        "fixed": {
+          "S_none": 0.427019045649476,
+          "S_readout": 0.1841216914699899,
+          "S": {
+            "readout": 0.1841216914699899,
+            "readout_early": 0.36429604486954686,
+            "finetune_low": 0.5393696908212307
+          },
+          "top_key": "finetune_low",
+          "access": -0.4239187224901937,
+          "access_ci": [
+            -0.6366214292277943,
+            -0.24630172028974814
+          ],
+          "recoverable": 0.1960809418161281,
+          "recoverable_ci": [
+            0.10825717166277264,
+            0.2746330535946458
+          ],
+          "unrecovered": 0.8039190581838719,
+          "label": "mostly unrecovered"
+        },
+        "probe": {
+          "naive_retention": 0.5941613655858442,
+          "naive_ci": [
+            0.5582824542876018,
+            0.6307942853487873
+          ],
+          "S_readout": 0.03767046225224573,
+          "gap": 0.5564909033335985,
+          "gap_ci": [
+            0.4644657900696704,
+            0.6741041113550765
+          ],
+          "S_readout_fixed": 0.1841216914699899,
+          "gap_fixed": 0.4100396741158543,
+          "label": "probes overstate",
+          "acc_A_w0": 0.5583500280976296,
+          "acc_A_later": 0.3317500151693821,
+          "acc_new_w0": 0.2806125143542886,
+          "acc_new_later": 0.321287514641881
+        },
+        "S_keys": {
+          "none": 0.4213248785992187,
+          "bn_recal": 0.4140150746329092,
+          "readout": 0.03767046225224573,
+          "readout_early": 0.10867195663550275,
+          "finetune_low": 0.5357178629165869,
+          "restore_head": 0.4213248785992187,
+          "restore_body": 1.0
+        }
+      },
+      "3/2": {
+        "same": {
+          "S_none": 0.3127662358041374,
+          "S_readout": 0.13808003908019292,
+          "S": {
+            "readout": 0.13808003908019292,
+            "readout_early": 0.21643687810252651,
+            "finetune_low": 0.4446223108441302
+          },
+          "top_key": "finetune_low",
+          "access": -0.2541874480342888,
+          "access_ci": [
+            -0.40903412654727556,
+            -0.10972576107946574
+          ],
+          "recoverable": 0.19186495470617415,
+          "recoverable_ci": [
+            0.14107393184031855,
+            0.24469979614972223
+          ],
+          "unrecovered": 0.8081350452938258,
+          "label": "mostly unrecovered"
+        },
+        "fixed": {
+          "S_none": 0.31113622615790854,
+          "S_readout": 0.2746748370656958,
+          "S": {
+            "readout": 0.2746748370656958,
+            "readout_early": 0.5029027600357341,
+            "finetune_low": 0.44252126325241153
+          },
+          "top_key": "readout_early",
+          "access": -0.05292975255303642,
+          "access_ci": [
+            -0.17253970188668957,
+            0.05723853703903008
+          ],
+          "recoverable": 0.278380924008038,
+          "recoverable_ci": [
+            0.15509257016913885,
+            0.41466536877248694
+          ],
+          "unrecovered": 0.7216190759919621,
+          "label": "mostly unrecovered"
+        },
+        "probe": {
+          "naive_retention": 0.6392048047436776,
+          "naive_ci": [
+            0.6034937721322052,
+            0.6787936939507588
+          ],
+          "S_readout": 0.13808003908019292,
+          "gap": 0.5011247656634846,
+          "gap_ci": [
+            0.4245230119435219,
+            0.5946960001794875
+          ],
+          "S_readout_fixed": 0.2746748370656958,
+          "gap_fixed": 0.3645299676779818,
+          "label": "probes overstate",
+          "acc_A_w0": 0.5583500280976296,
+          "acc_A_later": 0.3569000206887722,
+          "acc_new_w0": 0.2806125143542886,
+          "acc_new_later": 0.31855001393705606
+        },
+        "S_keys": {
+          "none": 0.3127662358041374,
+          "bn_recal": 0.3126315610311546,
+          "readout": 0.13808003908019292,
+          "readout_early": 0.21643687810252651,
+          "finetune_low": 0.4446223108441302,
+          "restore_head": 0.3127662358041374,
+          "restore_body": 1.0
+        }
+      },
+      "5/2": {
+        "same": {
+          "S_none": 0.20231679005827105,
+          "S_readout": 0.01651738811008233,
+          "S": {
+            "readout": 0.01651738811008233,
+            "readout_early": 0.19366836135875493,
+            "finetune_low": 0.3155577757249253
+          },
+          "top_key": "finetune_low",
+          "access": -0.23292379685635034,
+          "access_ci": [
+            -0.33889603106792004,
+            -0.14302086893830934
+          ],
+          "recoverable": 0.141962353294269,
+          "recoverable_ci": [
+            0.08114294186496307,
+            0.21179593026003232
+          ],
+          "unrecovered": 0.858037646705731,
+          "label": "mostly unrecovered"
+        },
+        "fixed": {
+          "S_none": 0.20229505679711068,
+          "S_readout": 0.2159863050911315,
+          "S": {
+            "readout": 0.2159863050911315,
+            "readout_early": 0.5780116174147686,
+            "finetune_low": 0.3330665314975125
+          },
+          "top_key": "readout_early",
+          "access": 0.01716329879948929,
+          "access_ci": [
+            -0.0903305941166192,
+            0.1095523076986753
+          ],
+          "recoverable": 0.4709969065869229,
+          "recoverable_ci": [
+            0.34519173253318514,
+            0.6032340851490082
+          ],
+          "unrecovered": 0.5290030934130772,
+          "label": "no majority"
+        },
+        "probe": {
+          "naive_retention": 0.6100116353416839,
+          "naive_ci": [
+            0.5822805808669097,
+            0.6411423202721752
+          ],
+          "S_readout": 0.01651738811008233,
+          "gap": 0.5934942472316016,
+          "gap_ci": [
+            0.5171083264552383,
+            0.6911368015813161
+          ],
+          "S_readout_fixed": 0.2159863050911315,
+          "gap_fixed": 0.3940253302505524,
+          "label": "probes overstate",
+          "acc_A_w0": 0.5583500280976296,
+          "acc_A_later": 0.34060001373291016,
+          "acc_new_w0": 0.2806125143542886,
+          "acc_new_later": 0.33601251542568206
+        },
+        "S_keys": {
+          "none": 0.20231679005827105,
+          "bn_recal": 0.21188154986436283,
+          "readout": 0.01651738811008233,
+          "readout_early": 0.19366836135875493,
+          "finetune_low": 0.3155577757249253,
+          "restore_head": 0.20231679005827105,
+          "restore_body": 1.0
+        }
+      }
+    }
+  }
+}

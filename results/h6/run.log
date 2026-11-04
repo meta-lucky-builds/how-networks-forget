@@ -1,0 +1,98 @@
+torch 2.14.0a0+4fdf77b940.nv26.08 GPU NVIDIA GeForce RTX 5090
+//h6_cifar.py:392: RuntimeWarning: invalid value encountered in scalar divide
+  return float(numerator.mean() / denominator.mean())
+//h6_cifar.py:392: RuntimeWarning: divide by zero encountered in scalar divide
+  return float(numerator.mean() / denominator.mean())
+selftest passed
+downloading CIFAR-100
+13:40:06 curve|cifar_class|0.01|10|700 32s
+13:40:38 curve|cifar_class|0.01|10|701 31s
+13:41:40 curve|cifar_class|0.01|20|700 63s
+13:42:42 curve|cifar_class|0.01|20|701 62s
+13:43:13 curve|cifar_class|0.05|10|700 31s
+13:43:44 curve|cifar_class|0.05|10|701 31s
+13:44:45 curve|cifar_class|0.05|20|700 61s
+13:45:48 curve|cifar_class|0.05|20|701 62s
+13:47:01 blind|cifar_class|700 74s
+13:48:16 blind|cifar_class|701 74s
+13:49:29 blind|cifar_class|702 73s
+13:50:41 blind|cifar_class|703 72s
+13:51:53 blind|cifar_class|704 72s
+13:53:04 blind|cifar_class|705 71s
+13:53:34 curve|cifar_task|0.01|10|700 31s
+13:54:06 curve|cifar_task|0.01|10|701 32s
+13:55:07 curve|cifar_task|0.01|20|700 61s
+13:56:10 curve|cifar_task|0.01|20|701 63s
+13:56:42 curve|cifar_task|0.05|10|700 32s
+13:57:14 curve|cifar_task|0.05|10|701 32s
+13:58:16 curve|cifar_task|0.05|20|700 62s
+13:59:19 curve|cifar_task|0.05|20|701 62s
+14:00:35 blind|cifar_task|700 76s
+14:01:51 blind|cifar_task|701 76s
+14:03:09 blind|cifar_task|702 78s
+14:04:25 blind|cifar_task|703 76s
+14:05:45 blind|cifar_task|704 79s
+14:07:02 blind|cifar_task|705 77s
+calibrated {'cifar_class': True, 'cifar_task': True}
+14:08:23 confirm|cifar_class|800 81s
+14:09:44 confirm|cifar_class|801 81s
+14:11:04 confirm|cifar_class|802 80s
+14:12:25 confirm|cifar_class|803 81s
+14:13:46 confirm|cifar_class|804 81s
+14:15:08 confirm|cifar_class|805 82s
+14:16:28 confirm|cifar_class|806 80s
+14:17:50 confirm|cifar_class|807 82s
+14:19:11 confirm|cifar_class|808 81s
+14:20:31 confirm|cifar_class|809 80s
+14:21:51 confirm|cifar_class|810 80s
+14:23:12 confirm|cifar_class|811 80s
+14:24:34 confirm|cifar_class|812 82s
+14:25:54 confirm|cifar_class|813 80s
+14:27:15 confirm|cifar_class|814 82s
+14:28:37 confirm|cifar_class|815 81s
+14:30:00 confirm|cifar_class|816 84s
+14:31:22 confirm|cifar_class|817 82s
+14:32:43 confirm|cifar_class|818 81s
+14:34:05 confirm|cifar_class|819 82s
+14:34:54 confirm|cifar_task|800 49s
+14:35:46 confirm|cifar_task|801 52s
+14:36:38 confirm|cifar_task|802 52s
+14:37:28 confirm|cifar_task|803 51s
+14:38:20 confirm|cifar_task|804 51s
+14:39:10 confirm|cifar_task|805 50s
+14:39:59 confirm|cifar_task|806 49s
+14:40:49 confirm|cifar_task|807 49s
+14:41:38 confirm|cifar_task|808 50s
+14:42:28 confirm|cifar_task|809 50s
+14:43:19 confirm|cifar_task|810 51s
+14:44:09 confirm|cifar_task|811 50s
+14:44:59 confirm|cifar_task|812 50s
+14:45:48 confirm|cifar_task|813 50s
+14:46:40 confirm|cifar_task|814 51s
+14:47:32 confirm|cifar_task|815 52s
+14:48:23 confirm|cifar_task|816 51s
+14:49:16 confirm|cifar_task|817 53s
+14:50:08 confirm|cifar_task|818 52s
+14:50:58 confirm|cifar_task|819 51s
+## cifar_class: lr 0.01, epochs 20, m* 1, n 2, w0 acc 0.688, gates passed True
+H6a probes overstate: naive 0.552, S_readout 0.146, gap 0.406 [0.3505936773678935, 0.4688550832151674], fixed S 0.196
+readout acc A 0.645 to 0.357, new 0.286 to 0.304
+H6b mostly unrecovered: access 0.15 [0.07002303160808261, 0.21467280363295896], recoverable 0.39 [0.33877604457936167, 0.4411398650823565]; fixed access 0.20, recoverable 0.39
+gates: sham_readout -0.015, total_erasure_readout 0.035, sham_finetune_low -0.034, total_erasure_finetune_low 0.009, planted_access_readout 1.000, planted_access_none 0.124, matched_gap 0.960
+lag/budget | S_none | access same, fixed | unrecovered same, fixed | top | naive, gap | S by key
+1/2 | 0.00 | 0.15, 0.20 | 0.61, 0.61 | finetune_low | 0.55, 0.41 | mask=0.20 none=0.00 bn_recal=0.23 readout=0.15 readout_early=0.26 finetune_low=0.39 restore_head=0.27 restore_body=0.97
+2/2 | 0.00 | 0.07, 0.15 | 0.82, 0.71 | finetune_low | 0.53, 0.46 | mask=0.08 none=0.00 bn_recal=0.07 readout=0.07 readout_early=0.09 finetune_low=0.18 restore_head=0.10 restore_body=0.97
+3/2 | 0.00 | 0.07, 0.17 | 0.88, 0.63 | readout_early | 0.54, 0.47 | mask=0.05 none=0.00 bn_recal=0.04 readout=0.07 readout_early=0.12 finetune_low=0.11 restore_head=0.05 restore_body=0.97
+5/2 | 0.00 | -0.01, 0.09 | 0.95, 0.63 | readout_early | 0.49, 0.50 | mask=0.01 none=0.00 bn_recal=0.00 readout=-0.01 readout_early=0.05 finetune_low=0.04 restore_head=0.02 restore_body=0.97
+## cifar_task: lr 0.01, epochs 10, m* 2, n 2, w0 acc 0.671, gates passed True
+H6a probes overstate: naive 0.594, S_readout 0.038, gap 0.556 [0.4644657900696704, 0.6741041113550765], fixed S 0.184
+readout acc A 0.558 to 0.332, new 0.281 to 0.321
+H6b mostly unrecovered: access -0.66 [-0.8846434029022902, -0.4675311642781979], recoverable 0.20 [0.1279466941100098, 0.2630069472877869]; fixed access -0.42, recoverable 0.20
+gates: sham_readout -0.067, total_erasure_readout 0.048, sham_finetune_low -0.006, total_erasure_finetune_low 0.003, planted_access_readout 1.000, planted_access_none 0.416, matched_gap 0.460
+lag/budget | S_none | access same, fixed | unrecovered same, fixed | top | naive, gap | S by key
+1/2 | 0.61 | -0.82, -0.69 | 0.80, 0.85 | finetune_low | 0.67, 0.39 | none=0.61 bn_recal=0.60 readout=0.29 readout_early=0.35 finetune_low=0.68 restore_head=0.61 restore_body=1.00
+2/2 | 0.42 | -0.66, -0.42 | 0.80, 0.80 | finetune_low | 0.59, 0.56 | none=0.42 bn_recal=0.41 readout=0.04 readout_early=0.11 finetune_low=0.54 restore_head=0.42 restore_body=1.00
+3/2 | 0.31 | -0.25, -0.05 | 0.81, 0.72 | finetune_low | 0.64, 0.50 | none=0.31 bn_recal=0.31 readout=0.14 readout_early=0.22 finetune_low=0.44 restore_head=0.31 restore_body=1.00
+5/2 | 0.20 | -0.23, 0.02 | 0.86, 0.53 | finetune_low | 0.61, 0.59 | none=0.20 bn_recal=0.21 readout=0.02 readout_early=0.19 finetune_low=0.32 restore_head=0.20 restore_body=1.00
+
+finished in 72 minutes. Send back: /h6_results.zip

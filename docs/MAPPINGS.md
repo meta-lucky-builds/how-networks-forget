@@ -4,8 +4,8 @@ What this mission has established, including what it failed to. A mapping counts
 after it passes its preregistered test against a non-biological rival (`docs/CHARTER.md`).
 
 **Current state: no mapping is supported.** One was tested and failed its gate. Three designs
-could not answer their question, so those claims remain open. H5 gave an answer about AI models and
-tests no brain mechanism, so it is an analogy with a result and not a supported mapping.
+could not answer their question, so those claims remain open. H5 and H6 gave answers about AI models and
+test no brain mechanism, so they are results about forgetting and not supported mappings.
 
 | Bet | Biological idea | AI claim | Outcome | What it licenses | Record |
 | --- | --- | --- | --- | --- | --- |
@@ -14,6 +14,7 @@ tests no brain mechanism, so it is an analogy with a result and not a supported 
 | H2R | As H2, on input-permuted MNIST with rank gates | As H2 | **Stopped at Stage 0**, line closed | Nothing about the claim. Short-gap threshold could not be met, and protect did not lose AUC | `results/h2r/RESULT.md` |
 | H4 | Schema-consistent learning needs less replay (Tse 2007) | Schema adds to replay savings beyond gradient overlap | **Stopped at Stage 0** | Nothing about the claim. `dose` was 96% censored, first-order r was 0.445 | `results/h4/RESULT.md` |
 | H5 | Engram retained, retrieval lost (Ryan 2015) | Forgetting is mostly loss of access, not overwriting | **Answered in two of three settings, for AI only.** `perm_class` mostly access, `perm_shared` no majority, `split_class` excluded | Early forgetting is mostly access, deep forgetting mostly unrecovered, on a small MLP. Says nothing about brains | `results/h5/RESULT.md` |
+| H6 | None: tests a measurement claim from H5 on a deep network | Probe retention overstates stored memory | **Answered at budget 2 only.** Probes overstate, and the split is mostly unrecovered, in both CIFAR-100 settings | Naive probe retention can read about half retained while old and never-trained tasks score alike. Not tested at larger budgets | `results/h6/RESULT.md` |
 | H3 | Self-generated gating | Gates must work without task labels or blocks | Not started | | `docs/literature/gating_metacognition.md` |
 
 ## Method lessons, each paid for
@@ -33,6 +34,8 @@ These are about how to run this work, and they are the most reliable output so f
 5. **Separate calibration from confirmation.** Three Stage 0 failures came from constants that were
    guesses (H4's lengths and ladder, H2R's thresholds). A calibration run that only sets constants,
    followed by a preregistered test on fresh seeds, would have caught them.
+6. **Do not trim the check on what a blind rule chose.** H6's rule took the smallest budget, the weakest key, and the compute
+   trim dropped the larger budget that would have tested how far the verdict carries.
 
 ## Open synthesis, not a finding
 

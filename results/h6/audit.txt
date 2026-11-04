@@ -1,0 +1,77 @@
+== calibration
+cifar_class config {'lr': 0.01, 'epochs': 20, 'm_star': 1, 'S_none': 0.0, 'w0_acc': 0.6875000298023224, 'final_acc': 0.8250000178813934} budget 2 answerable True seeds [700, 701, 702, 703, 704, 705]
+ advantage_w0 {'2': {'readout': 0.27266668776671094, 'finetune_low': 0.5013750245173773}}
+ checks {'sham_readout': -0.094, 'total_erasure_readout': -0.044, 'sham_finetune_low': 0.011, 'total_erasure_finetune_low': -0.033, 'planted_access_readout': 1.0, 'planted_access_none': 0.182, 'matched_gap': 1.048}
+ grid
+   0.01/10 {'w0_acc': 0.671, 'none_A_0': 0.671, 'none_C_0': 0.0, 'none_A_1': 0.0, 'none_C_1': 0.0, 'none_A_2': 0.0, 'none_C_2': 0.0, 'none_A_3': 0.0, 'none_C_3': 0.0, 'none_A_5': 0.0, 'none_C_5': 0.0, 'final_acc': 0.792}
+   0.01/20 {'w0_acc': 0.688, 'none_A_0': 0.688, 'none_C_0': 0.0, 'none_A_1': 0.0, 'none_C_1': 0.0, 'none_A_2': 0.0, 'none_C_2': 0.0, 'none_A_3': 0.0, 'none_C_3': 0.0, 'none_A_5': 0.0, 'none_C_5': 0.0, 'final_acc': 0.825}
+   0.05/10 {'w0_acc': 0.618, 'none_A_0': 0.618, 'none_C_0': 0.0, 'none_A_1': 0.0, 'none_C_1': 0.0, 'none_A_2': 0.0, 'none_C_2': 0.0, 'none_A_3': 0.0, 'none_C_3': 0.0, 'none_A_5': 0.0, 'none_C_5': 0.0, 'final_acc': 0.648}
+   0.05/20 {'w0_acc': 0.652, 'none_A_0': 0.652, 'none_C_0': 0.0, 'none_A_1': 0.0, 'none_C_1': 0.0, 'none_A_2': 0.0, 'none_C_2': 0.0, 'none_A_3': 0.0, 'none_C_3': 0.0, 'none_A_5': 0.0, 'none_C_5': 0.0, 'final_acc': 0.79}
+cifar_task config {'lr': 0.01, 'epochs': 10, 'm_star': 2, 'S_none': 0.4511212852328417, 'w0_acc': 0.6710000336170197, 'final_acc': 0.7745000422000885} budget 2 answerable True seeds [700, 701, 702, 703, 704, 705]
+ advantage_w0 {'2': {'readout': 0.2407500116775433, 'finetune_low': 0.4384166967744629}}
+ checks {'sham_readout': -0.098, 'total_erasure_readout': -0.104, 'sham_finetune_low': -0.068, 'total_erasure_finetune_low': -0.017, 'planted_access_readout': 1.0, 'planted_access_none': 0.444, 'matched_gap': 0.573}
+ grid
+   0.01/10 {'w0_acc': 0.671, 'none_A_0': 0.671, 'none_C_0': 0.097, 'none_A_1': 0.43, 'none_C_1': 0.109, 'none_A_2': 0.366, 'none_C_2': 0.107, 'none_A_3': 0.308, 'none_C_3': 0.106, 'none_A_5': 0.241, 'none_C_5': 0.116, 'final_acc': 0.775}
+   0.01/20 {'w0_acc': 0.688, 'none_A_0': 0.688, 'none_C_0': 0.101, 'none_A_1': 0.463, 'none_C_1': 0.104, 'none_A_2': 0.438, 'none_C_2': 0.106, 'none_A_3': 0.339, 'none_C_3': 0.1, 'none_A_5': 0.281, 'none_C_5': 0.1, 'final_acc': 0.852}
+   0.05/10 {'w0_acc': 0.618, 'none_A_0': 0.618, 'none_C_0': 0.105, 'none_A_1': 0.412, 'none_C_1': 0.107, 'none_A_2': 0.361, 'none_C_2': 0.108, 'none_A_3': 0.318, 'none_C_3': 0.111, 'none_A_5': 0.363, 'none_C_5': 0.12, 'final_acc': 0.789}
+   0.05/20 {'w0_acc': 0.652, 'none_A_0': 0.652, 'none_C_0': 0.103, 'none_A_1': 0.452, 'none_C_1': 0.111, 'none_A_2': 0.412, 'none_C_2': 0.11, 'none_A_3': 0.376, 'none_C_3': 0.097, 'none_A_5': 0.37, 'none_C_5': 0.104, 'final_acc': 0.84}
+
+== raw rows 9300 non-finite 0
+
+== summary verdicts and rebuilt values
+cifar_class H6a probes overstate H6b mostly unrecovered gates True same mostly unrecovered fixed mostly unrecovered
+ fixed recoverable_ci [0.3411326521118564, 0.4902331593688448] fixed access_ci [0.1252962869357543, 0.2578202364796282]
+ matched erasure {'matched_S_readout': 0.04, 'matched_S_none': 0.054}
+ lag 1: naive 0.552 chance-corrected 0.470 S_best 0.390 [0.339, 0.441] naive-S_best 0.162 [0.108, 0.217] S_none 0.000 S_none-S_readout -0.146 [-0.215, -0.07]
+   same S {'mask': 0.204, 'none': 0.0, 'bn_recal': 0.233, 'readout': 0.146, 'readout_early': 0.264, 'finetune_low': 0.39, 'restore_head': 0.266, 'restore_body': 0.973}
+   fixed S {'mask': 0.218, 'none': 0.0, 'bn_recal': 0.243, 'readout': 0.196, 'readout_early': 0.381, 'finetune_low': 0.389, 'restore_head': 0.281, 'restore_body': 0.973}
+   acc A {'mask': 0.236, 'none': 0.0, 'bn_recal': 0.258, 'readout': 0.357, 'readout_early': 0.333, 'finetune_low': 0.407, 'restore_head': 0.276, 'restore_body': 0.727}
+   acc new {'mask': 0.103, 'none': 0.0, 'bn_recal': 0.101, 'readout': 0.304, 'readout_early': 0.293, 'finetune_low': 0.19, 'restore_head': 0.103, 'restore_body': 0.094}
+ lag 2: naive 0.529 chance-corrected 0.443 S_best 0.182 [0.136, 0.27] naive-S_best 0.347 [0.275, 0.393] S_none 0.000 S_none-S_readout -0.069 [-0.16, 0.032]
+   same S {'mask': 0.08, 'none': 0.0, 'bn_recal': 0.072, 'readout': 0.069, 'readout_early': 0.089, 'finetune_low': 0.182, 'restore_head': 0.103, 'restore_body': 0.972}
+   fixed S {'mask': 0.096, 'none': 0.0, 'bn_recal': 0.087, 'readout': 0.155, 'readout_early': 0.294, 'finetune_low': 0.168, 'restore_head': 0.119, 'restore_body': 0.972}
+   acc A {'mask': 0.156, 'none': 0.0, 'bn_recal': 0.153, 'readout': 0.342, 'readout_early': 0.32, 'finetune_low': 0.285, 'restore_head': 0.172, 'restore_body': 0.727}
+   acc new {'mask': 0.104, 'none': 0.0, 'bn_recal': 0.104, 'readout': 0.317, 'readout_early': 0.306, 'finetune_low': 0.183, 'restore_head': 0.104, 'restore_body': 0.094}
+ lag 3: naive 0.538 chance-corrected 0.453 S_best 0.125 [0.068, 0.268] naive-S_best 0.414 [0.274, 0.468] S_none 0.000 S_none-S_readout -0.069 [-0.138, 0.012]
+   same S {'mask': 0.046, 'none': 0.0, 'bn_recal': 0.039, 'readout': 0.069, 'readout_early': 0.125, 'finetune_low': 0.108, 'restore_head': 0.05, 'restore_body': 0.973}
+   fixed S {'mask': 0.062, 'none': 0.0, 'bn_recal': 0.047, 'readout': 0.171, 'readout_early': 0.366, 'finetune_low': 0.089, 'restore_head': 0.066, 'restore_body': 0.973}
+   acc A {'mask': 0.134, 'none': 0.0, 'bn_recal': 0.127, 'readout': 0.347, 'readout_early': 0.331, 'finetune_low': 0.24, 'restore_head': 0.137, 'restore_body': 0.727}
+   acc new {'mask': 0.104, 'none': 0.0, 'bn_recal': 0.1, 'readout': 0.323, 'readout_early': 0.312, 'finetune_low': 0.18, 'restore_head': 0.104, 'restore_body': 0.094}
+ lag 5: naive 0.491 chance-corrected 0.397 S_best 0.052 [0.009, 0.197] naive-S_best 0.439 [0.308, 0.482] S_none 0.000 S_none-S_readout 0.012 [-0.081, 0.104]
+   same S {'mask': 0.006, 'none': 0.0, 'bn_recal': 0.005, 'readout': -0.012, 'readout_early': 0.052, 'finetune_low': 0.039, 'restore_head': 0.019, 'restore_body': 0.974}
+   fixed S {'mask': 0.021, 'none': 0.0, 'bn_recal': 0.013, 'readout': 0.085, 'readout_early': 0.374, 'finetune_low': -0.01, 'restore_head': 0.034, 'restore_body': 0.974}
+   acc A {'mask': 0.108, 'none': 0.0, 'bn_recal': 0.104, 'readout': 0.317, 'readout_early': 0.332, 'finetune_low': 0.186, 'restore_head': 0.116, 'restore_body': 0.728}
+   acc new {'mask': 0.104, 'none': 0.0, 'bn_recal': 0.1, 'readout': 0.321, 'readout_early': 0.324, 'finetune_low': 0.164, 'restore_head': 0.104, 'restore_body': 0.094}
+   acc A w0 {'mask': 0.745, 'none': 0.745, 'bn_recal': 0.768, 'readout': 0.645, 'readout_early': 0.428, 'finetune_low': 0.746, 'restore_head': 0.745, 'restore_body': 0.745}
+   acc new w0 {'mask': 0.094, 'none': 0.0, 'bn_recal': 0.095, 'readout': 0.286, 'readout_early': 0.275, 'finetune_low': 0.191, 'restore_head': 0.094, 'restore_body': 0.094}
+   bn_recal minus mask at m*: 0.029 [0.014, 0.045]
+   restore_head minus mask at m*: 0.062 [0.039, 0.086]
+   per-seed H6a gap min/median/max 0.225 0.419 0.828 seeds positive 20
+cifar_task H6a probes overstate H6b mostly unrecovered gates True same mostly unrecovered fixed mostly unrecovered
+ fixed recoverable_ci [0.10825717166277264, 0.2746330535946458] fixed access_ci [-0.6366214292277943, -0.24630172028974814]
+ matched erasure {'matched_S_readout': 0.54, 'matched_S_none': 0.423}
+ lag 1: naive 0.673 chance-corrected 0.602 S_best 0.684 [0.64, 0.728] naive-S_best -0.011 [-0.066, 0.043] S_none 0.607 S_none-S_readout 0.321 [0.233, 0.417]
+   same S {'none': 0.607, 'bn_recal': 0.596, 'readout': 0.286, 'readout_early': 0.348, 'finetune_low': 0.684, 'restore_head': 0.607, 'restore_body': 1.0}
+   fixed S {'none': 0.611, 'bn_recal': 0.599, 'readout': 0.343, 'readout_early': 0.488, 'finetune_low': 0.671, 'restore_head': 0.611, 'restore_body': 1.0}
+   acc A {'none': 0.448, 'bn_recal': 0.461, 'readout': 0.376, 'readout_early': 0.332, 'finetune_low': 0.535, 'restore_head': 0.448, 'restore_body': 0.671}
+   acc new {'none': 0.098, 'bn_recal': 0.097, 'readout': 0.296, 'readout_early': 0.284, 'finetune_low': 0.193, 'restore_head': 0.098, 'restore_body': 0.096}
+ lag 2: naive 0.594 chance-corrected 0.506 S_best 0.536 [0.501, 0.571] naive-S_best 0.058 [0.023, 0.094] S_none 0.421 S_none-S_readout 0.384 [0.271, 0.512]
+   same S {'none': 0.421, 'bn_recal': 0.414, 'readout': 0.038, 'readout_early': 0.109, 'finetune_low': 0.536, 'restore_head': 0.421, 'restore_body': 1.0}
+   fixed S {'none': 0.427, 'bn_recal': 0.422, 'readout': 0.184, 'readout_early': 0.364, 'finetune_low': 0.539, 'restore_head': 0.427, 'restore_body': 1.0}
+   acc A {'none': 0.342, 'bn_recal': 0.353, 'readout': 0.332, 'readout_early': 0.314, 'finetune_low': 0.469, 'restore_head': 0.342, 'restore_body': 0.671}
+   acc new {'none': 0.099, 'bn_recal': 0.1, 'readout': 0.321, 'readout_early': 0.299, 'finetune_low': 0.201, 'restore_head': 0.099, 'restore_body': 0.096}
+ lag 3: naive 0.639 chance-corrected 0.560 S_best 0.445 [0.403, 0.49] naive-S_best 0.195 [0.137, 0.251] S_none 0.313 S_none-S_readout 0.175 [0.076, 0.276]
+   same S {'none': 0.313, 'bn_recal': 0.313, 'readout': 0.138, 'readout_early': 0.216, 'finetune_low': 0.445, 'restore_head': 0.313, 'restore_body': 1.0}
+   fixed S {'none': 0.311, 'bn_recal': 0.31, 'readout': 0.275, 'readout_early': 0.503, 'finetune_low': 0.443, 'restore_head': 0.311, 'restore_body': 1.0}
+   acc A {'none': 0.275, 'bn_recal': 0.285, 'readout': 0.357, 'readout_early': 0.334, 'finetune_low': 0.421, 'restore_head': 0.275, 'restore_body': 0.671}
+   acc new {'none': 0.095, 'bn_recal': 0.093, 'readout': 0.319, 'readout_early': 0.304, 'finetune_low': 0.198, 'restore_head': 0.095, 'restore_body': 0.096}
+ lag 5: naive 0.610 chance-corrected 0.525 S_best 0.316 [0.264, 0.378] naive-S_best 0.294 [0.234, 0.353] S_none 0.202 S_none-S_readout 0.186 [0.114, 0.272]
+   same S {'none': 0.202, 'bn_recal': 0.212, 'readout': 0.017, 'readout_early': 0.194, 'finetune_low': 0.316, 'restore_head': 0.202, 'restore_body': 1.0}
+   fixed S {'none': 0.202, 'bn_recal': 0.21, 'readout': 0.216, 'readout_early': 0.578, 'finetune_low': 0.333, 'restore_head': 0.202, 'restore_body': 1.0}
+   acc A {'none': 0.212, 'bn_recal': 0.223, 'readout': 0.341, 'readout_early': 0.344, 'finetune_low': 0.366, 'restore_head': 0.212, 'restore_body': 0.671}
+   acc new {'none': 0.096, 'bn_recal': 0.094, 'readout': 0.336, 'readout_early': 0.317, 'finetune_low': 0.208, 'restore_head': 0.096, 'restore_body': 0.096}
+   acc A w0 {'none': 0.671, 'bn_recal': 0.707, 'readout': 0.558, 'readout_early': 0.402, 'finetune_low': 0.699, 'restore_head': 0.671, 'restore_body': 0.671}
+   acc new w0 {'none': 0.096, 'bn_recal': 0.095, 'readout': 0.281, 'readout_early': 0.264, 'finetune_low': 0.199, 'restore_head': 0.096, 'restore_body': 0.096}
+   bn_recal minus none at m*: -0.007 [-0.036, 0.02]
+   restore_head minus none at m*: 0.000 [0.0, 0.0]
+   per-seed H6a gap min/median/max 0.218 0.544 2.119 seeds positive 20

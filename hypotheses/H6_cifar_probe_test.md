@@ -1,7 +1,7 @@
 # H6: Do probes overstate stored memory on a real shared-feature task?
 
-**Status:** preregistered before any H6 code or data. It follows H5 and uses what H5 showed, so H5's seeds and
-results are not reused. Later changes go in the Deviations section.
+**Status:** complete, see `results/h6/RESULT.md`. Preregistered before any H6 code or data. It follows H5 and uses what
+H5 showed, so H5's seeds and results are not reused. Later changes go in the Deviations section.
 
 ## Question
 
