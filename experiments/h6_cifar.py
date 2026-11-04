@@ -1,13 +1,20 @@
 """H6: do probes overstate stored memory on Split CIFAR-100?
 
 Spec: hypotheses/H6_cifar_probe_test.md. Calibration never scores the trained task on a later network
-with any key but `none`. Runs on a Colab GPU only.
+with any key but `none`. Self-contained: upload this one file and run `python h6_cifar.py run` on a
+GPU machine. It downloads and verifies CIFAR-100, tests itself, runs everything, and zips the results.
+Rerunning resumes from the last finished seed.
 """
 import argparse
 import copy
+import hashlib
 import json
+import pickle
+import shutil
 import sys
+import tarfile
 import time
+import urllib.request
 from pathlib import Path
 
 import numpy as np
@@ -29,6 +36,8 @@ BEST_KEYS = ("readout", "readout_early", "finetune_low")
 N_BOOTSTRAP = 10000
 WIDTH, BATCH, KEY_PER_CLASS, RIDGE, TUNE_STEPS, TUNE_RATE, BISECT = 32, 128, 50, 1.0, 30, 0.1, 6
 ROOT = 20261105
+MIRROR = "https://storage.googleapis.com/tensorflow/tf-keras-datasets/cifar-100-python.tar.gz"
+CIFAR_MD5 = "eb9058c3a382ffc7106e4002c42a8d85"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 RESTORE = {"restore_head": ("head.",), "restore_body": ("conv", "bn", "stage")}
 ZERO_SAMPLE = ("none", "mask", *RESTORE)
@@ -46,14 +55,26 @@ class Data:
 
 
 def load_cifar(root):
-    from torchvision.datasets import CIFAR100
+    root = Path(root)
+    root.mkdir(parents=True, exist_ok=True)
+    path = root / "cifar-100-python.tar.gz"
+    md5 = lambda: hashlib.md5(path.read_bytes()).hexdigest()
+    if not path.exists() or md5() != CIFAR_MD5:
+        print("downloading CIFAR-100", flush=True)
+        urllib.request.urlretrieve(MIRROR, path)
+    if md5() != CIFAR_MD5:
+        raise SystemExit("CIFAR-100 download failed its checksum")
     mean = torch.tensor([0.5071, 0.4865, 0.4409]).view(1, 3, 1, 1)
     std = torch.tensor([0.2673, 0.2564, 0.2762]).view(1, 3, 1, 1)
-    def part(train):
-        d = CIFAR100(root, train=train, download=True)
-        x = torch.from_numpy(d.data).permute(0, 3, 1, 2).float() / 255.0
-        return ((x - mean) / std).to(DEVICE), torch.tensor(d.targets, device=DEVICE)
-    return Data(*part(True), *part(False))
+    with tarfile.open(path) as tar:
+        def part(name):
+            d = pickle.load(tar.extractfile(f"cifar-100-python/{name}"), encoding="bytes")
+            x = torch.from_numpy(d[b"data"].reshape(-1, 3, 32, 32)).float() / 255.0
+            return ((x - mean) / std).to(DEVICE), torch.tensor(d[b"fine_labels"], device=DEVICE)
+        data = Data(*part("train"), *part("test"))
+    assert len(data.x_train) == 50000 and len(data.x_test) == 10000
+    assert all(len(data.train[c]) == 450 and len(data.key[c]) == 50 and len(data.test[c]) == 100 for c in range(100))
+    return data
 
 
 class Block(nn.Module):
@@ -557,6 +578,7 @@ def confirm(data, out, calibration):
 
 def selftest():
     global BATCH, BISECT
+    saved = BATCH, BISECT
     BATCH, BISECT = 32, 1
     g = torch.Generator(DEVICE).manual_seed(0)
     centres = torch.randn(100, 3, 32, 32, device=DEVICE, generator=g)
@@ -590,27 +612,33 @@ def selftest():
     assert torch.equal(back["conv.weight"], w0["conv.weight"]) and torch.equal(back["head.weight"], net.state_dict()["head.weight"])
     assert not torch.equal(planted_erasure(net, 2.0, 5).conv.weight, net.conv.weight)
     assert torch.equal(planted_erasure(net, 0.0, 5).conv.weight, net.conv.weight)
+    BATCH, BISECT = saved
     print("selftest passed", flush=True)
 
 
 def main():
+    base = Path(__file__).resolve().parent
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=("selftest", "speed", "all", "retry"))
-    parser.add_argument("--out", default="/content/h6")
+    parser.add_argument("mode", choices=("selftest", "run", "retry"))
+    parser.add_argument("--out", default=str(base / "h6_results"))
+    parser.add_argument("--data", default=str(base / "cifar"))
     args = parser.parse_args()
+    if not torch.cuda.is_available():
+        raise SystemExit("No GPU found: this experiment needs one, so nothing was run")
+    print("torch", torch.__version__, "GPU", torch.cuda.get_device_name(0), flush=True)
+    selftest()
     if args.mode == "selftest":
-        return selftest()
+        return
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
-    data = load_cifar("/content/cifar")
-    if args.mode == "speed":
-        start = time.time()
-        run_seed(data, "cifar_class", 1, 0.05, 2, 1, BUDGETS, False)
-        return print("one seed at 2 epochs per task, all budgets:", round(time.time() - start), "s", flush=True)
+    start = time.time()
+    data = load_cifar(args.data)
     calibration = calibrate(data, out, RETRY_SEEDS if args.mode == "retry" else CAL_SEEDS)
     print("calibrated", {r: e["answerable"] for r, e in calibration.items()}, flush=True)
     confirm(data, out, calibration)
-    print("finished", flush=True)
+    archive = shutil.make_archive(str(out), "zip", out)
+    print((out / "summary.md").read_text(), flush=True)
+    print(f"finished in {(time.time() - start) / 60:.0f} minutes. Send back: {archive}", flush=True)
 
 
 if __name__ == "__main__":

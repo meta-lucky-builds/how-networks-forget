@@ -3,7 +3,7 @@
 Durable state for a long-running research mission. Anyone resuming, human or
 agent, starts here, then reads `docs/CHARTER.md`.
 
-**Last heartbeat:** 2026-11-04T09:45Z
+**Last heartbeat:** 2026-11-04T13:40Z
 **Working branch:** `research/bio-to-ai`
 **Phase:** 3, H5 complete, owner decides what follows
 
@@ -49,9 +49,9 @@ agent, starts here, then reads `docs/CHARTER.md`.
 
 ## In progress
 
-- H6 (CIFAR-100 probe test, owner request) runs on the Colab T4 in the background: log `/content/h6/run.log`, results `/content/h6/summary.md`, read through a notebook cell, then commit. A blocked notebook cell needs the owner to interrupt it. H5 is complete (`results/h5/RESULT.md`). Other lines stay paused
-  until the owner says otherwise. Open H5 question: bet 3 on published probes needs a harder dataset than 3-way
-  MNIST and Fashion, such as CIFAR-100, plus more seeds, which was not preregistered.
+- H6 (CIFAR-100 probe test, owner request): the owner runs `experiments/h6_cifar.py run` on an RTX 5090 in a Jupyter-style
+  cloud and returns `h6_results.zip`. Waiting on that. Then check gates and record the verdict in `results/h6/RESULT.md`.
+  H5 is complete (`results/h5/RESULT.md`). Other lines stay paused.
 - **The Colab runtime is shared with work we do not own** (`experiments/thread_a.py`,
   `mechinterp`), possibly another session of the owner's. Never kill those processes or
   delete cells that are not ours. Use Colab only for small tests, and expect delays.

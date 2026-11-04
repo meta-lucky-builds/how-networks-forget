@@ -97,8 +97,8 @@ If bet 1 fails, the published probes survive a stronger control, and my criticis
 One small network, one optimiser, and 20 seeds. GPU runs are not bit-for-bit reproducible. It tests no brain mechanism. Class
 difficulty varies, so exchangeability holds across seeds and not within one seed.
 
-**Execution.** Colab T4 GPU only. Code in `experiments/h6_cifar.py`, whose `selftest` mode replaces a separate test file because
-it needs the GPU. Results are copied back through notebook cells and committed from there.
+**Execution.** One GPU, chosen in Deviation 2. Code in `experiments/h6_cifar.py`, whose `selftest` mode replaces a separate
+test file because it needs the GPU.
 
 ## Deviations
 1. **Compute trims and data source, before any H6 data.** Timing on the T4: one epoch 1.5 s, one seed about 5 to 9 minutes, so
@@ -106,3 +106,7 @@ it needs the GPU. Results are copied back through notebook cells and committed f
    first 2 calibration seeds instead of 3. Confirmation scores budget `n` only, not also 20, so budget sensitivity is not reported.
    The official CIFAR-100 server gave about 53 kB/s, so the file comes from the Google Cloud mirror Keras uses, with the same md5,
    eb9058c3a382ffc7106e4002c42a8d85, also checked by torchvision. No rule, seed, gate or label changes.
+2. **Execution moves to the owner's RTX 5090 in a Jupyter-style cloud, before any H6 outcome was seen.** Colab disconnected, and
+   nothing from its partial run was read or kept. The owner runs one uploaded file and returns the results. The file now loads
+   CIFAR-100 itself, with the same md5, in place of torchvision, and adds checks on the expected image counts. It runs the self-test
+   first, and the results are zipped. Seeds, constants, rules, gates and labels do not change. Which GPU ran it is printed in the log.
