@@ -98,4 +98,19 @@ This is a CPU-sized stream.
 
 ## Deviations
 
-None yet.
+All recorded before any H2R data was seen.
+
+1. **`both_perm` scrambles noise only.** The table was ambiguous. `P` follows the real `u` as
+   in `both_util`, and only `R` is the re-permuted gate. Scrambling both would let protection
+   alone produce a win and so would not test coordination, which is what H2a claims.
+2. **The retry scales every condition's rate by 3,** not only `sgd`'s. Raising `sgd` alone
+   lowers `sgd` AUC, which works against the tension check (`protect` below `sgd`), so the retry
+   could not have fixed a tension failure. A retry is allowed only if every failed check is
+   plasticity or tension, and it reruns all of Stage 0's conditions.
+3. **Choices the spec left open, fixed in code before data** (`NOTES` in `experiments/h2r.py`).
+   Stage 0 first tunes `sgd`, `protect` and `both_util`, and the full run reuses those configs.
+   "Layer" means each of the 6 weight and bias arrays. Rank ties break at random. So the gate SD
+   check is met by construction and cannot fail, and only the Spearman check tests the gate.
+   `reuse` is lower-is-better, and censored tasks count as task length and stay in, which shrinks
+   differences toward 0. Stage 0 has its own image pool. Holm uses step-down percentile intervals.
+   Stage 0 checks without "all 3 seeds" use the mean over seeds.
