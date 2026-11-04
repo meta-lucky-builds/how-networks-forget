@@ -8,11 +8,14 @@
 Six hypotheses, each committed before its data. The main question: when a network "forgets" an old task, has the
 memory been overwritten, or is it still there and just hard to reach?
 
-**Short answer.** It depends on the setting, on how much is learned afterwards, and on how many labels you use to look for
-the memory. Early forgetting on a small network was almost all loss of access (0.96), and deep forgetting was mostly unrecovered.
+**Short answer.** It depends on the setting, on how much is learned afterwards, and on how many labels are used to look for the memory.
+On a small MLP with tasks competing for outputs, early forgetting was almost all loss of access (0.96), and masking the outputs alone
+recovered 0.94 of the loss. Deeper forgetting leaves more that no key recovers, by an amount that depends on the key and the baseline.
 
-**Main result.** The standard probe can badly overstate what survives. On ResNet-18 and Split CIFAR-100 it reads 0.55 to 0.59 retained,
-where a control using never-trained tasks on the same network reads 0.04 to 0.15. The gap held in all 20 seeds.
+**Main result.** Plain linear-probe retention can far exceed what the probe can attribute to the old task. On ResNet-18 and Split CIFAR-100,
+with 2 labelled images per class, it reads 0.55 to 0.59 retained. Subtracting what the same probe scores on never-trained tasks leaves
+0.04 to 0.20, depending on the setting and baseline. The gap is positive in all 20 seeds at every lag tested, on both baselines.
+Real memory does survive: stronger keys reach 0.39 and 0.54 at the same test points.
 
 No biology-to-AI mapping has been supported so far, and this repo records that plainly.
 
@@ -22,26 +25,32 @@ No biology-to-AI mapping has been supported so far, and this repo records that p
 
 ![Naive probe retention stays between about 0.5 and 0.7 as later tasks are learned, while controlled measures fall](docs/figures/h6_probe_vs_memory.svg)
 
-Fit a new linear readout for an old task and compare its accuracy with the one on the original network. That ratio stays
-between about 0.5 and 0.7 however much is learned afterwards, so it looks like about half the task or more survives. The catch is that
-later training also raises scores on tasks the network **never saw**. After 5 later tasks with all seen classes competing, the
-readout scores **0.317 on the trained task and 0.321 on never-seen tasks**, while plain retention still says 0.49.
+Fit a new linear readout for an old task and compare its accuracy with the one on the original network. That ratio stays between
+about 0.5 and 0.7 over the 1 to 5 later tasks tested, so it looks like about half the task or more survives. The catch is that the probe
+already scores about 0.28 on tasks the network **never saw**, even on the original network, and later training adds up to 0.06. After 5 later
+tasks with all seen classes competing, the readout scores **0.317 on the trained task and 0.321 on never-seen tasks**, while plain
+retention still says 0.49. Correcting for chance only lowers plain retention to 0.40 to 0.60, so chance does not explain it.
 
-| Split CIFAR-100, ResNet-18, 20 fresh seeds | Plain retention | Controlled for never-seen tasks | Gap, 95% CI |
-| --- | --- | --- | --- |
-| All seen classes compete | 0.55 | 0.15 | **0.41** [0.35, 0.47] |
-| Task identity given | 0.59 | 0.04 | **0.56** [0.46, 0.67] |
+| Split CIFAR-100, ResNet-18, 20 fresh seeds | Plain retention | Same-network control | Fixed-baseline control | Gap to same-network, 95% CI | Gap to fixed, 95% CI |
+| --- | --- | --- | --- | --- | --- |
+| All seen classes compete | 0.55 | 0.15 | 0.20 | **0.41** [0.35, 0.47] | **0.36** [0.31, 0.41] |
+| Task identity given | 0.59 | 0.04 | 0.18 | **0.56** [0.46, 0.67] | **0.41** [0.33, 0.51] |
 
-The gap was positive in all 20 seeds in both settings, and the fixed baseline, which ignores that later gain, still reads only 0.20 and 0.18.
-Measured against the strongest key instead, which is a harsher test, it grows
-with later learning: from 0.16 to 0.44 after 1 and 5 tasks with all seen classes competing, and from -0.01 to 0.29 with task identity
-given. So early on, with task identity given, there is no overstatement by that test.
+Both gaps were positive in all 20 seeds at all four lags tested, with every interval's lower bound at 0.27 or above. Lags other than the
+test points are post hoc.
 
-On permuted MNIST, plain retention and the controlled readout nearly agree, with gaps of 0.04 and -0.02. Those tasks share few features,
-so this fits the idea that overstatement comes from transferable features, though network and data changed together.
+**This does not mean the memory is gone,** because a failed key proves only that this key failed. Stronger keys show real storage: a low-rate
+fine-tune reaches 0.39 after 1 task with all seen classes competing, and 0.54 after 2 tasks with task identity given, where the old output layer
+alone keeps 0.42. Against the strongest key the gap shrinks and depends on the baseline (post hoc). On the same network it grows, from 0.16 to 0.44
+and from -0.01 to 0.29 between 1 and 5 later tasks. On the fixed baseline it does not, going from 0.16 to 0.12 and from 0.00 to 0.03. So plain
+probes clearly overstate what this low-label readout can show. How far they overstate total stored memory is not settled.
 
-**Why it matters.** Probe retention has been read as evidence that memory survives forgetting: 76% retained at zero task accuracy on this
-same ResNet-18 and dataset ([Trivedi & Melwani 2026](https://arxiv.org/abs/2606.06032)), and 5.7 points lost by the probe against 22 by accuracy
+On permuted MNIST, plain retention and the same-network control nearly agree (0.04 and -0.02). Those tasks share few features, which fits
+the idea that overstatement comes from transferable features, though network and data changed together, and with shared outputs the
+fixed baseline does show a gap of 0.27.
+
+**Why it matters.** Probe retention has been read as evidence that memory survives forgetting: 76% retained at zero task accuracy on a
+ResNet-18 and this dataset ([Trivedi & Melwani 2026](https://arxiv.org/abs/2606.06032)), and 5.7 points lost by the probe against 22 by accuracy
 ([Davari et al. 2022](https://arxiv.org/abs/2203.13381)). Neither reports a never-trained-task control on the same network. The closest control we
 found is a probe on a network at initialization ([Ramasesh et al. 2020](https://arxiv.org/abs/2007.07400)).
 
@@ -58,12 +67,16 @@ overwriting, not a measurement of it**.
 | Small MLP, permuted MNIST, tasks compete for outputs | 1 task | 0.96 [0.92, 0.99] | 0.04 | **Mostly access** |
 | Small MLP, permuted MNIST, shared outputs | 5 tasks | 0.46 [0.41, 0.51] | 0.53 | **No majority**, depends on baseline and budget |
 | ResNet-18, Split CIFAR-100, all seen classes compete | 1 task | 0.15 [0.07, 0.21] | 0.61 | **Mostly unrecovered**, at 2 images per class |
-| ResNet-18, Split CIFAR-100, task identity given | 2 tasks | no valid reading | 0.80 | **Mostly unrecovered**, at 2 images per class |
+| ResNet-18, Split CIFAR-100, task identity given | 2 tasks | no valid reading | 0.80 | **Mostly unrecovered** of what was lost, at 2 images per class |
+
+The shares are of what was lost, so they can sound bleaker than the memory is. With task identity given, 0.42 of the original advantage survives with
+no key, so 0.80 of the rest is 0.46 of the original, and 0.54 is reachable. These labels are for the preregistered test points. At 5 tasks with
+task identity given, for example, the fixed baseline reads no majority.
 
 Three things change the answer:
 
-- **More later learning.** On the MLP, access gives way to unrecovered damage. After 20 tasks with shared outputs, unrecovered is at
-  least 0.40 on either baseline at either learning rate, the firmest result here.
+- **More later learning.** On the MLP, access gives way to unrecovered damage, by an amount that depends on the key and baseline. After 20
+  tasks with shared outputs, unrecovered is at least 0.40 on either baseline at either learning rate, the firmest result here.
 - **More labels for the key.** With shared outputs, the MLP's label moves from no majority at 5 images per class to mostly repair at 10
   and mostly access at 20 and 50. With competing outputs it stays mostly access throughout. So the CIFAR labels, at 2 images, may not hold at larger budgets.
 - **The baseline.** Same-network and fixed baselines can disagree widely. The same MLP point reads 0.46 access on one and 0.15 on the other.
@@ -72,17 +85,18 @@ The MNIST verdict numbers replicated on fresh seeds. A third MLP setting, 3-way 
 as planned. The MLP and ResNet rows differ in network, data and budget all at once, so no
 single cause explains the difference. [MNIST result](results/h5/RESULT.md).
 
-### 3. The damage is in the body of the network, not the output layer
+### 3. With outputs masked, the remaining damage is in the feature layers
 
-Restoring the saved feature layers brings back 0.97 to 1.00 of the old task's advantage in the CIFAR experiment, at every lag.
+Scored over the old task's outputs only, restoring the saved feature layers brings back 0.97 to 1.00 of the old task's advantage in the CIFAR
+experiment, at every lag.
 Restoring the output layer adds at most 0.07. This locates the damage and is not a fix, since it needs the old weights. On the MLP, late
-damage is likewise in the hidden layers. There, with shared outputs, the network also got worse at learning new tasks as it aged, while on
-CIFAR new-task probe scores rose. Batch norm
-recalibration, a zero-label fix that was predicted to help, added 0.03 at most at the test points.
+damage is likewise in the hidden layers. There the network also got worse at learning new tasks as it aged, with new-task readout falling from 0.36
+to 0.22 and 0.24 by 20 tasks, while on CIFAR new-task probe scores rose. Batch norm recalibration from 20 images, a zero-label fix that was
+predicted to help, added 0.03 at most at the test points.
 
-### 4. A clean negative: holding back on surprise loses to hedging
+### 4. A negative with a clear cause: holding back on surprise loses to hedging
 
-The idea was to delay learning from a surprising sample until something corroborates it. It failed its gate. A short derivation
+The idea was to delay learning from a surprising sample until something corroborates it. On a 1-D tracking stream it failed its gate. A short derivation
 shows why: under squared error, when a jump could be a real change or a one-off, staying put costs **about twice** what the
 midpoint costs. The data match, 12.99 against 6.76. It did win where it should, with the lowest error of any non-ceiling learner on
 outlier-only streams (1.30), and corroboration clearly beat no corroboration. [Result](results/h1_stage_a/RESULT.md).
@@ -98,7 +112,7 @@ designs, avoiding about 414 projected minutes of runs. [Lessons learned](docs/MA
 These come from four review threads and a prior-art check, and are not results of this repo. Each note records how deeply every source was read, and many
 are abstract-level.
 
-- **Surprise needs a cause.** In humans, surprise raised learning after a real change and lowered it after a one-off
+- **Surprise needs a cause.** In humans, surprise raised learning in blocks with real changes and lowered it in blocks with one-offs
   ([Nassar et al. 2019, 39 subjects](docs/literature/neuromodulation.md)). AI surprise gates usually just raise learning with surprise.
 - **Fair tuning erases many gains.** No neuromodulation-inspired method in the notes beat well-tuned Adam on a standard benchmark, and
   audited optimiser speedups [mostly shrank under fair tuning](docs/literature/neuromodulation.md).
@@ -137,10 +151,10 @@ tasks `C` **on the same network**:
 `k` is a key: nothing, an output mask, a new readout, a low-rate fine-tune and so on. A key that works proves storage. A key that
 fails proves only that this key failed. Every setting must first pass blind checks: a sham that should read 0, random erasure that
 should read 0, and a planted access failure that should read near 1. A fresh readout ignores that planted shuffle by construction, so for
-the readout this check confirms the arithmetic, while the sham and erasure checks are the ones that could expose a bad measure. Constants are chosen on separate seeds that never score the old
+the readout this check confirms the arithmetic. The sham and erasure checks catch bias, not undercounting. Constants are chosen on separate seeds that never score the old
 task on a later network with any key but "nothing".
 
-## Why these results can be trusted
+## Why take these results seriously
 
 - **Plans came first.** Every plan is in git before its results, with the rule for each label fixed in advance. Later changes are logged as deviations.
 - **In H5 and H6, constants were set blind** on separate seeds, and verdicts come from 20 fresh seeds per setting.

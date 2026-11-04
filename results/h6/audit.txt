@@ -75,3 +75,13 @@ cifar_task H6a probes overstate H6b mostly unrecovered gates True same mostly un
    bn_recal minus none at m*: -0.007 [-0.036, 0.02]
    restore_head minus none at m*: 0.000 [0.0, 0.0]
    per-seed H6a gap min/median/max 0.218 0.544 2.119 seeds positive 20
+
+== plain retention minus fixed-baseline readout, and minus strongest key on each baseline
+ cifar_class lag 1: minus fixed readout 0.356 [0.313, 0.412] seeds positive 20 same-network seeds positive 20 same-network CI [0.351, 0.469] minus fixed strongest 0.164 [0.069, 0.212] new w0 0.286 new later 0.304
+ cifar_class lag 2: minus fixed readout 0.375 [0.318, 0.446] seeds positive 20 same-network seeds positive 20 same-network CI [0.397, 0.536] minus fixed strongest 0.235 [0.096, 0.368] new w0 0.286 new later 0.317
+ cifar_class lag 3: minus fixed readout 0.368 [0.322, 0.425] seeds positive 20 same-network seeds positive 20 same-network CI [0.411, 0.539] minus fixed strongest 0.172 [0.066, 0.325] new w0 0.286 new later 0.323
+ cifar_class lag 5: minus fixed readout 0.405 [0.349, 0.473] seeds positive 20 same-network seeds positive 20 same-network CI [0.435, 0.577] minus fixed strongest 0.117 [0.028, 0.233] new w0 0.286 new later 0.321
+ cifar_task lag 1: minus fixed readout 0.330 [0.272, 0.404] seeds positive 20 same-network seeds positive 20 same-network CI [0.318, 0.474] minus fixed strongest 0.002 [-0.038, 0.045] new w0 0.281 new later 0.296
+ cifar_task lag 2: minus fixed readout 0.410 [0.332, 0.512] seeds positive 20 same-network seeds positive 20 same-network CI [0.464, 0.674] minus fixed strongest 0.055 [0.019, 0.09] new w0 0.281 new later 0.321
+ cifar_task lag 3: minus fixed readout 0.365 [0.308, 0.433] seeds positive 20 same-network seeds positive 20 same-network CI [0.425, 0.595] minus fixed strongest 0.136 [0.051, 0.226] new w0 0.281 new later 0.319
+ cifar_task lag 5: minus fixed readout 0.394 [0.331, 0.476] seeds positive 20 same-network seeds positive 20 same-network CI [0.517, 0.691] minus fixed strongest 0.032 [-0.066, 0.125] new w0 0.281 new later 0.336

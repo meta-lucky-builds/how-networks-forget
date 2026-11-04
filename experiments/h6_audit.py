@@ -91,3 +91,21 @@ for regime, e in summ.items():
     now, then = col(regime, m, "A", "readout", n), col(regime, 0, "A", "readout", n)
     pos = (now / then - (now - new(regime, m, "readout", n)) / (then - new(regime, 0, "readout", n))).tolist()
     print("   per-seed H6a gap min/median/max", round(min(pos), 3), round(float(np.median(pos)), 3), round(max(pos), 3), "seeds positive", sum(p > 0 for p in pos))
+
+print("\n== plain retention minus fixed-baseline readout, and minus strongest key on each baseline")
+for regime, e in summ.items():
+    n = e["budget"]
+    for lag in (1, 2, 3, 5):
+        now, then = col(regime, lag, "A", "readout", n), col(regime, 0, "A", "readout", n)
+        naive = (counts @ now) / (counts @ then)
+        keys = ("readout", "readout_early", "finetune_low")
+        fixed = {k: S(regime, lag, k, n, True) for k in keys}
+        same = S(regime, lag, "readout", n)
+        best_fixed = np.max([bratio(v) for v in fixed.values()], axis=0)
+        point = max(v[0].mean() / v[1].mean() for v in fixed.values())
+        gap = naive - bratio(fixed["readout"])
+        seeds_gap = now / then - fixed["readout"][0] / fixed["readout"][1]
+        same_gap = now / then - same[0] / same[1]
+        print(f" {regime} lag {lag}: minus fixed readout {now.mean() / then.mean() - fixed['readout'][0].mean() / fixed['readout'][1].mean():.3f} {ci(gap)}"
+              f" seeds positive {int((seeds_gap > 0).sum())} same-network seeds positive {int((same_gap > 0).sum())} same-network CI {ci(naive - bratio(same))}"
+              f" minus fixed strongest {now.mean() / then.mean() - point:.3f} {ci(naive - best_fixed)} new w0 {new(regime, 0, 'readout', n).mean():.3f} new later {new(regime, lag, 'readout', n).mean():.3f}")

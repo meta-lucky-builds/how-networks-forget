@@ -1,6 +1,6 @@
 # Status
 
-Last updated 2026-11-04. Anyone resuming, human or agent, starts here, then reads [`CHARTER.md`](CHARTER.md).
+Last updated 2026-11-05. Anyone resuming, human or agent, starts here, then reads [`CHARTER.md`](CHARTER.md).
 
 **Where it stands.** H5 and H6, the two forgetting experiments, are complete. All other lines are paused or closed.
 
@@ -14,7 +14,7 @@ Last updated 2026-11-04. Anyone resuming, human or agent, starts here, then read
 | H3 | Gates must be self-generated, without task labels or blocks | Not started |
 | H4 | Does schema consistency add anything beyond gradient interference? | **Stopped at Stage 0**, claim untested |
 | H5 | Forgetting: overwriting or loss of access, on an MLP | **Complete.** `perm_class` mostly access, `perm_shared` no majority, `split_class` excluded. Replicated |
-| H6 | Probes overstate memory, on a ResNet | **Complete.** Probes overstate and mostly unrecovered, at budget 2 only |
+| H6 | Probes overstate memory, on a ResNet | **Complete.** Probes overstate and most of what was lost is unrecovered at the test points, at budget 2 only |
 
 Kill rules live in each preregistration.
 
@@ -39,5 +39,5 @@ all plasticity, is weakened: a shared signal is contested in biology and the AI 
 
 ## Open items
 
-- Citations from 2026 preprints come from one research pass and have not been independently re-opened.
+- Most citations from 2026 preprints come from one research pass and have not been re-opened. Trivedi & Melwani 2026 was re-read in full on 2026-11-05.
 - H1's per-seed files were not kept. The run is deterministic, so `experiments/h1_stage_a.py` regenerates them.

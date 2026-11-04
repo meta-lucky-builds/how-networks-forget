@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SERIES = (("naive", "Naive probe retention", "s1"), ("best", "Controlled, best key", "s2"), ("readout", "Controlled, same readout", "s3"))
+SERIES = (("naive", "Naive probe retention", "s1"), ("best", "Same-network control, best key", "s2"), ("readout", "Same-network control, same readout", "s3"))
 PANELS = (("cifar_class", "All seen classes compete (cifar_class)"), ("cifar_task", "Task identity given (cifar_task)"))
 LAGS = (1, 2, 3, 5)
 WIDTH, HEIGHT, PANEL_W, PANEL_H, TOP, LEFT, GAP = 880, 424, 340, 270, 96, 44, 64
@@ -47,10 +47,10 @@ def panel(entry, title, x0):
 
 def main():
     summary = json.loads((ROOT / "results/h6/summary.json").read_text())
-    alt = "Two line charts. Naive probe retention stays between about 0.5 and 0.7 as later tasks are learned, while the controlled measures fall towards zero."
+    alt = "Two line charts. Naive probe retention stays between about 0.5 and 0.7 as later tasks are learned, while the same-network controls fall."
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {WIDTH} {HEIGHT + 20}" width="{WIDTH}" role="img" aria-label="{alt}">', f"<style>{STYLE}</style>",
            f'<rect class="surface" width="{WIDTH}" height="{HEIGHT + 20}" rx="8"/>',
-           f'<text class="title" x="{LEFT}" y="26" style="font-size:16px">A plain probe keeps reading about half or more while controlled measures fall</text>']
+           f'<text class="title" x="{LEFT}" y="26" style="font-size:16px">A plain probe keeps reading about half or more while same-network controls fall</text>']
     legend_x = LEFT
     for _, name, css in SERIES:
         out.append(f'<line class="{css}" stroke-width="2" x1="{legend_x}" x2="{legend_x + 20}" y1="49" y2="49"/><circle class="{css}" cx="{legend_x + 10}" cy="49" r="4"/>')

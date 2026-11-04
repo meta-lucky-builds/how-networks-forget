@@ -23,7 +23,7 @@ def interval(ci):
 def test_probe_table(regime, name):
     t = H6[regime]["probe_test"]
     assert H6[regime]["probe_verdict"] == "probes overstate" and H6[regime]["gates_passed"]
-    assert f"| {name} | {f(t['naive_retention'])} | {f(t['S_readout'])} | **{f(t['gap'])}** {interval(t['gap_ci'])} |" in README
+    assert f"| {name} | {f(t['naive_retention'])} | {f(t['S_readout'])} | {f(t['S_readout_fixed'])} | **{f(t['gap'])}** {interval(t['gap_ci'])} | **{f(t['gap_fixed'])}**" in README
 
 
 def test_probe_scores_after_five_tasks():
@@ -39,7 +39,9 @@ def test_gap_against_strongest_key(regime, lag):
 
 
 def test_fixed_baseline_and_damage_location():
-    assert f"still reads only {f(H6['cifar_class']['probe_test']['S_readout_fixed'])} and {f(H6['cifar_task']['probe_test']['S_readout_fixed'])}" in README
+    assert f"reaches {f(max(H6['cifar_class']['same']['S'].values()))} after 1 task" in README
+    assert f"and {f(max(H6['cifar_task']['same']['S'].values()))} after 2 tasks" in README
+    assert f(H6["cifar_task"]["same"]["S_none"]) in README
     keys = [H6[r]["by_lag"][f"{lag}/2"]["S_keys"] for r in H6 for lag in (1, 2, 3, 5)]
     assert 0.965 <= min(k["restore_body"] for k in keys) and max(k["restore_body"] for k in keys) <= 1.005
     reference = [k.get("mask", k["none"]) for k in keys]

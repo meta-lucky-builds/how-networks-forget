@@ -3,7 +3,8 @@
 **Status: complete. All gates passed in both settings on the confirmation seeds.**
 
 **Answer.** At two labelled images per class, yes. Plain probe retention looks like about half the old task survives, and it
-barely moves as learning continues, while the controlled measures fall towards zero. The split reads mostly unrecovered in
+barely moves as learning continues, while the same-network measures fall. The fixed baseline falls less, and early-layer readouts hold up on it,
+so how far probes overstate total stored memory is not settled. The split reads mostly unrecovered in
 both settings on both baselines. **Both verdicts hold at that one budget.** Budget 2 is a weak key, and the sweep that would
 show how far this carries was cut to save compute. "Unrecovered" is an upper limit on overwriting, not a measurement of it.
 
@@ -23,7 +24,7 @@ Chosen blind: `cifar_class` rate 0.01, 20 epochs, test point 1 later task. `cifa
 | `cifar_class` | 0.552 | 0.146 | **0.406** [0.351, 0.469] | 0.196 | 20 of 20 |
 | `cifar_task` | 0.594 | 0.038 | **0.556** [0.464, 0.674] | 0.184 | 20 of 20 |
 
-The raw accuracies show why. New tasks gain from later training, so what looks like memory is largely general features.
+The raw accuracies show why. Never-trained tasks already score about 0.28 on the original network, and later training adds 0.02 to 0.04 at these test points. Much of what looks like memory is ability the probe has on any task.
 
 | Setting | Readout on old task, start to later | Readout on never-trained tasks, start to later |
 | --- | --- | --- |
@@ -84,6 +85,12 @@ so makes this gap conservative. Test points are in bold.
 The sharpest single reading: in `cifar_class` after 5 later tasks, the readout scores 0.317 on the trained task and 0.321 on
 tasks the network never saw, while naive retention still says 0.49. Correcting naive retention for chance (0.1) moves it only
 to about 0.40.
+
+### The gap on the fixed baseline
+
+Plain retention minus the fixed-baseline readout is 0.36 [0.31, 0.41] and 0.41 [0.33, 0.51] at the test points. It is positive in all 20 seeds at all
+four lags in both settings, with no interval's lower bound below 0.27. Against the strongest key on the fixed baseline the gap does not grow:
+0.16 to 0.12 between 1 and 5 later tasks in `cifar_class`, and 0.00 to 0.03 in `cifar_task`. Full table: `audit.txt`.
 
 ### Where the damage is
 
