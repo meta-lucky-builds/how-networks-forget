@@ -131,6 +131,28 @@ def test_blind_never_scores_a_later_network_on_the_trained_task(monkeypatch):
     assert later and all(r[3] == "none" for r in later)
 
 
+def test_gates_run_on_blind_rows(monkeypatch):
+    rows = run_small(True, monkeypatch)
+    checks = h5.evaluate_gates(h5.index_rows({1: rows}), [1], 1, 5)
+    assert "sham_null_readout" in checks and "matched_erasure_gap" in checks
+
+
+def test_restore_puts_back_only_the_named_arrays():
+    now, w0 = small_net(seed=1), small_net(seed=2)
+    head = h5.restored(now, w0, "restore_head")
+    assert head[4] is not w0[4] and np.array_equal(head[4], w0[4]) and head[0] is now[0]
+    body = h5.restored(now, w0, "restore_body")
+    assert np.array_equal(body[2], w0[2]) and body[4] is now[4]
+
+
+def test_finetune_short_is_the_start_of_the_long_path(monkeypatch):
+    data, task = synthetic(), h5.Task(np.arange(3), np.arange(3))
+    net, seen = small_net(outputs=20), np.arange(3)
+    short = h5.probe(net, task, 0, data, "finetune10", 5, seen, 0.05, 3)
+    monkeypatch.setattr(h5, "FINETUNE_STEPS", 10)
+    assert short == h5.probe(net, task, 0, data, "finetune", 5, seen, 0.05, 3)
+
+
 def test_unblinded_scores_all_keys(monkeypatch):
     rows = run_small(False, monkeypatch)
     keys = {r[3] for r in rows if r[0] == "real" and r[1] > 0 and r[2] == "A"}

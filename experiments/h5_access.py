@@ -182,9 +182,9 @@ def train_task(net, task, data, active, lr, steps, rng):
 
 
 # ---- Keys ----
-def ridge_score(net, task, x_key, y_key, x_eval, y_eval):
-    f = np.nan_to_num(hidden_states(net, x_key)[3]).astype(np.float64)
-    test = np.nan_to_num(hidden_states(net, x_eval)[3]).astype(np.float64)
+def ridge_score(net, task, x_key, y_key, x_eval, y_eval, layer=3):
+    f = np.nan_to_num(hidden_states(net, x_key)[layer]).astype(np.float64)
+    test = np.nan_to_num(hidden_states(net, x_eval)[layer]).astype(np.float64)
     mean, std = f.mean(0), f.std(0) + 1e-6
     f, test = (f - mean) / std, (test - mean) / std
     target = np.eye(len(task.classes))[y_key]
@@ -206,9 +206,9 @@ def gain_score(net, task, x_key, y_key, x_eval, y_eval):
     return score(net, task, x_eval, y_eval, task.outputs, gains)
 
 
-def finetune_score(net, task, x_key, y_key, x_eval, y_eval, lr, rng):
+def finetune_score(net, task, x_key, y_key, x_eval, y_eval, lr, rng, steps):
     tuned, size = copy_net(net), min(BATCH, len(y_key))
-    for _ in range(FINETUNE_STEPS):
+    for _ in range(steps):
         ids = rng.choice(len(y_key), size=size, replace=False)
         weight, _ = grads(tuned, x_key[ids], y_key[ids], task.outputs)
         for a, g in zip(tuned, weight):
@@ -216,24 +216,41 @@ def finetune_score(net, task, x_key, y_key, x_eval, y_eval, lr, rng):
     return score(tuned, task, x_eval, y_eval, task.outputs)
 
 
+# Saved weights from w_0 put back with no samples: indices of the arrays taken from w_0. These locate
+# damage and carry many bits, so they never count as access.
+RESTORE = {"restore_head": (4, 5), "restore_layer1": (0, 1), "restore_top2": (2, 3, 4, 5), "restore_body": (0, 1, 2, 3)}
+ZERO_SAMPLE = ("none", "mask", *RESTORE)
+PLANTED_KEYS = ("none", "readout", "finetune")
+
+
 def keys_for(regime):
-    return ("none", "gain", "readout", "finetune") if regime == "perm_shared" else ("none", "mask", "gain", "readout", "finetune")
+    base = ("none", "gain", "readout", "readout1", "finetune10", "finetune", *RESTORE)
+    return base if regime == "perm_shared" else ("mask", *base)
 
 
-def probe(net, task, task_id, data, key, n, seen, lr, seed):
+def restored(net, w0, key):
+    return [w0[i].copy() if i in RESTORE[key] else a for i, a in enumerate(net)]
+
+
+def probe(net, task, task_id, data, key, n, seen, lr, seed, w0=None):
     """Accuracy on one task after one key. Key samples depend on seed, task and n, not on the network."""
     x_eval, y_eval = task.pool(data.x_test, data.eval)
     if key == "none":
         return score(net, task, x_eval, y_eval, np.union1d(seen, task.outputs))
     if key == "mask":
         return score(net, task, x_eval, y_eval, task.outputs)
+    if key in RESTORE:
+        return score(restored(net, w0, key), task, x_eval, y_eval, task.outputs)
     rng = rng_for(seed, K_KEY, task_id, n)
     x_key, y_key = task.pool(data.x_train, data.key, n, rng)
     if key == "gain":
         return gain_score(net, task, x_key, y_key, x_eval, y_eval)
     if key == "readout":
         return ridge_score(net, task, x_key, y_key, x_eval, y_eval)
-    return finetune_score(net, task, x_key, y_key, x_eval, y_eval, lr, rng)
+    if key == "readout1":
+        return ridge_score(net, task, x_key, y_key, x_eval, y_eval, layer=1)
+    # Same draws for both lengths, so finetune10 is the start of finetune's path.
+    return finetune_score(net, task, x_key, y_key, x_eval, y_eval, lr, rng, 10 if key == "finetune10" else FINETUNE_STEPS)
 
 
 # ---- Planted truth ----
@@ -302,8 +319,8 @@ def run_seed(data, regime, seed, lr, steps, m_star, budgets, blind):
         for name in names:
             task, task_id = named[name]
             for key in allowed:
-                for n in (0,) if key in ("none", "mask") else budgets:
-                    acc = probe(candidate, task, task_id, data, key, n, seen, lr, seed)
+                for n in (0,) if key in ZERO_SAMPLE else budgets:
+                    acc = probe(candidate, task, task_id, data, key, n, seen, lr, seed, w0)
                     rows.append((which, lag, name, key, n, acc))
 
     for t in range(last + 1):
@@ -334,9 +351,9 @@ def run_seed(data, regime, seed, lr, steps, m_star, budgets, blind):
     erase_seed = int(rng_for(seed, K_ERASE).integers(2 ** 31))
     shuffled = match_fraction(lambda f: planted_access(w0, f, plant_seed), target, s_none)
     erased = match_fraction(lambda f: planted_erasure(w0, f, erase_seed), target, s_none)
-    measure("plant_access", 0, planted_access(w0, shuffled, plant_seed), seen0)
-    measure("erase_matched", 0, planted_erasure(w0, erased, erase_seed), seen0)
-    measure("erase_total", 0, planted_erasure(w0, 2.0, erase_seed), seen0)  # rng.random < 2 is always true
+    measure("plant_access", 0, planted_access(w0, shuffled, plant_seed), seen0, allowed=PLANTED_KEYS)
+    measure("erase_matched", 0, planted_erasure(w0, erased, erase_seed), seen0, allowed=PLANTED_KEYS)
+    measure("erase_total", 0, planted_erasure(w0, 2.0, erase_seed), seen0, allowed=PLANTED_KEYS)  # rng.random < 2 is always true
     return rows
 
 
@@ -375,7 +392,7 @@ def index_rows(rows_by_seed):
 
 
 def column(acc, seeds, which, lag, task, key, n):
-    n = 0 if key in ("none", "mask") else n
+    n = 0 if key in ZERO_SAMPLE else n
     return np.array([acc[(s, which, lag, task, key, n)] for s in seeds])
 
 
@@ -383,18 +400,22 @@ def new_task(acc, seeds, which, lag, key, n):
     return 0.5 * (column(acc, seeds, which, lag, "C1", key, n) + column(acc, seeds, which, lag, "C2", key, n))
 
 
+def starting_advantage(acc, seeds, key, n):
+    """Per-seed denominator of S_k: the advantage of the trained task on w_0."""
+    return column(acc, seeds, "real", 0, "A", key, n) - new_task(acc, seeds, "real", 0, key, n)
+
+
 def surviving(acc, seeds, lag, key, n, which="real", fixed_baseline=False):
     """Per-seed numerator and denominator of S_k. The ratio of their means is S_k."""
     baseline_lag, baseline_net = (0, "real") if fixed_baseline else (lag, which)
     numerator = column(acc, seeds, which, lag, "A", key, n) - new_task(acc, seeds, baseline_net, baseline_lag, key, n)
-    denominator = column(acc, seeds, "real", 0, "A", key, n) - new_task(acc, seeds, "real", 0, key, n)
-    return numerator, denominator
+    return numerator, starting_advantage(acc, seeds, key, n)
 
 
 def sham(acc, seeds, lag, key, n):
     """S from two tasks that were never trained. Expected 0 by exchangeability."""
     numerator = column(acc, seeds, "real", lag, "C1", key, n) - column(acc, seeds, "real", lag, "C2", key, n)
-    return numerator, surviving(acc, seeds, lag, key, n)[1]
+    return numerator, starting_advantage(acc, seeds, key, n)
 
 
 def ratio(numerator, denominator):
@@ -438,6 +459,28 @@ def decompose(acc, seeds, lag, n, counts, fixed_baseline=False):
             "S": {k: ratio(*pairs[k]) for k in pairs}, "label": label(access_ci, total_ci)}
 
 
+def recovered_by_key(acc, seeds, lag, n, counts, keys):
+    """For each key, the share of what was lost that it recovers, with an interval."""
+    none = surviving(acc, seeds, lag, "none", 0)
+    boot_none, out = (counts @ none[0]) / (counts @ none[1]), {}
+    for key in keys:
+        pair = surviving(acc, seeds, lag, key, n)
+        value = (ratio(*pair) - ratio(*none)) / (1.0 - ratio(*none))
+        boot = ((counts @ pair[0]) / (counts @ pair[1]) - boot_none) / (1.0 - boot_none)
+        out[key] = {"S": ratio(*pair), "recovered": value, "recovered_ci": ci(boot)}
+    return out
+
+
+def naive_against_controlled(acc, seeds, lag, n, counts):
+    """Published probe retention beside S_readout, which subtracts what a probe teaches on a new task."""
+    now, then = column(acc, seeds, "real", lag, "A", "readout", n), column(acc, seeds, "real", 0, "A", "readout", n)
+    pair = surviving(acc, seeds, lag, "readout", n)
+    naive = (counts @ now) / (counts @ then)
+    gap = naive - (counts @ pair[0]) / (counts @ pair[1])
+    return {"naive_retention": float(now.mean() / then.mean()), "naive_retention_ci": ci(naive),
+            "S_readout": ratio(*pair), "naive_minus_S": float(now.mean() / then.mean() - ratio(*pair)), "naive_minus_S_ci": ci(gap)}
+
+
 def evaluate_gates(acc, seeds, m_star, n):
     """Validity gates of the spec, at the primary lag and budget."""
     planted = lambda which, key: ratio(*surviving(acc, seeds, 0, key, n, which=which))
@@ -479,7 +522,7 @@ def choose_config(curves, regime):
 def choose_budget(acc, seeds):
     """The smallest budget whose readout and finetune advantages on w_0 have real range."""
     for n in BUDGETS:
-        values = {k: float(surviving(acc, seeds, 0, k, n)[1].mean()) for k in ("readout", "finetune")}
+        values = {k: float(starting_advantage(acc, seeds, k, n).mean()) for k in ("readout", "finetune")}
         if min(values.values()) >= MIN_ADVANTAGE:
             return n, values
     return None, None
@@ -552,14 +595,13 @@ def analyse(rows, regimes):
         primary = decompose(acc, seeds, m_star, n, counts)
         fixed = decompose(acc, seeds, m_star, n, counts, fixed_baseline=True)
         checks = evaluate_gates(acc, seeds, m_star, n)
-        readout_a = column(acc, seeds, "real", m_star, "A", "readout", n)
-        readout_a0 = column(acc, seeds, "real", 0, "A", "readout", n)
         summary[regime] = {
             "m_star": m_star, "budget": n, "primary": primary, "fixed_baseline": fixed,
             "verdict": primary["label"] if all(c["pass"] for c in checks.values()) else "void: gates failed",
             "robust": primary["label"] == fixed["label"], "checks": checks,
-            "naive_retention_readout": float(readout_a.mean() / readout_a0.mean()),
-            "S_by_key": {k: ratio(*surviving(acc, seeds, m_star, k, n)) for k in keys_for(regime)},
+            "naive_against_controlled": naive_against_controlled(acc, seeds, m_star, n, counts),
+            "recovered_by_key": recovered_by_key(acc, seeds, m_star, n, counts, keys_for(regime)),
+            "recovered_by_key_by_lag": {str(lag): recovered_by_key(acc, seeds, lag, n, counts, keys_for(regime)) for lag in LAGS[regime]},
             "new_task_by_lag": {str(lag): {k: float(new_task(acc, seeds, "real", lag, k, n).mean()) for k in keys_for(regime)}
                                 for lag in (0, *LAGS[regime])},
             "trained_task_by_lag": {str(lag): {k: float(column(acc, seeds, "real", lag, "A", k, n).mean()) for k in keys_for(regime)}

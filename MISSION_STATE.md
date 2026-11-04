@@ -3,7 +3,7 @@
 Durable state for a long-running research mission. Anyone resuming, human or
 agent, starts here, then reads `docs/CHARTER.md`.
 
-**Last heartbeat:** 2026-11-04T04:20Z
+**Last heartbeat:** 2026-11-04T06:10Z
 **Working branch:** `research/bio-to-ai`
 **Phase:** 3, H1 negative, H2 and H2R closed untested, H4 stopped untested, H3 next
 
@@ -81,13 +81,8 @@ granularity is mixed. It remains an open test (`neuromodulation.md` Exp 2).
 
 ## Next
 
-1. Design H3 in a CPU-sized form, the last open bet, from `gating_metacognition.md`
-   Experiment 1. The source uses 2x2048 units, so check the runtime on paper first.
-2. Use the method lessons in `docs/MAPPINGS.md`. Add a calibration run that only sets constants
-   and reports metric ranges before thresholds are fixed, then preregister and test on fresh seeds.
-3. Do not reopen H2 or H4 under their old names. A new form needs a new name and a
-   preregistration that states what these stops informed. Open candidate: test the cause-inference
-   synthesis directly, since every thread points at it and nothing has tested it.
+**Owner's instruction, 2026-11-04: focus only on H5, overwriting or loss of access. All other lines are
+paused.** Finish calibration, confirmation and the verdict before anything else. H3 and new bets wait.
 
 Usage note: on 2026-11-03 the 5-hour window reached 66% about 75 minutes in, driven by
 five research agents and a large coordinator context. Wait cheaply while Colab runs.

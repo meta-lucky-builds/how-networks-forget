@@ -169,3 +169,11 @@ design guarantees is that the answer will be interpretable, which H2, H2R and H4
    images per class. Keys beyond `none` and `mask` restrict output to the probed task, so they include the
    mask. Key samples are the same across networks within a seed and task. Sham and planted gates run again on
    the confirmation seeds, and a failure voids the label.
+2. **Comparisons added at the owner's request, before any outcome was seen. None decides a label.** The first
+   calibration run crashed in the sham gate, which tried to read a trained-task score that the blind stage
+   never computes, so it produced no gate or outcome, and calibration reruns on the same seeds 500 to 504.
+   Added: `restore_head`, `restore_layer1`, `restore_top2` and `restore_body` put saved `w_0` arrays back with no
+   samples, to locate where overwriting happened. They carry many bits, so they are not access keys. `readout1`
+   is the same ridge on the first hidden layer, testing the claim that early layers keep more. `finetune10` is the
+   first 10 steps of `finetune`, showing how cheap repair is. Each key's recovered share and interval is reported,
+   as is the interval of naive retention minus `S_readout`, which is bet 3.
