@@ -43,8 +43,8 @@ A biological analogy earns nothing by itself. Each mapping must state:
   sizes. Null and negative results are recorded with the same care.
 - **Execute in the cloud only.** Experiments and tests run on cloud machines, never a
   local one: GitHub Actions, Colab or a cloud GPU.
-- **Cite only what was read.** No citation enters the repo unless its source was
-  actually opened; `docs/literature/` records what each claim rests on.
+- **Say how deeply each source was read.** `docs/literature/` records for each claim whether
+  it rests on a full text, an abstract or a snippet, and marks what was not opened.
 
 ## Repository layout
 

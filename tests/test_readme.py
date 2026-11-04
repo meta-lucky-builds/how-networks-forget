@@ -38,6 +38,19 @@ def test_gap_against_strongest_key(regime, lag):
     assert f(v["probe"]["naive_retention"] - max(v["same"]["S"].values())) in README
 
 
+def test_fixed_baseline_and_damage_location():
+    assert f"still reads only {f(H6['cifar_class']['probe_test']['S_readout_fixed'])} and {f(H6['cifar_task']['probe_test']['S_readout_fixed'])}" in README
+    keys = [H6[r]["by_lag"][f"{lag}/2"]["S_keys"] for r in H6 for lag in (1, 2, 3, 5)]
+    assert 0.965 <= min(k["restore_body"] for k in keys) and max(k["restore_body"] for k in keys) <= 1.005
+    reference = [k.get("mask", k["none"]) for k in keys]
+    assert max(k["restore_head"] - r for k, r in zip(keys, reference)) <= 0.07
+
+
+def test_null_checks_claim():
+    names = ("sham_readout", "sham_finetune_low", "total_erasure_readout", "total_erasure_finetune_low")
+    assert max(abs(H6[r]["checks"][n]["measured"]) for r in H6 for n in names) <= 0.07
+
+
 def test_mnist_rows():
     for regime, row in (("perm_class", "tasks compete for outputs | 1 task"), ("perm_shared", "shared outputs | 5 tasks")):
         p = H5[regime]["primary"]

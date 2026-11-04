@@ -9,17 +9,21 @@ Six hypotheses, each committed before its data. The main question: when a networ
 memory been overwritten, or is it still there and just hard to reach?
 
 **Short answer.** It depends on the setting, on how much is learned afterwards, and on how many labels you use to look for
-the memory. A common way of measuring it can mislead. No biology-to-AI mapping has been supported so far, and this repo records
-that plainly.
+the memory. Early forgetting on a small network was almost all loss of access (0.96), and deep forgetting was mostly unrecovered.
+
+**Main result.** The standard probe can badly overstate what survives. On ResNet-18 and Split CIFAR-100 it reads 0.55 to 0.59 retained,
+where a control using never-trained tasks on the same network reads 0.04 to 0.15. The gap held in all 20 seeds.
+
+No biology-to-AI mapping has been supported so far, and this repo records that plainly.
 
 ## Top findings
 
-### 1. A plain probe can report memory that the network does not have
+### 1. A plain probe can report memory that controlled tests cannot find
 
 ![Naive probe retention stays between about 0.5 and 0.7 as later tasks are learned, while controlled measures fall](docs/figures/h6_probe_vs_memory.svg)
 
 Fit a new linear readout for an old task and compare its accuracy with the one on the original network. That ratio stays
-between about 0.5 and 0.7 however much is learned afterwards, so it looks like at least half the task survives. The catch is that
+between about 0.5 and 0.7 however much is learned afterwards, so it looks like about half the task or more survives. The catch is that
 later training also raises scores on tasks the network **never saw**. After 5 later tasks with all seen classes competing, the
 readout scores **0.317 on the trained task and 0.321 on never-seen tasks**, while plain retention still says 0.49.
 
@@ -28,14 +32,21 @@ readout scores **0.317 on the trained task and 0.321 on never-seen tasks**, whil
 | All seen classes compete | 0.55 | 0.15 | **0.41** [0.35, 0.47] |
 | Task identity given | 0.59 | 0.04 | **0.56** [0.46, 0.67] |
 
-The gap was positive in all 20 seeds in both settings. Measured against the strongest key instead, which is a harsher test, it grows
+The gap was positive in all 20 seeds in both settings, and the fixed baseline, which ignores that later gain, still reads only 0.20 and 0.18.
+Measured against the strongest key instead, which is a harsher test, it grows
 with later learning: from 0.16 to 0.44 after 1 and 5 tasks with all seen classes competing, and from -0.01 to 0.29 with task identity
 given. So early on, with task identity given, there is no overstatement by that test.
 
-On permuted MNIST the same check found almost none (0.04 and -0.02). Those tasks share few features, so this fits the idea that
-overstatement comes from transferable features, though network and data changed together.
+On permuted MNIST, plain retention and the controlled readout nearly agree, with gaps of 0.04 and -0.02. Those tasks share few features,
+so this fits the idea that overstatement comes from transferable features, though network and data changed together.
 
-**Limit: the CIFAR result is at 2 labelled images per class only.** [Full result](results/h6/RESULT.md).
+**Why it matters.** Probe retention has been read as evidence that memory survives forgetting: 76% retained at zero task accuracy on this
+same ResNet-18 and dataset ([Trivedi & Melwani 2026](https://arxiv.org/abs/2606.06032)), and 5.7 points lost by the probe against 22 by accuracy
+([Davari et al. 2022](https://arxiv.org/abs/2203.13381)). Neither reports a never-trained-task control on the same network. The closest control we
+found is a probe on a network at initialization ([Ramasesh et al. 2020](https://arxiv.org/abs/2007.07400)).
+
+**Limit: the CIFAR result is at 2 labelled images per class only.** Those studies train on the task's own data, so this raises a
+question about their readings without refuting them. [Full result](results/h6/RESULT.md).
 
 ### 2. Forgetting is not one thing
 
@@ -57,14 +68,16 @@ Three things change the answer:
   and mostly access at 20 and 50. With competing outputs it stays mostly access throughout. So the CIFAR labels, at 2 images, may not hold at larger budgets.
 - **The baseline.** Same-network and fixed baselines can disagree widely. The same MLP point reads 0.46 access on one and 0.15 on the other.
 
-The MNIST verdict numbers replicated on fresh seeds. The MLP and ResNet rows differ in network, data and budget all at once, so no
+The MNIST verdict numbers replicated on fresh seeds. A third MLP setting, 3-way MNIST and Fashion tasks, failed its checks and was excluded
+as planned. The MLP and ResNet rows differ in network, data and budget all at once, so no
 single cause explains the difference. [MNIST result](results/h5/RESULT.md).
 
 ### 3. The damage is in the body of the network, not the output layer
 
 Restoring the saved feature layers brings back 0.97 to 1.00 of the old task's advantage in the CIFAR experiment, at every lag.
 Restoring the output layer adds at most 0.07. This locates the damage and is not a fix, since it needs the old weights. On the MLP, late
-damage is likewise in the hidden layers, and networks also got worse at learning new tasks as they aged. Batch norm
+damage is likewise in the hidden layers. There, with shared outputs, the network also got worse at learning new tasks as it aged, while on
+CIFAR new-task probe scores rose. Batch norm
 recalibration, a zero-label fix that was predicted to help, added 0.03 at most at the test points.
 
 ### 4. A clean negative: holding back on surprise loses to hedging
@@ -82,7 +95,7 @@ designs, avoiding about 414 projected minutes of runs. [Lessons learned](docs/MA
 
 ### 6. From the literature: what AI versions of biological ideas tend to drop
 
-These come from five review threads and are not results of this repo. Each note records how deeply every source was read, and many
+These come from four review threads and a prior-art check, and are not results of this repo. Each note records how deeply every source was read, and many
 are abstract-level.
 
 - **Surprise needs a cause.** In humans, surprise raised learning after a real change and lowered it after a one-off
@@ -123,8 +136,18 @@ tasks `C` **on the same network**:
 
 `k` is a key: nothing, an output mask, a new readout, a low-rate fine-tune and so on. A key that works proves storage. A key that
 fails proves only that this key failed. Every setting must first pass blind checks: a sham that should read 0, random erasure that
-should read 0, and a planted access failure that should read near 1. Constants are chosen on separate seeds that never score the old
+should read 0, and a planted access failure that should read near 1. A fresh readout ignores that planted shuffle by construction, so for
+the readout this check confirms the arithmetic, while the sham and erasure checks are the ones that could expose a bad measure. Constants are chosen on separate seeds that never score the old
 task on a later network with any key but "nothing".
+
+## Why these results can be trusted
+
+- **Plans came first.** Every plan is in git before its results, with the rule for each label fixed in advance. Later changes are logged as deviations.
+- **In H5 and H6, constants were set blind** on separate seeds, and verdicts come from 20 fresh seeds per setting.
+- **Null checks passed where it counts.** On H6's confirmation seeds, sham and total-erasure readings stayed within 0.07 of zero, against a limit of 0.15.
+- **The MNIST numbers replicated.** On 20 more seeds, 0.46 access became 0.47 and 0.96 became 1.00.
+- **Failures are on the record,** including wrong predictions, design errors and an excluded setting.
+- **The data is here.** Raw results and logs are stored for every experiment except H1, and the tests run on every push.
 
 ## What this does not show
 
@@ -150,14 +173,14 @@ python -m pytest tests -q
 | H2 | `python experiments/h2_shared_state.py` | CPU, about 165 minutes |
 | H2R | `python experiments/h2r.py --stage0` | CPU, about 49 minutes |
 | H4 | `python experiments/h4_schema.py --stage0` | CPU, a few minutes |
-| H5 | `python experiments/h5_access.py calibrate`, then `confirm`, then `sensitivity` | CPU, hours |
+| H5 | `python experiments/h5_access.py calibrate`, then `confirm`, then `sensitivity` | CPU, about 30 to 40 minutes per run |
 | H6 | `pip install -e ".[h6]"`, then `python experiments/h6_cifar.py run` | RTX 5090, 72 minutes |
 
 H6 is one self-contained file: it downloads and verifies CIFAR-100, tests itself, and resumes if interrupted. It needs a GPU, and GPU
 runs are not bit-for-bit reproducible. H1's per-seed files were not kept, so rerun it to regenerate them.
 
 Continuous integration checks more than the code. It runs H6's self-test on CPU, rebuilds H6's post hoc numbers and this figure from
-the stored data and fails if they differ, and fails if a headline number or a link in this README stops matching the stored results.
+the stored data and fails if they differ, and fails if the main H5 and H6 numbers or local links in this README stop matching the repo.
 
 ## Repository map
 

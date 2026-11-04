@@ -120,8 +120,10 @@ them the truth lies.
 4. **The planted-access gate cannot fail for this readout.** Planted access shuffles units in front of the head, which a fresh
    readout ignores, so 1.000 is built in. It checks the arithmetic. It does not show the keys would detect access loss
    lower in the network. Sham and total erasure are the informative nulls.
-5. **This does not refute published probe studies.** It shows the gap on one small ResNet at a very low budget.
-   Their setups differ, and their citations rest on the read depth logged in `hypotheses/H5_overwrite_or_access.md`.
+5. **This does not refute published probe studies.** It shows the gap on one small ResNet at a very low budget. They train on
+   the task's own data, so they use far more labels. Rechecked on 2026-11-05: Trivedi & Melwani 2026 report 0.468 of 0.616, and Davari
+   2022 report 5.7 points against 22. Neither reports a never-trained-task control on the same network, and Ramasesh 2020's
+   control is a network at initialization. Davari was read in part, in the pages about probes and controls.
 6. **Not comparable to H5 directly.** `perm_class` read 0.96 access and `cifar_class` 0.15, but network, data, task structure and
    budget (5 against 2) all changed at once, so no one cause can be assigned.
 7. One network, one optimiser, 20 seeds, and GPU runs that are not bit-for-bit reproducible. The two runtime warnings in

@@ -9,7 +9,7 @@
 text { font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 13px }
 </style>
 <rect class="surface" width="880" height="444" rx="8"/>
-<text class="title" x="44" y="26" style="font-size:16px">A plain probe keeps reading about half retained while controlled memory falls</text>
+<text class="title" x="44" y="26" style="font-size:16px">A plain probe keeps reading about half or more while controlled measures fall</text>
 <line class="s1" stroke-width="2" x1="44" x2="64" y1="49" y2="49"/><circle class="s1" cx="54" cy="49" r="4"/>
 <text class="text" x="70" y="53">Naive probe retention</text>
 <line class="s2" stroke-width="2" x1="239.20000000000002" x2="259.20000000000005" y1="49" y2="49"/><circle class="s2" cx="249.20000000000002" cy="49" r="4"/>
