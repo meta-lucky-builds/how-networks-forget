@@ -1,7 +1,11 @@
 # H5: is forgetting mostly loss of access or overwriting?
 
-**Status: two of three settings confirmed. `split_class` could not be answered and is excluded.** A descriptive
-follow-up at a gentler rate is running (Deviation 4).
+**Status: complete. Two of three settings answered, `split_class` could not be answered and is excluded.**
+
+**Answer.** Neither explanation is "the" cause. Early forgetting is mostly loss of access, above all when tasks
+compete for outputs. As learning continues, the share no key can recover grows until it is the largest part.
+With shared outputs, access is weaker and the split is contested at moderate forgetting. "Unrecovered" is an upper
+limit on overwriting, so overwriting itself is not measured. This holds for a small MLP on permuted MNIST.
 
 Run 41791382866, seeds 600 to 619, constants fixed on separate seeds. All sham and planted gates passed on
 the confirmation seeds. Data: `summary.json`, `raw_perm_shared.csv`, `raw_perm_class.csv`. Intervals are 95%
@@ -95,7 +99,53 @@ Naive probe retention is close to `S_readout` here: 0.65 against 0.60 in `perm_s
    scores higher than `finetune`. So "unrecovered" is looser than it should be, and at budget 50 the shares contradict
    each other, with `readout` recovering 1.0 while `unrecovered` says 0.44. **The labels rest on budget 5, and in
    `perm_shared` the label changes with budget:** no majority, mostly repair, mostly access, mostly access at 5, 10, 20, 50.
-3. **One optimiser, one rate, one small network.** The blind rule chose rate 0.3 with 2000 steps for both settings,
-   the top of the grid. A gentler rate may give a different split.
+3. **One optimiser and one small network.** The blind rule chose rate 0.3 with 2000 steps for both settings, the
+   top of the grid. The follow-up below covers rate 0.1, but not width, optimiser or dataset.
 4. **Readout at budget 5 cannot reach the original accuracy,** 0.83 against 0.96 on `w_0`. `S` is relative to what
    the same key achieves on `w_0`, so a full `S` does not mean full accuracy.
+
+## Follow-up: replication, gentler rate, fairer strongest key (Deviation 4)
+
+Descriptive, designed after the verdicts, and it changes no label. Run 41795802842, fresh seeds 620 to 639. All gates
+passed for all four combinations. Full table: `sensitivity.md`.
+
+**The verdict numbers replicated at rate 0.3:**
+
+| Setting, test point | Measure | Confirmation | Replication |
+| --- | --- | --- | --- |
+| `perm_shared`, 5 tasks | Access, same-network | 0.46 | 0.47 |
+| `perm_shared`, 5 tasks | Access, fixed baseline | 0.15 | 0.14 |
+| `perm_class`, 1 task | Access, same-network | 0.96 | 1.00 |
+| `perm_class`, 1 task | Access, fixed baseline | 0.87 | 0.92 |
+
+**Budget 5. Access is same-network, then fixed baseline. Unrecovered uses the best key, same-network, then fixed.**
+
+| Setting | Rate | Later tasks | `S_none` | Access | Unrecovered, best key |
+| --- | --- | --- | --- | --- | --- |
+| `perm_class` | 0.3 | 1 | 0.34 | 1.00, 0.92 | -0.06, 0.08 |
+| `perm_class` | 0.3 | 5 | 0.00 | 0.79, 0.63 | 0.02, 0.22 |
+| `perm_class` | 0.3 | 20 | 0.00 | 0.20, -0.06 | 0.46, 0.83 |
+| `perm_class` | 0.1 | 1 | 0.21 | 0.95, 0.95 | 0.04, 0.05 |
+| `perm_class` | 0.1 | 5 | 0.00 | 0.85, 0.83 | 0.08, 0.14 |
+| `perm_class` | 0.1 | 20 | 0.00 | 0.45, 0.35 | 0.30, 0.49 |
+| `perm_shared` | 0.3 | 1 | 0.81 | 1.08, 0.37 | -0.35, 0.63 |
+| `perm_shared` | 0.3 | 5 | 0.25 | 0.47, 0.14 | 0.02, 0.63 |
+| `perm_shared` | 0.3 | 20 | 0.03 | 0.13, -0.20 | 0.52, 0.99 |
+| `perm_shared` | 0.1 | 1 | 0.94 | 0.56, 0.36 | -0.09, 0.37 |
+| `perm_shared` | 0.1 | 10 | 0.23 | 0.49, 0.18 | 0.14, 0.73 |
+| `perm_shared` | 0.1 | 20 | 0.07 | 0.23, -0.11 | 0.40, 0.90 |
+
+Readings:
+
+1. **Separate outputs: access is robust.** At rate 0.1 the two baselines nearly agree, so the disagreement seen at 0.3
+   comes largely from the high rate. Access stays the largest share through 10 tasks at 0.1 (0.66, 0.62).
+2. **Shared outputs: the rate does not change the split at matching forgetting.** At `S_none` near 0.25, access is
+   0.47 at rate 0.3 with 5 tasks and 0.49 at rate 0.1 with 10 tasks. So a gentler rate delays forgetting without
+   changing its kind.
+3. **The limit on overwriting at moderate forgetting is wide.** With the best key, `perm_shared` unrecovered at 5
+   tasks is 0.02 same-network and 0.63 fixed. Values below 0 and `S` above 1 cannot be real memory fractions, so
+   the same-network reading is inflated at the early lags, by the falling new-task score. Fixed baseline counts all
+   of that fall as lost, so it is too harsh. The data do not say where between them the truth lies.
+4. **Deep forgetting is the firmest result.** At 20 tasks in `perm_shared`, unrecovered is at least 0.40 on either
+   baseline at either rate, even with the best key chosen after the fact.
+5. **The first layer was usually the best key,** often ahead of fine-tuning, consistent with the earlier reading.

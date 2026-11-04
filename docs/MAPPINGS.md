@@ -4,7 +4,8 @@ What this mission has established, including what it failed to. A mapping counts
 after it passes its preregistered test against a non-biological rival (`docs/CHARTER.md`).
 
 **Current state: no mapping is supported.** One was tested and failed its gate. Three designs
-could not answer their question, so those claims remain open.
+could not answer their question, so those claims remain open. H5 gave an answer about AI models and
+tests no brain mechanism, so it is an analogy with a result and not a supported mapping.
 
 | Bet | Biological idea | AI claim | Outcome | What it licenses | Record |
 | --- | --- | --- | --- | --- | --- |
@@ -12,6 +13,7 @@ could not answer their question, so those claims remain open.
 | H2 | One multi-timescale synaptic state sets protection and recycling | A shared gate beats unrelated gates | **No conclusion**, design failure | Nothing about the claim. Label permutation capped zero-shot near 0.2 | `results/h2_shared_state/RESULT.md` |
 | H2R | As H2, on input-permuted MNIST with rank gates | As H2 | **Stopped at Stage 0**, line closed | Nothing about the claim. Short-gap threshold could not be met, and protect did not lose AUC | `results/h2r/RESULT.md` |
 | H4 | Schema-consistent learning needs less replay (Tse 2007) | Schema adds to replay savings beyond gradient overlap | **Stopped at Stage 0** | Nothing about the claim. `dose` was 96% censored, first-order r was 0.445 | `results/h4/RESULT.md` |
+| H5 | Engram retained, retrieval lost (Ryan 2015) | Forgetting is mostly loss of access, not overwriting | **Answered in two of three settings, for AI only.** `perm_class` mostly access, `perm_shared` no majority, `split_class` excluded | Early forgetting is mostly access, deep forgetting mostly unrecovered, on a small MLP. Says nothing about brains | `results/h5/RESULT.md` |
 | H3 | Self-generated gating | Gates must work without task labels or blocks | Not started | | `docs/literature/gating_metacognition.md` |
 
 ## Method lessons, each paid for
