@@ -3,7 +3,7 @@
 Durable state for a long-running research mission. Anyone resuming, human or
 agent, starts here, then reads `docs/CHARTER.md`.
 
-**Last heartbeat:** 2026-11-04T07:20Z
+**Last heartbeat:** 2026-11-04T07:55Z
 **Working branch:** `research/bio-to-ai`
 **Phase:** 3, H1 negative, H2 and H2R closed untested, H4 stopped untested, H3 next
 
@@ -49,7 +49,7 @@ agent, starts here, then reads `docs/CHARTER.md`.
 
 ## In progress
 
-- H5 (overwriting or access, requested by the owner 2026-11-04): `perm_shared` and `perm_class` passed
+- H5 (overwriting or access, requested by the owner 2026-11-04): `perm_class` confirmed mostly access, `perm_shared` no majority (`results/h5/RESULT.md`). `split_class`
   calibration and are confirming on Actions. Then `calibrate-retry` for `split_class` only (Deviation 3),
   then its `confirm` if answerable. Request format: line 1 mode, line 2 regimes, line 3 free text.
 - **The Colab runtime is shared with work we do not own** (`experiments/thread_a.py`,
