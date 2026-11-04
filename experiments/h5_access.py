@@ -33,6 +33,8 @@ CAL_SEEDS, RETRY_SEEDS, CONFIRM_SEEDS = tuple(range(500, 505)), tuple(range(505,
 MIN_ACC, MAX_S_NONE, MIN_ADVANTAGE = 0.85, 0.5, 0.15
 NULL_LIMIT, PLANT_MIN_S, PLANT_MAX_NONE, MATCHED_GAP = 0.15, 0.8, 0.6, 0.2
 N_BOOTSTRAP = 10000
+SENS_SEEDS, SENS_RATES, SENS_STEPS, SENS_BUDGETS = tuple(range(620, 640)), (0.3, 0.1), 2000, (5, 20)  # Deviation 4
+BEST_KEYS = ("readout", "readout1", "finetune10", "finetune", "finetune_low")
 
 # ---- Left open by the spec; chosen from first principles, not from outcomes ----
 HIDDEN = 128
@@ -225,7 +227,7 @@ PLANTED_KEYS = ("none", "readout", "finetune")
 
 
 def keys_for(regime):
-    base = ("none", "gain", "readout", "readout1", "finetune10", "finetune", *RESTORE)
+    base = ("none", "gain", "readout", "readout1", "finetune10", "finetune", "finetune_low", *RESTORE)
     return base if regime == "perm_shared" else ("mask", *base)
 
 
@@ -250,6 +252,8 @@ def probe(net, task, task_id, data, key, n, seen, lr, seed, w0=None):
         return ridge_score(net, task, x_key, y_key, x_eval, y_eval)
     if key == "readout1":
         return ridge_score(net, task, x_key, y_key, x_eval, y_eval, layer=1)
+    if key == "finetune_low":  # Deviation 4: a tenth of the rate, as 100 steps at the full rate may overfit
+        return finetune_score(net, task, x_key, y_key, x_eval, y_eval, 0.1 * lr, rng, FINETUNE_STEPS)
     # Same draws for both lengths, so finetune10 is the start of finetune's path.
     return finetune_score(net, task, x_key, y_key, x_eval, y_eval, lr, rng, 10 if key == "finetune10" else FINETUNE_STEPS)
 
@@ -472,6 +476,19 @@ def recovered_by_key(acc, seeds, lag, n, counts, keys):
     return out
 
 
+def best_key(acc, seeds, lag, n, counts, keys=BEST_KEYS, fixed_baseline=False):
+    """Unrecovered share, taking the highest S over keys, in each resample as well. Slightly favours recovery."""
+    none = surviving(acc, seeds, lag, "none", 0, fixed_baseline=fixed_baseline)
+    pairs = {k: surviving(acc, seeds, lag, k, n, fixed_baseline=fixed_baseline) for k in keys}
+    point = {k: ratio(*v) for k, v in pairs.items()}
+    top = max(point, key=point.get)
+    lost = max(1.0 - ratio(*none), 1e-9)
+    boot_none = (counts @ none[0]) / (counts @ none[1])
+    boot = np.max([(counts @ v[0]) / (counts @ v[1]) for v in pairs.values()], axis=0)
+    return {"top_key": top, "S_none": ratio(*none), "S_top": point[top], "S": point, "unrecovered": (1.0 - point[top]) / lost,
+            "unrecovered_ci": ci((1.0 - boot) / np.maximum(1.0 - boot_none, 1e-9))}
+
+
 def naive_against_controlled(acc, seeds, lag, n, counts):
     """Published probe retention beside S_readout, which subtracts what a probe teaches on a new task."""
     now, then = column(acc, seeds, "real", lag, "A", "readout", n), column(acc, seeds, "real", 0, "A", "readout", n)
@@ -602,6 +619,39 @@ def confirm(out_dir, cache, workers, wanted=REGIMES):
     path.write_text(json.dumps(merged(path, analyse(rows, regimes)), indent=2))
 
 
+def sensitivity(out_dir, cache, workers, wanted):
+    """Deviation 4. Descriptive: both rates, two budgets, every lag, on fresh seeds. Decides no label."""
+    calibration = json.loads((out_dir / "calibration.json").read_text())
+    jobs, rows = [], {}
+    for regime in wanted:
+        m_star = calibration["regimes"][regime]["config"]["m_star"]
+        jobs += [(regime, s, lr, SENS_STEPS, m_star, SENS_BUDGETS, False) for lr in SENS_RATES for s in SENS_SEEDS]
+    with ProcessPoolExecutor(workers, initializer=_init_worker, initargs=(str(cache),)) as pool:
+        for job, (regime, seed, seed_rows) in zip(jobs, pool.map(_seed_job, jobs)):
+            rows.setdefault((regime, job[2]), {})[seed] = seed_rows
+            log.info("sensitivity %s lr=%s seed=%s", regime, job[2], seed)
+    seeds, counts, out = list(SENS_SEEDS), resample_counts(len(SENS_SEEDS), N_BOOTSTRAP), {}
+    lines = ["| Setting | Rate | Later tasks | Budget | S_none | Access | Access, fixed | Unrecovered, best key | Same, fixed | Top key |",
+             "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for (regime, lr), per in rows.items():
+        acc, name = index_rows(per), f"{regime}@{lr}"
+        entry = out[name] = {"lags": {}, "w0_acc": float(column(acc, seeds, "real", 0, "A", "none", 0).mean())}
+        for lag in LAGS[regime]:
+            for n in SENS_BUDGETS:
+                same, fixed = decompose(acc, seeds, lag, n, counts), decompose(acc, seeds, lag, n, counts, fixed_baseline=True)
+                top, top_fixed = best_key(acc, seeds, lag, n, counts), best_key(acc, seeds, lag, n, counts, fixed_baseline=True)
+                entry["lags"][f"{lag}/{n}"] = {"primary": same, "fixed": fixed, "best": top, "best_fixed": top_fixed}
+                lines.append(f"| {regime} | {lr} | {lag} | {n} | {top['S_none']:.2f} | {same['access']:.2f} | {fixed['access']:.2f} | "
+                             f"{top['unrecovered']:.2f} [{top['unrecovered_ci'][0]:.2f}, {top['unrecovered_ci'][1]:.2f}] | "
+                             f"{top_fixed['unrecovered']:.2f} | {top['top_key']} |")
+        m_star = calibration["regimes"][regime]["config"]["m_star"]
+        entry["checks"] = evaluate_gates(acc, seeds, m_star, SENS_BUDGETS[0])
+        failed = [k for k, c in entry["checks"].items() if not c["pass"]]
+        lines.append(f"| {regime} | {lr} | gates at {m_star} | {SENS_BUDGETS[0]} | failed: {', '.join(failed) or 'none'} | | | | | |")
+    (out_dir / "sensitivity.json").write_text(json.dumps(out, indent=2))
+    (out_dir / "sensitivity.md").write_text("\n".join(lines) + "\n")
+
+
 def analyse(rows, regimes):
     seeds, counts, summary = list(CONFIRM_SEEDS), resample_counts(len(CONFIRM_SEEDS), N_BOOTSTRAP), {}
     for regime, entry in regimes.items():
@@ -628,7 +678,7 @@ def analyse(rows, regimes):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=("calibrate", "calibrate-retry", "confirm"))
+    parser.add_argument("mode", choices=("calibrate", "calibrate-retry", "confirm", "sensitivity"))
     parser.add_argument("--out", default="results/h5")
     parser.add_argument("--cache", default=str(Path.home() / ".cache" / "clu"))
     parser.add_argument("--workers", type=int, default=2)
@@ -638,7 +688,9 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s",
                         handlers=[logging.StreamHandler(), logging.FileHandler(out_dir / "run.log")])
-    if args.mode == "confirm":
+    if args.mode == "sensitivity":
+        sensitivity(out_dir, cache, args.workers, args.regimes)
+    elif args.mode == "confirm":
         confirm(out_dir, cache, args.workers, args.regimes)
     else:
         calibrate(CAL_SEEDS if args.mode == "calibrate" else RETRY_SEEDS, out_dir, cache, args.workers, args.regimes)

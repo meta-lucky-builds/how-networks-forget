@@ -223,3 +223,19 @@ def test_merged_keeps_earlier_regimes(tmp_path):
     path.write_text('{"perm_class": 1}')
     assert h5.merged(path, {"split_class": 2}) == {"perm_class": 1, "split_class": 2}
     assert h5.merged(tmp_path / "absent.json", {"a": 3}) == {"a": 3}
+
+
+def test_best_key_takes_the_highest_and_shares_stay_consistent():
+    seeds = list(range(8))
+    acc = fake_acc(seeds, {"none": 0.9, "readout": 0.9, "finetune": 0.9}, {"none": 0.1, "readout": 0.4, "finetune": 0.7},
+                   {"none": 0.1, "readout": 0.3, "finetune": 0.3})
+    out = h5.best_key(acc, seeds, 2, 5, h5.resample_counts(8, 50), keys=("readout", "finetune"))
+    assert out["top_key"] == "finetune" and abs(out["S_top"] - 4 / 6) < 1e-9
+    assert abs(out["unrecovered"] - (1 - 4 / 6)) < 1e-9
+
+
+def test_low_rate_finetune_differs_from_full_rate():
+    data, task = synthetic(), h5.Task(np.arange(3), np.arange(3))
+    net, seen = small_net(outputs=20), np.arange(3)
+    assert h5.probe(net, task, 0, data, "finetune_low", 5, seen, 0.05, 3) != h5.probe(net, task, 0, data, "finetune", 5, seen, 0.5, 3)
+    assert "finetune_low" in h5.keys_for("perm_shared")

@@ -1,6 +1,7 @@
 # H5: is forgetting mostly loss of access or overwriting?
 
-**Status: two of three settings confirmed. `split_class` is still rerunning its calibration.**
+**Status: two of three settings confirmed. `split_class` could not be answered and is excluded.** A descriptive
+follow-up at a gentler rate is running (Deviation 4).
 
 Run 41791382866, seeds 600 to 619, constants fixed on separate seeds. All sham and planted gates passed on
 the confirmation seeds. Data: `summary.json`, `raw_perm_shared.csv`, `raw_perm_class.csv`. Intervals are 95%
@@ -14,6 +15,19 @@ bootstrap over seeds.
 | `perm_shared` | 5 later tasks | 0.46 [0.41, 0.51] | 0.01 [-0.07, 0.08] | 0.53 [0.46, 0.61] | **No majority** | **No**, fixed baseline 0.15 / 0.11 / 0.75 reads mostly unrecovered |
 
 "Unrecovered" is the most that overwriting can be, not a measured amount of it.
+
+## `split_class`: excluded, no verdict
+
+It used its one blind rerun, seeds 505 to 509 (Deviation 3). On seeds 500 to 504 no budget from 5 to 50 had an
+advantage on `w_0` of at least 0.15. On the rerun, budget 1 had enough range (readout 0.36, finetune 0.32), but two
+null checks failed: total erasure on `readout` read 0.34, and sham on `finetune` read -0.22, each against a limit of
+0.15. At one image per class with five seeds, the measurement is too noisy. As preregistered it stays excluded,
+and **bet 3 is not settled by this experiment.**
+
+The first failure is still worth noting. With 5 or more images per class, a readout on a never-seen 3-class task
+scored within 0.15 of the trained task, even on the network that had just learned it. So on these easy tasks a probe
+says little about memory. This does not rebut the published claims, since these 3-way MNIST and Fashion tasks are
+much easier than theirs, and it was measured before forgetting, not after.
 
 ## Everything below is descriptive and decided no label
 

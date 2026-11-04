@@ -186,3 +186,11 @@ design guarantees is that the answer will be interpretable, which H2, H2R and H4
    constants from seeds 500 to 504 and confirm on seeds 600 to 619 first. Only their code path for regimes and
    output files changed, so their constants, keys and analysis are as they were. Raw results now go in one
    file per regime, and `summary.json` is merged.
+4. **Descriptive follow-up, written after seeing the `perm_class` and `perm_shared` confirmation. It decides no
+   label and changes none.** It targets three weaknesses found there: the single high rate, a strongest key that
+   was not the strongest, and shares that depended on the baseline. Seeds 620 to 639, fresh, both permuted settings,
+   rates 0.3 and 0.1 with 2000 steps, budgets 5 and 20, every lag. New key `finetune_low` is `finetune` at a tenth
+   of the rate. Unrecovered is also reported with the best of `readout`, `readout1`, `finetune10`, `finetune` and
+   `finetune_low`, taken in each resample, with both baselines. Taking a maximum slightly favours recovery, and
+   that is stated. A gentler rate forgets more slowly, so rates are compared at matching `S_none`, not at matching lag.
+   Repeating rate 0.3 on new seeds also serves as a replication of the confirmation numbers.
