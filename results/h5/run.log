@@ -139,3 +139,145 @@
 2026-11-04 05:08:21,085 INFO calibration split_class seed=502
 2026-11-04 05:08:36,631 INFO calibration split_class seed=503
 2026-11-04 05:08:37,358 INFO calibration split_class seed=504
+2026-11-04 06:46:34,479 INFO downloaded train-images-idx3-ubyte.gz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-images-idx3-ubyte.gz
+2026-11-04 06:46:34,875 INFO downloaded train-labels-idx1-ubyte.gz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-labels-idx1-ubyte.gz
+2026-11-04 06:46:35,194 INFO downloaded t10k-images-idx3-ubyte.gz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-images-idx3-ubyte.gz
+2026-11-04 06:46:35,371 INFO downloaded t10k-labels-idx1-ubyte.gz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-labels-idx1-ubyte.gz
+2026-11-04 06:46:35,656 INFO downloaded mnist.npz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz
+2026-11-04 06:46:35,860 INFO datasets {'fashion/train-images-idx3-ubyte.gz': '3aede38d61863908ad78613f6a32ed271626dd12800ba2636569512369268a84', 'fashion/train-labels-idx1-ubyte.gz': 'a04f17134ac03560a47e3764e11b92fc97de4d1bfaf8ba1a3aa29af54cc90845', 'fashion/t10k-images-idx3-ubyte.gz': '346e55b948d973a97e58d2351dde16a484bd415d4595297633bb08f03db6a073', 'fashion/t10k-labels-idx1-ubyte.gz': '67da17c76eaffca5446c3361aaab5c3cd6d1c2608764d35dfb1850b086bf8dd5', 'mnist/mnist.npz': '731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1'}
+2026-11-04 06:46:51,187 INFO curve perm_shared lr=0.01 steps=500 seed=500
+2026-11-04 06:46:51,188 INFO curve perm_shared lr=0.01 steps=500 seed=501
+2026-11-04 06:47:05,502 INFO curve perm_shared lr=0.01 steps=500 seed=502
+2026-11-04 06:47:05,606 INFO curve perm_shared lr=0.01 steps=500 seed=503
+2026-11-04 06:47:20,069 INFO curve perm_shared lr=0.01 steps=500 seed=504
+2026-11-04 06:48:03,113 INFO curve perm_shared lr=0.01 steps=2000 seed=500
+2026-11-04 06:48:17,543 INFO curve perm_shared lr=0.01 steps=2000 seed=501
+2026-11-04 06:49:00,779 INFO curve perm_shared lr=0.01 steps=2000 seed=502
+2026-11-04 06:49:15,414 INFO curve perm_shared lr=0.01 steps=2000 seed=503
+2026-11-04 06:49:58,322 INFO curve perm_shared lr=0.01 steps=2000 seed=504
+2026-11-04 06:49:58,322 INFO curve perm_shared lr=0.03 steps=500 seed=500
+2026-11-04 06:49:58,322 INFO curve perm_shared lr=0.03 steps=500 seed=501
+2026-11-04 06:49:59,195 INFO curve perm_shared lr=0.03 steps=500 seed=502
+2026-11-04 06:50:12,986 INFO curve perm_shared lr=0.03 steps=500 seed=503
+2026-11-04 06:50:13,821 INFO curve perm_shared lr=0.03 steps=500 seed=504
+2026-11-04 06:51:10,666 INFO curve perm_shared lr=0.03 steps=2000 seed=500
+2026-11-04 06:51:11,598 INFO curve perm_shared lr=0.03 steps=2000 seed=501
+2026-11-04 06:52:07,930 INFO curve perm_shared lr=0.03 steps=2000 seed=502
+2026-11-04 06:52:09,301 INFO curve perm_shared lr=0.03 steps=2000 seed=503
+2026-11-04 06:53:05,414 INFO curve perm_shared lr=0.03 steps=2000 seed=504
+2026-11-04 06:53:05,415 INFO curve perm_shared lr=0.1 steps=500 seed=500
+2026-11-04 06:53:05,415 INFO curve perm_shared lr=0.1 steps=500 seed=501
+2026-11-04 06:53:05,415 INFO curve perm_shared lr=0.1 steps=500 seed=502
+2026-11-04 06:53:07,728 INFO curve perm_shared lr=0.1 steps=500 seed=503
+2026-11-04 06:53:20,073 INFO curve perm_shared lr=0.1 steps=500 seed=504
+2026-11-04 06:54:05,627 INFO curve perm_shared lr=0.1 steps=2000 seed=500
+2026-11-04 06:54:17,958 INFO curve perm_shared lr=0.1 steps=2000 seed=501
+2026-11-04 06:55:03,431 INFO curve perm_shared lr=0.1 steps=2000 seed=502
+2026-11-04 06:55:15,827 INFO curve perm_shared lr=0.1 steps=2000 seed=503
+2026-11-04 06:56:00,905 INFO curve perm_shared lr=0.1 steps=2000 seed=504
+2026-11-04 06:56:00,905 INFO curve perm_shared lr=0.3 steps=500 seed=500
+2026-11-04 06:56:00,906 INFO curve perm_shared lr=0.3 steps=500 seed=501
+2026-11-04 06:56:00,906 INFO curve perm_shared lr=0.3 steps=500 seed=502
+2026-11-04 06:56:14,154 INFO curve perm_shared lr=0.3 steps=500 seed=503
+2026-11-04 06:56:15,516 INFO curve perm_shared lr=0.3 steps=500 seed=504
+2026-11-04 06:57:11,990 INFO curve perm_shared lr=0.3 steps=2000 seed=500
+2026-11-04 06:57:13,313 INFO curve perm_shared lr=0.3 steps=2000 seed=501
+2026-11-04 06:58:09,625 INFO curve perm_shared lr=0.3 steps=2000 seed=502
+2026-11-04 06:58:10,903 INFO curve perm_shared lr=0.3 steps=2000 seed=503
+2026-11-04 06:59:02,680 INFO curve perm_shared lr=0.3 steps=2000 seed=504
+2026-11-04 06:59:02,680 INFO curve perm_class lr=0.01 steps=500 seed=500
+2026-11-04 06:59:02,680 INFO curve perm_class lr=0.01 steps=500 seed=501
+2026-11-04 06:59:02,680 INFO curve perm_class lr=0.01 steps=500 seed=502
+2026-11-04 06:59:11,486 INFO curve perm_class lr=0.01 steps=500 seed=503
+2026-11-04 06:59:17,724 INFO curve perm_class lr=0.01 steps=500 seed=504
+2026-11-04 07:00:12,777 INFO curve perm_class lr=0.01 steps=2000 seed=500
+2026-11-04 07:00:19,476 INFO curve perm_class lr=0.01 steps=2000 seed=501
+2026-11-04 07:01:13,819 INFO curve perm_class lr=0.01 steps=2000 seed=502
+2026-11-04 07:01:20,909 INFO curve perm_class lr=0.01 steps=2000 seed=503
+2026-11-04 07:02:14,105 INFO curve perm_class lr=0.01 steps=2000 seed=504
+2026-11-04 07:02:14,106 INFO curve perm_class lr=0.03 steps=500 seed=500
+2026-11-04 07:02:14,106 INFO curve perm_class lr=0.03 steps=500 seed=501
+2026-11-04 07:02:14,106 INFO curve perm_class lr=0.03 steps=500 seed=502
+2026-11-04 07:02:21,946 INFO curve perm_class lr=0.03 steps=500 seed=503
+2026-11-04 07:02:29,332 INFO curve perm_class lr=0.03 steps=500 seed=504
+2026-11-04 07:03:22,417 INFO curve perm_class lr=0.03 steps=2000 seed=500
+2026-11-04 07:03:30,338 INFO curve perm_class lr=0.03 steps=2000 seed=501
+2026-11-04 07:04:22,853 INFO curve perm_class lr=0.03 steps=2000 seed=502
+2026-11-04 07:04:31,176 INFO curve perm_class lr=0.03 steps=2000 seed=503
+2026-11-04 07:05:23,186 INFO curve perm_class lr=0.03 steps=2000 seed=504
+2026-11-04 07:05:23,187 INFO curve perm_class lr=0.1 steps=500 seed=500
+2026-11-04 07:05:23,187 INFO curve perm_class lr=0.1 steps=500 seed=501
+2026-11-04 07:05:23,187 INFO curve perm_class lr=0.1 steps=500 seed=502
+2026-11-04 07:05:32,356 INFO curve perm_class lr=0.1 steps=500 seed=503
+2026-11-04 07:05:38,247 INFO curve perm_class lr=0.1 steps=500 seed=504
+2026-11-04 07:06:33,798 INFO curve perm_class lr=0.1 steps=2000 seed=500
+2026-11-04 07:06:40,379 INFO curve perm_class lr=0.1 steps=2000 seed=501
+2026-11-04 07:07:35,032 INFO curve perm_class lr=0.1 steps=2000 seed=502
+2026-11-04 07:07:42,018 INFO curve perm_class lr=0.1 steps=2000 seed=503
+2026-11-04 07:08:35,339 INFO curve perm_class lr=0.1 steps=2000 seed=504
+2026-11-04 07:08:35,340 INFO curve perm_class lr=0.3 steps=500 seed=500
+2026-11-04 07:08:35,340 INFO curve perm_class lr=0.3 steps=500 seed=501
+2026-11-04 07:08:35,340 INFO curve perm_class lr=0.3 steps=500 seed=502
+2026-11-04 07:08:43,188 INFO curve perm_class lr=0.3 steps=500 seed=503
+2026-11-04 07:08:50,422 INFO curve perm_class lr=0.3 steps=500 seed=504
+2026-11-04 07:09:43,923 INFO curve perm_class lr=0.3 steps=2000 seed=500
+2026-11-04 07:09:51,795 INFO curve perm_class lr=0.3 steps=2000 seed=501
+2026-11-04 07:10:44,124 INFO curve perm_class lr=0.3 steps=2000 seed=502
+2026-11-04 07:10:52,686 INFO curve perm_class lr=0.3 steps=2000 seed=503
+2026-11-04 07:11:43,178 INFO curve perm_class lr=0.3 steps=2000 seed=504
+2026-11-04 07:11:43,178 INFO curve split_class lr=0.01 steps=500 seed=500
+2026-11-04 07:11:43,179 INFO curve split_class lr=0.01 steps=500 seed=501
+2026-11-04 07:11:43,179 INFO curve split_class lr=0.01 steps=500 seed=502
+2026-11-04 07:11:43,179 INFO curve split_class lr=0.01 steps=500 seed=503
+2026-11-04 07:11:43,179 INFO curve split_class lr=0.01 steps=500 seed=504
+2026-11-04 07:11:43,179 INFO curve split_class lr=0.01 steps=2000 seed=500
+2026-11-04 07:11:43,179 INFO curve split_class lr=0.01 steps=2000 seed=501
+2026-11-04 07:11:43,179 INFO curve split_class lr=0.01 steps=2000 seed=502
+2026-11-04 07:11:43,179 INFO curve split_class lr=0.01 steps=2000 seed=503
+2026-11-04 07:11:51,501 INFO curve split_class lr=0.01 steps=2000 seed=504
+2026-11-04 07:11:51,501 INFO curve split_class lr=0.03 steps=500 seed=500
+2026-11-04 07:11:51,502 INFO curve split_class lr=0.03 steps=500 seed=501
+2026-11-04 07:11:51,502 INFO curve split_class lr=0.03 steps=500 seed=502
+2026-11-04 07:11:53,204 INFO curve split_class lr=0.03 steps=500 seed=503
+2026-11-04 07:11:53,973 INFO curve split_class lr=0.03 steps=500 seed=504
+2026-11-04 07:12:03,119 INFO curve split_class lr=0.03 steps=2000 seed=500
+2026-11-04 07:12:03,875 INFO curve split_class lr=0.03 steps=2000 seed=501
+2026-11-04 07:12:12,935 INFO curve split_class lr=0.03 steps=2000 seed=502
+2026-11-04 07:12:13,656 INFO curve split_class lr=0.03 steps=2000 seed=503
+2026-11-04 07:12:22,631 INFO curve split_class lr=0.03 steps=2000 seed=504
+2026-11-04 07:12:22,631 INFO curve split_class lr=0.1 steps=500 seed=500
+2026-11-04 07:12:22,631 INFO curve split_class lr=0.1 steps=500 seed=501
+2026-11-04 07:12:22,631 INFO curve split_class lr=0.1 steps=500 seed=502
+2026-11-04 07:12:23,511 INFO curve split_class lr=0.1 steps=500 seed=503
+2026-11-04 07:12:25,084 INFO curve split_class lr=0.1 steps=500 seed=504
+2026-11-04 07:12:33,385 INFO curve split_class lr=0.1 steps=2000 seed=500
+2026-11-04 07:12:34,943 INFO curve split_class lr=0.1 steps=2000 seed=501
+2026-11-04 07:12:43,126 INFO curve split_class lr=0.1 steps=2000 seed=502
+2026-11-04 07:12:44,655 INFO curve split_class lr=0.1 steps=2000 seed=503
+2026-11-04 07:12:52,903 INFO curve split_class lr=0.1 steps=2000 seed=504
+2026-11-04 07:12:52,903 INFO curve split_class lr=0.3 steps=500 seed=500
+2026-11-04 07:12:52,904 INFO curve split_class lr=0.3 steps=500 seed=501
+2026-11-04 07:12:52,904 INFO curve split_class lr=0.3 steps=500 seed=502
+2026-11-04 07:12:54,625 INFO curve split_class lr=0.3 steps=500 seed=503
+2026-11-04 07:12:55,441 INFO curve split_class lr=0.3 steps=500 seed=504
+2026-11-04 07:13:04,491 INFO curve split_class lr=0.3 steps=2000 seed=500
+2026-11-04 07:13:05,268 INFO curve split_class lr=0.3 steps=2000 seed=501
+2026-11-04 07:13:14,404 INFO curve split_class lr=0.3 steps=2000 seed=502
+2026-11-04 07:13:15,151 INFO curve split_class lr=0.3 steps=2000 seed=503
+2026-11-04 07:13:20,347 INFO curve split_class lr=0.3 steps=2000 seed=504
+2026-11-04 07:14:02,032 INFO calibration perm_shared seed=500
+2026-11-04 07:14:02,032 INFO calibration perm_shared seed=501
+2026-11-04 07:14:43,471 INFO calibration perm_shared seed=502
+2026-11-04 07:14:43,618 INFO calibration perm_shared seed=503
+2026-11-04 07:15:23,861 INFO calibration perm_shared seed=504
+2026-11-04 07:15:23,862 INFO calibration perm_class seed=500
+2026-11-04 07:15:28,287 INFO calibration perm_class seed=501
+2026-11-04 07:15:46,021 INFO calibration perm_class seed=502
+2026-11-04 07:15:50,439 INFO calibration perm_class seed=503
+2026-11-04 07:16:07,482 INFO calibration perm_class seed=504
+2026-11-04 07:16:07,483 INFO calibration split_class seed=500
+2026-11-04 07:16:16,924 INFO calibration split_class seed=501
+2026-11-04 07:16:20,571 INFO calibration split_class seed=502
+2026-11-04 07:16:30,048 INFO calibration split_class seed=503
+2026-11-04 07:16:32,328 INFO calibration split_class seed=504
+2026-11-04 07:16:32,344 INFO answerable: ['perm_shared', 'perm_class']
