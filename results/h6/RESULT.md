@@ -88,8 +88,8 @@ to about 0.40.
 
 ### The gap on the fixed baseline
 
-Plain retention minus the fixed-baseline readout is 0.36 [0.31, 0.41] and 0.41 [0.33, 0.51] at the test points. It is positive in all 20 seeds at all
-four lags in both settings, with no interval's lower bound below 0.27. Against the strongest key on the fixed baseline the gap does not grow:
+Plain retention minus the fixed-baseline readout is 0.36 [0.31, 0.41] and 0.41 [0.33, 0.51] at the test points. This gap is positive by algebra whenever
+the old task's readout falls, so its size is the evidence, not its sign. At all four lags in both settings, no interval's lower bound is below 0.27. Against the strongest key on the fixed baseline the gap does not grow:
 0.16 to 0.12 between 1 and 5 later tasks in `cifar_class`, and 0.00 to 0.03 in `cifar_task`. Full table: `audit.txt`.
 
 ### Where the damage is

@@ -14,7 +14,7 @@ recovered 0.94 of the loss. Deeper forgetting leaves more that no key recovers, 
 
 **Main result.** Plain linear-probe retention can far exceed what the probe can attribute to the old task. On ResNet-18 and Split CIFAR-100,
 with 2 labelled images per class, it reads 0.55 to 0.59 retained. Subtracting what the same probe scores on never-trained tasks leaves
-0.04 to 0.20, depending on the setting and baseline. The gap is positive in all 20 seeds at every lag tested, on both baselines.
+0.04 to 0.20, depending on the setting and baseline. The gap is large at every lag tested, with no 95% interval below 0.27.
 Real memory does survive: stronger keys reach 0.39 and 0.54 at the same test points.
 
 No biology-to-AI mapping has been supported so far, and this repo records that plainly.
@@ -23,7 +23,7 @@ No biology-to-AI mapping has been supported so far, and this repo records that p
 
 ### 1. A plain probe can report memory that controlled tests cannot find
 
-![Naive probe retention stays between about 0.5 and 0.7 as later tasks are learned, while controlled measures fall](docs/figures/h6_probe_vs_memory.svg)
+![Naive probe retention stays between about 0.5 and 0.7 as later tasks are learned, while same-network controls fall](docs/figures/h6_probe_vs_memory.svg)
 
 Fit a new linear readout for an old task and compare its accuracy with the one on the original network. That ratio stays between
 about 0.5 and 0.7 over the 1 to 5 later tasks tested, so it looks like about half the task or more survives. The catch is that the probe
@@ -36,8 +36,9 @@ retention still says 0.49. Correcting for chance only lowers plain retention to 
 | All seen classes compete | 0.55 | 0.15 | 0.20 | **0.41** [0.35, 0.47] | **0.36** [0.31, 0.41] |
 | Task identity given | 0.59 | 0.04 | 0.18 | **0.56** [0.46, 0.67] | **0.41** [0.33, 0.51] |
 
-Both gaps were positive in all 20 seeds at all four lags tested, with every interval's lower bound at 0.27 or above. Lags other than the
-test points are post hoc.
+Once a probe scores well on never-trained tasks, a positive gap follows largely from arithmetic, so the size is the evidence, not the sign. At all
+four lags tested, no interval's lower bound is below 0.32 for the same-network gap or 0.27 for the fixed-baseline gap. Lags other than the test
+points are post hoc.
 
 **This does not mean the memory is gone,** because a failed key proves only that this key failed. Stronger keys show real storage: a low-rate
 fine-tune reaches 0.39 after 1 task with all seen classes competing, and 0.54 after 2 tasks with task identity given, where the old output layer
@@ -45,9 +46,8 @@ alone keeps 0.42. Against the strongest key the gap shrinks and depends on the b
 and from -0.01 to 0.29 between 1 and 5 later tasks. On the fixed baseline it does not, going from 0.16 to 0.12 and from 0.00 to 0.03. So plain
 probes clearly overstate what this low-label readout can show. How far they overstate total stored memory is not settled.
 
-On permuted MNIST, plain retention and the same-network control nearly agree (0.04 and -0.02). Those tasks share few features, which fits
-the idea that overstatement comes from transferable features, though network and data changed together, and with shared outputs the
-fixed baseline does show a gap of 0.27.
+On permuted MNIST, plain retention and the same-network control nearly agree (0.04 and -0.02). New-task scores fall with age there, which shrinks
+that gap, and with shared outputs the fixed baseline still shows a gap of 0.27. So this contrast does not show why the gap is large on CIFAR.
 
 **Why it matters.** Probe retention has been read as evidence that memory survives forgetting: 76% retained at zero task accuracy on a
 ResNet-18 and this dataset ([Trivedi & Melwani 2026](https://arxiv.org/abs/2606.06032)), and 5.7 points lost by the probe against 22 by accuracy
