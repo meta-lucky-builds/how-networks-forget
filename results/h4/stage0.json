@@ -1,0 +1,425 @@
+{
+  "stage": "stage0",
+  "seeds": [
+    300,
+    301,
+    302
+  ],
+  "design_hash": "e0eb7cc79f33437e4bd2a1614ab28f17f2d929839971559d2e8c245fe13b0012",
+  "datasets": {
+    "fashion/train-images-idx3-ubyte.gz": "3aede38d61863908ad78613f6a32ed271626dd12800ba2636569512369268a84",
+    "fashion/train-labels-idx1-ubyte.gz": "a04f17134ac03560a47e3764e11b92fc97de4d1bfaf8ba1a3aa29af54cc90845",
+    "fashion/t10k-images-idx3-ubyte.gz": "346e55b948d973a97e58d2351dde16a484bd415d4595297633bb08f03db6a073",
+    "fashion/t10k-labels-idx1-ubyte.gz": "67da17c76eaffca5446c3361aaab5c3cd6d1c2608764d35dfb1850b086bf8dd5",
+    "mnist/mnist.npz": "731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1"
+  },
+  "plan": {
+    "seeds": [
+      300,
+      301,
+      302
+    ],
+    "lengths": [
+      10,
+      100,
+      500
+    ],
+    "n_bootstrap": 10000,
+    "train_per_class": 5000,
+    "val_per_class": 500,
+    "measure_per_class": 400,
+    "eval_per_class": 400,
+    "schema_lr": 0.05,
+    "schema_batch": 64,
+    "schema_criterion": 0.8,
+    "schema_check_every": 25,
+    "schema_max_steps": 20000,
+    "fine_lr": 0.002,
+    "n_new": 32,
+    "overlap_batches": 10,
+    "overlap_batch": 64
+  },
+  "notes": [
+    "N is 11 for every network: 10 Fashion-MNIST outputs and one foreign output, so parameter count is matched. Softmax runs over active outputs only; other outputs stay at their random init",
+    "old-class accuracy is argmax over old classes plus the new one, before and after, so drop measures only the update",
+    "singletons (trouser, bag) count as inconsistent: they have no relatives by construction",
+    "consistent networks withhold two classes each, so all eight non-singleton classes appear both as consistent and as inconsistent. Schema size differs: 8 (consistent, singleton), 7 (footwear withheld), 5 (upper body withheld). The spec's model has no term for this",
+    "a fixed accuracy criterion does not equalise steps: the easy upper-withheld schema reaches it far sooner. Followed as written; steps per net are in the summary, and verdict-free sensitivity fits drop that net and, separately, the singleton classes",
+    "foreign: one digit per schema network, drawn without replacement within a seed, on all 7 nets",
+    "schema_condition has 3 levels with inconsistent as reference, so the consistent column is the coefficient of interest. VIF of condition is the larger VIF of its two columns",
+    "predicted drop from overlap reads as the spec's named overlap variable, so the check is Pearson r(overlap, drop) at zero replay and the short length. r with the unnormalised inner product is reported and decides nothing",
+    "positive control, new_acc and censoring are at the medium length. The new_acc check is each condition mean at zero replay, the setting of the primary model; the minimum over all rungs is reported and decides nothing (Deviation 2)",
+    "added beyond the preregistered Stage 0 list: every schema network must reach the criterion; in the full run, events on a network that missed it are excluded and counted",
+    "all intervals are 95 percent percentile cluster bootstrap, as in H2, including for equivalence. All threshold comparisons on CIs are strict",
+    "lengths share one trajectory per rung and rungs share new-class and old-class draws (nested), so contrasts across lengths and rungs are paired",
+    "growth must hold in points and in units of the drop SD at that length, because all drop grows with length and points alone could not fail. Failing either triggers the preregistered caveat",
+    "dose: the smallest rung with drop strictly under 2, at the medium length. Censored events are never imputed at the top rung: reported as censored fractions, medians treating them as above the top rung, and a rank mean labelled as a lower bound",
+    "new_acc within 2 points is the largest gap between condition means at medium, zero replay",
+    "Fashion-MNIST is checked against the published MD5s (no sha256 is published) and MNIST against the sha256 Keras publishes; sha256 of every file is logged, and the full run requires the values recorded by Stage 0",
+    "fine-tuning loss is the mean over the combined batch, so replay also dilutes the new-class gradient. New-class draws per step stay fixed, so the ladder is exact"
+  ],
+  "checks": {
+    "positive_control_zero_replay_drop": {
+      "measured": 57.140178571428564,
+      "threshold": ">= 5.0 points",
+      "pass": true
+    },
+    "positive_control_top_rung_reduction": {
+      "measured": 0.8471953372814351,
+      "threshold": ">= 0.5 of the zero-replay drop",
+      "pass": true
+    },
+    "new_acc_medium_zero_replay_min_over_condition": {
+      "measured": 99.88333333333334,
+      "threshold": ">= 70.0",
+      "pass": true
+    },
+    "first_order_r_short": {
+      "measured": 0.4450557602754185,
+      "threshold": ">= 0.5",
+      "pass": false
+    },
+    "condition_vif": {
+      "measured": 2.415753765311643,
+      "threshold": "<= 5.0",
+      "pass": true,
+      "per_column": {
+        "consistent": 1.728339264234377,
+        "foreign": 2.415753765311643,
+        "overlap": 1.1310462886289159,
+        "distance": 3.0552620001587654
+      }
+    },
+    "dose_censored_fraction": {
+      "measured": 0.96,
+      "threshold": "< 0.5",
+      "pass": false
+    },
+    "schema_criterion_reached_fraction": {
+      "measured": 1.0,
+      "threshold": "== 1.0",
+      "pass": true,
+      "not_preregistered": true
+    }
+  },
+  "overall_pass": false,
+  "failed": [
+    "first_order_r_short",
+    "dose_censored_fraction"
+  ],
+  "audit_overlap_vs_short_drop": [
+    [
+      -0.24445,
+      19.0625
+    ],
+    [
+      -0.10336,
+      25.0
+    ],
+    [
+      -0.09168,
+      15.5938
+    ],
+    [
+      -0.03883,
+      16.625
+    ],
+    [
+      -0.01365,
+      1.25
+    ],
+    [
+      -0.00736,
+      -0.4375
+    ],
+    [
+      -0.00533,
+      7.9375
+    ],
+    [
+      0.00514,
+      9.5
+    ],
+    [
+      0.00668,
+      0.1875
+    ],
+    [
+      0.01262,
+      5.1875
+    ],
+    [
+      0.02357,
+      5.3437
+    ],
+    [
+      0.02742,
+      6.5
+    ],
+    [
+      0.03331,
+      0.2812
+    ],
+    [
+      0.03989,
+      0.25
+    ],
+    [
+      0.0411,
+      1.3125
+    ],
+    [
+      0.04187,
+      24.5
+    ],
+    [
+      0.04405,
+      1.8929
+    ],
+    [
+      0.05108,
+      9.5938
+    ],
+    [
+      0.05663,
+      8.5625
+    ],
+    [
+      0.05773,
+      1.5
+    ],
+    [
+      0.06092,
+      1.0357
+    ],
+    [
+      0.06822,
+      27.4062
+    ],
+    [
+      0.06929,
+      5.3438
+    ],
+    [
+      0.06991,
+      0.5625
+    ],
+    [
+      0.07127,
+      1.2857
+    ],
+    [
+      0.0735,
+      18.1563
+    ],
+    [
+      0.07405,
+      0.3571
+    ],
+    [
+      0.07493,
+      22.8125
+    ],
+    [
+      0.07862,
+      4.0938
+    ],
+    [
+      0.08729,
+      2.5
+    ],
+    [
+      0.09175,
+      1.5938
+    ],
+    [
+      0.09349,
+      0.7188
+    ],
+    [
+      0.09446,
+      4.5937
+    ],
+    [
+      0.09677,
+      1.8125
+    ],
+    [
+      0.09945,
+      1.8929
+    ],
+    [
+      0.10424,
+      14.65
+    ],
+    [
+      0.10659,
+      2.0313
+    ],
+    [
+      0.10861,
+      17.3437
+    ],
+    [
+      0.11789,
+      18.9375
+    ],
+    [
+      0.11838,
+      7.75
+    ],
+    [
+      0.11852,
+      2.7857
+    ],
+    [
+      0.11897,
+      5.2188
+    ],
+    [
+      0.12194,
+      1.1071
+    ],
+    [
+      0.13244,
+      0.1563
+    ],
+    [
+      0.13375,
+      4.1562
+    ],
+    [
+      0.13999,
+      12.7857
+    ],
+    [
+      0.14665,
+      20.15
+    ],
+    [
+      0.15066,
+      9.3929
+    ],
+    [
+      0.15485,
+      6.2143
+    ],
+    [
+      0.16782,
+      23.4063
+    ],
+    [
+      0.1727,
+      22.0938
+    ],
+    [
+      0.17384,
+      12.1563
+    ],
+    [
+      0.20341,
+      1.9643
+    ],
+    [
+      0.21273,
+      7.1875
+    ],
+    [
+      0.21492,
+      12.45
+    ],
+    [
+      0.221,
+      18.875
+    ],
+    [
+      0.226,
+      22.4
+    ],
+    [
+      0.23484,
+      20.75
+    ],
+    [
+      0.23966,
+      3.1
+    ],
+    [
+      0.24698,
+      21.75
+    ],
+    [
+      0.25538,
+      10.75
+    ],
+    [
+      0.25701,
+      22.2188
+    ],
+    [
+      0.27082,
+      29.5
+    ],
+    [
+      0.28853,
+      8.1875
+    ],
+    [
+      0.2926,
+      10.0312
+    ],
+    [
+      0.30515,
+      3.1
+    ],
+    [
+      0.31599,
+      19.55
+    ],
+    [
+      0.32974,
+      24.95
+    ],
+    [
+      0.33764,
+      17.05
+    ],
+    [
+      0.34377,
+      33.7
+    ],
+    [
+      0.3508,
+      16.25
+    ],
+    [
+      0.41028,
+      37.65
+    ],
+    [
+      0.42641,
+      29.1
+    ],
+    [
+      0.44048,
+      32.85
+    ],
+    [
+      0.48916,
+      17.1
+    ]
+  ],
+  "diagnostics": {
+    "new_acc_medium_min_over_condition_and_rung": 97.1875,
+    "schema_steps_median_by_net": {
+      "C2": 50.0,
+      "C1": 100.0,
+      "C3": 50.0,
+      "C4": 125.0,
+      "I_foot": 400.0,
+      "I_upper": 25.0,
+      "I_single": 400.0
+    }
+  },
+  "elapsed_seconds": 155.00753784179688
+}
