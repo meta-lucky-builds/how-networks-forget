@@ -101,3 +101,8 @@ difficulty varies, so exchangeability holds across seeds and not within one seed
 it needs the GPU. Results are copied back through notebook cells and committed from there.
 
 ## Deviations
+1. **Compute trims and data source, before any H6 data.** Timing on the T4: one epoch 1.5 s, one seed about 5 to 9 minutes, so
+   the plan needed 6 to 8 hours, which risks a Colab session. Epochs become 10 or 20 instead of 10 or 30. The config curve uses the
+   first 2 calibration seeds instead of 3. Confirmation scores budget `n` only, not also 20, so budget sensitivity is not reported.
+   The official CIFAR-100 server gave about 53 kB/s, so the file comes from the Google Cloud mirror Keras uses, with the same md5,
+   eb9058c3a382ffc7106e4002c42a8d85, also checked by torchvision. No rule, seed, gate or label changes.

@@ -19,10 +19,10 @@ import torch.nn.functional as F
 REGIMES = ("cifar_class", "cifar_task")
 LAGS = (1, 2, 3, 5)
 N_NEW = 4
-GRID = tuple((lr, epochs) for lr in (0.01, 0.05) for epochs in (10, 30))
+GRID = tuple((lr, epochs) for lr in (0.01, 0.05) for epochs in (10, 20))
 BUDGETS = (2, 5, 10, 20, 50)
 CAL_SEEDS, RETRY_SEEDS, CONFIRM_SEEDS = tuple(range(700, 706)), tuple(range(706, 712)), tuple(range(800, 820))
-CURVE_SEEDS = 3
+CURVE_SEEDS = 2
 MIN_ACC, MAX_S_NONE, MIN_ADVANTAGE = 0.4, 0.5, 0.15
 NULL_LIMIT, PLANT_MIN_S, PLANT_MAX_NONE, MATCHED_GAP, MATERIAL = 0.15, 0.8, 0.6, 0.2, 0.05
 BEST_KEYS = ("readout", "readout_early", "finetune_low")
@@ -530,7 +530,7 @@ def confirm(data, out, calibration):
             lines.append(f"{regime}: unanswerable: {entry.get('reason')}")
             continue
         c, n = entry["config"], entry["budget"]
-        budgets = tuple(sorted({n, 20}))
+        budgets = (n,)
         rows = {s: store.get(f"confirm|{regime}|{s}", lambda s=s: run_seed(data, regime, s, c["lr"], c["epochs"], c["m_star"], budgets, False)) for s in seeds}
         acc, m_star = index_rows(rows), c["m_star"]
         checks = evaluate_gates(acc, seeds, m_star, n)

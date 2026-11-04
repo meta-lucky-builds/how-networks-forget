@@ -3,7 +3,7 @@
 Durable state for a long-running research mission. Anyone resuming, human or
 agent, starts here, then reads `docs/CHARTER.md`.
 
-**Last heartbeat:** 2026-11-04T08:50Z
+**Last heartbeat:** 2026-11-04T09:45Z
 **Working branch:** `research/bio-to-ai`
 **Phase:** 3, H5 complete, owner decides what follows
 
@@ -49,7 +49,7 @@ agent, starts here, then reads `docs/CHARTER.md`.
 
 ## In progress
 
-- No runs in flight. H5 is complete on its preregistered scope (`results/h5/RESULT.md`). Other lines stay paused
+- H6 (CIFAR-100 probe test, owner request) runs on the Colab T4 in the background: log `/content/h6/run.log`, results `/content/h6/summary.md`, read through a notebook cell, then commit. A blocked notebook cell needs the owner to interrupt it. H5 is complete (`results/h5/RESULT.md`). Other lines stay paused
   until the owner says otherwise. Open H5 question: bet 3 on published probes needs a harder dataset than 3-way
   MNIST and Fashion, such as CIFAR-100, plus more seeds, which was not preregistered.
 - **The Colab runtime is shared with work we do not own** (`experiments/thread_a.py`,
