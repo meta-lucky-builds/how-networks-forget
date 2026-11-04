@@ -1,0 +1,47 @@
+# Runs the H4 experiment. Change .github/run-requests/h4 to start or resume it. Its first word
+# selects the mode: `stage0` or `full`. The full run refuses to start unless a Stage 0 pass is
+# committed, and resumes from results/h4/raw_results.csv, committed at the end of each run.
+# GITHUB_TOKEN pushes do not retrigger workflows, so this cannot loop.
+name: h4
+on:
+  push:
+    branches: [research/bio-to-ai]
+    paths: [.github/run-requests/h4]
+permissions:
+  contents: write
+concurrency:
+  group: h4
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q numpy pytest
+      - run: python -m pytest tests/test_h4.py -q --tb=short
+        timeout-minutes: 20
+      # Stop well inside the job limit, so partial results are always committed.
+      - name: Run experiment
+        run: |
+          mode=$(awk 'NR==1 {print $1}' .github/run-requests/h4)
+          case "$mode" in
+            stage0) args="--stage0" ;;
+            full) args="" ;;
+            *) echo "unknown mode: $mode"; exit 1 ;;
+          esac
+          timeout 320m python experiments/h4_schema.py $args || echo "exit code $?"
+      - name: Commit results
+        if: always()
+        run: |
+          [ -d results/h4 ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results/h4
+          git diff --cached --quiet && exit 0
+          git commit -m "Record H4 results from run ${GITHUB_RUN_ID}"
+          git pull --rebase origin research/bio-to-ai
+          git push origin HEAD:research/bio-to-ai

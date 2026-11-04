@@ -134,3 +134,22 @@ A CIFAR-100 version is out of scope on this CPU runtime.
    a Stage 0 check, because that would select on the outcome. It stays in the full analysis
    as preregistered. Fashion-MNIST alone is used for H4: the EMNIST-style set is dropped
    for runtime, and the design already allows this. The full run executes on GitHub Actions.
+
+2. **Schema size and training depth, fixed before data.** Withholding classes makes schema size
+   differ by network: 8 (consistent, singleton), 7 (footwear withheld), 5 (upper body withheld).
+   A fixed accuracy criterion also does not equalise steps, since an easy schema reaches it far
+   sooner. Either can produce a false raw effect in the predicted direction. The primary model
+   stays as preregistered. Three verdict-free checks are added: dropping the upper-withheld network,
+   dropping singleton new classes, and adding schema size and log steps as covariates. **A supported
+   H4a or H4b must be reported as not robust if any of the three moves the consistent coefficient's
+   interval to a different label.** Stage 0 reports steps per network.
+3. **Constants and readings, fixed before data** (`experiments/h4_schema.py`). 40 evaluation seeds
+   (400 to 439), so a CI within 1 point is reachable. Fine-tuning: plain SGD, rate 0.002, 32 new
+   samples per step, lengths 10, 100 and 500 steps. Schema: rate 0.05, batch 64, criterion 80% checked
+   every 25 steps, cap 20000. All schema images of an old class form the replay buffer. N is 11, so
+   parameter count is matched. The validity check uses the named `overlap` variable; r with the raw
+   inner product is reported and decides nothing. New-class accuracy at Stage 0 is checked at zero
+   replay, the primary model's setting, with other rungs reported. Added Stage 0 check: every schema
+   network reaches the criterion. Growth must hold in points and in SD units. Intervals are 95%
+   percentile cluster bootstrap. The Stage 0 checkpoint is not committed, since it would show the
+   raw effect. These lengths rest on an estimate, so Stage 0 can fail on them, and H4 then stops.
