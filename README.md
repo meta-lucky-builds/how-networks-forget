@@ -1,6 +1,6 @@
-# clu
+# How networks forget
 
-[![tests](https://github.com/meta-lucky-builds/clu/actions/workflows/tests.yml/badge.svg)](https://github.com/meta-lucky-builds/clu/actions/workflows/tests.yml)
+[![tests](https://github.com/meta-lucky-builds/how-networks-forget/actions/workflows/tests.yml/badge.svg)](https://github.com/meta-lucky-builds/how-networks-forget/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **Preregistered experiments on how neural networks forget, and on whether ideas from the biology of memory help AI.**
