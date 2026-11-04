@@ -281,3 +281,51 @@
 2026-11-04 07:16:30,048 INFO calibration split_class seed=503
 2026-11-04 07:16:32,328 INFO calibration split_class seed=504
 2026-11-04 07:16:32,344 INFO answerable: ['perm_shared', 'perm_class']
+2026-11-04 07:19:01,033 INFO downloaded train-images-idx3-ubyte.gz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-images-idx3-ubyte.gz
+2026-11-04 07:19:01,340 INFO downloaded train-images-idx3-ubyte.gz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-images-idx3-ubyte.gz
+2026-11-04 07:19:01,394 INFO downloaded train-labels-idx1-ubyte.gz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-labels-idx1-ubyte.gz
+2026-11-04 07:19:01,509 INFO downloaded t10k-images-idx3-ubyte.gz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-images-idx3-ubyte.gz
+2026-11-04 07:19:01,629 INFO downloaded t10k-labels-idx1-ubyte.gz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-labels-idx1-ubyte.gz
+2026-11-04 07:19:01,687 INFO downloaded t10k-labels-idx1-ubyte.gz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-labels-idx1-ubyte.gz
+2026-11-04 07:19:01,729 INFO downloaded mnist.npz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz
+2026-11-04 07:19:01,806 INFO downloaded mnist.npz from https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz
+2026-11-04 07:20:20,043 INFO confirm perm_shared seed=600
+2026-11-04 07:20:20,217 INFO confirm perm_shared seed=601
+2026-11-04 07:21:37,450 INFO confirm perm_shared seed=602
+2026-11-04 07:21:37,739 INFO confirm perm_shared seed=603
+2026-11-04 07:22:54,756 INFO confirm perm_shared seed=604
+2026-11-04 07:22:55,097 INFO confirm perm_shared seed=605
+2026-11-04 07:24:11,936 INFO confirm perm_shared seed=606
+2026-11-04 07:24:11,936 INFO confirm perm_shared seed=607
+2026-11-04 07:25:30,932 INFO confirm perm_shared seed=608
+2026-11-04 07:25:30,932 INFO confirm perm_shared seed=609
+2026-11-04 07:26:49,644 INFO confirm perm_shared seed=610
+2026-11-04 07:26:49,645 INFO confirm perm_shared seed=611
+2026-11-04 07:28:07,109 INFO confirm perm_shared seed=612
+2026-11-04 07:28:07,109 INFO confirm perm_shared seed=613
+2026-11-04 07:29:25,771 INFO confirm perm_shared seed=614
+2026-11-04 07:29:25,771 INFO confirm perm_shared seed=615
+2026-11-04 07:30:44,090 INFO confirm perm_shared seed=616
+2026-11-04 07:30:44,566 INFO confirm perm_shared seed=617
+2026-11-04 07:32:02,231 INFO confirm perm_shared seed=618
+2026-11-04 07:32:02,926 INFO confirm perm_shared seed=619
+2026-11-04 07:33:27,348 INFO confirm perm_class seed=600
+2026-11-04 07:33:28,335 INFO confirm perm_class seed=601
+2026-11-04 07:34:52,222 INFO confirm perm_class seed=602
+2026-11-04 07:34:53,346 INFO confirm perm_class seed=603
+2026-11-04 07:36:16,849 INFO confirm perm_class seed=604
+2026-11-04 07:36:18,048 INFO confirm perm_class seed=605
+2026-11-04 07:37:42,599 INFO confirm perm_class seed=606
+2026-11-04 07:37:44,292 INFO confirm perm_class seed=607
+2026-11-04 07:39:08,733 INFO confirm perm_class seed=608
+2026-11-04 07:39:10,455 INFO confirm perm_class seed=609
+2026-11-04 07:40:32,995 INFO confirm perm_class seed=610
+2026-11-04 07:40:35,127 INFO confirm perm_class seed=611
+2026-11-04 07:41:57,777 INFO confirm perm_class seed=612
+2026-11-04 07:42:00,683 INFO confirm perm_class seed=613
+2026-11-04 07:43:19,797 INFO confirm perm_class seed=614
+2026-11-04 07:43:22,962 INFO confirm perm_class seed=615
+2026-11-04 07:44:42,306 INFO confirm perm_class seed=616
+2026-11-04 07:44:45,771 INFO confirm perm_class seed=617
+2026-11-04 07:46:04,115 INFO confirm perm_class seed=618
+2026-11-04 07:46:06,454 INFO confirm perm_class seed=619
