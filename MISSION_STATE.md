@@ -3,9 +3,9 @@
 Durable state for a long-running research mission. Anyone resuming, human or
 agent, starts here, then reads `docs/CHARTER.md`.
 
-**Last heartbeat:** 2026-11-04T01:34Z
+**Last heartbeat:** 2026-11-04T04:20Z
 **Working branch:** `research/bio-to-ai`
-**Phase:** 3, H1 negative, H2 no conclusion (design failure), Stage 0 running for H2R and H4
+**Phase:** 3, H1 negative, H2 and H2R closed untested, H4 stopped untested, H3 next
 
 ## Standing instructions from the project owner
 
@@ -42,14 +42,14 @@ agent, starts here, then reads `docs/CHARTER.md`.
   learner, savings tracked speed and was censored, the gate was almost constant, and SGD
   lost no plasticity. All design errors. Charter now requires a Stage 0 with a positive
   control.
-- H2R preregistered (`hypotheses/H2R_shared_state_redesign.md`).
+- H2R Stage 0 **failed, no retry allowed, H2 line closed.** `results/h2r/RESULT.md`. Its
+  short-gap threshold was arithmetically unreachable, my error, and the rule stands anyway.
+- H4 Stage 0 **failed, stopped.** `results/h4/RESULT.md`. `dose` 96% censored, first-order r 0.445.
+- `docs/MAPPINGS.md` written: no mapping supported so far, plus the method lessons.
 
 ## In progress
 
-- Stage 0 of H2R (run 41754260090) and H4 on GitHub Actions, requested
-  2026-11-04. On a pass, set the file under `.github/run-requests/` to `full` and push. On a
-  failure, apply the preregistration's stop rule. Check with
-  `gh run list -R meta-lucky-builds/clu`.
+- No runs in flight. H3 design is next.
 - **The Colab runtime is shared with work we do not own** (`experiments/thread_a.py`,
   `mechinterp`), possibly another session of the owner's. Never kill those processes or
   delete cells that are not ours. Use Colab only for small tests, and expect delays.
@@ -60,9 +60,9 @@ agent, starts here, then reads `docs/CHARTER.md`.
 | --- | --- | --- |
 | H1 | Commit surprising samples only after corroboration | **Stopped.** H1b (hedge predictions, defer weight commits) is parked in RESULT.md |
 | H2 | One multi-timescale state sets both protection and recycling (`synaptic.md` Exp 1, 2) | **No conclusion.** Design could not answer |
-| H2R | H2 with input permutation, rank gates of mean 1, a repeat-versus-novel metric | Preregistered. Line closes if Stage 0 fails after one retry, or if the manipulation check fails |
-| H3 | Gates must be self-generated, without task labels or blocks (`gating_metacognition.md` Exp 1) | Not started |
-| H4 | Does schema consistency add anything beyond gradient interference? | Preregistered, Stage 0 added |
+| H2R | H2 with input permutation, rank gates of mean 1, a repeat-versus-novel metric | **Stopped at Stage 0, H2 line closed.** No retry allowed. Claim untested |
+| H3 | Gates must be self-generated, without task labels or blocks (`gating_metacognition.md` Exp 1) | Not started, next |
+| H4 | Does schema consistency add anything beyond gradient interference? | **Stopped at Stage 0.** Claim untested |
 
 Kill rules live in each preregistration. H1 failing its gate does not end the
 mission: record it and move to H2.
@@ -78,10 +78,13 @@ granularity is mixed. It remains an open test (`neuromodulation.md` Exp 2).
 
 ## Next
 
-1. Run Stage 0 for H2R and H4 on Actions once implemented. Apply each file's checks as
-   written, then start the full run or record the stop.
-2. H3 needs a GPU-scale network: find a CPU-sized form or a GPU runtime.
-3. Write `docs/MAPPINGS.md`, including negative results.
+1. Design H3 in a CPU-sized form, the last open bet, from `gating_metacognition.md`
+   Experiment 1. The source uses 2x2048 units, so check the runtime on paper first.
+2. Use the method lessons in `docs/MAPPINGS.md`. Add a calibration run that only sets constants
+   and reports metric ranges before thresholds are fixed, then preregister and test on fresh seeds.
+3. Do not reopen H2 or H4 under their old names. A new form needs a new name and a
+   preregistration that states what these stops informed. Open candidate: test the cause-inference
+   synthesis directly, since every thread points at it and nothing has tested it.
 
 Usage note: on 2026-11-03 the 5-hour window reached 66% about 75 minutes in, driven by
 five research agents and a large coordinator context. Wait cheaply while Colab runs.
