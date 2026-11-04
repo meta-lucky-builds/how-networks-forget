@@ -211,3 +211,15 @@ def test_choose_config_rule():
 
 def test_seed_sets_are_disjoint():
     assert not set(h5.CAL_SEEDS) & set(h5.RETRY_SEEDS) and not set(h5.CONFIRM_SEEDS) & set(h5.CAL_SEEDS)
+
+
+def test_budgets_change_only_for_split():
+    assert h5.budgets_for("perm_shared") == (5, 10, 20, 50) == h5.budgets_for("perm_class")
+    assert h5.budgets_for("split_class")[0] == 1
+
+
+def test_merged_keeps_earlier_regimes(tmp_path):
+    path = tmp_path / "summary.json"
+    path.write_text('{"perm_class": 1}')
+    assert h5.merged(path, {"split_class": 2}) == {"perm_class": 1, "split_class": 2}
+    assert h5.merged(tmp_path / "absent.json", {"a": 3}) == {"a": 3}

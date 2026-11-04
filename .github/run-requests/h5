@@ -1,1 +1,3 @@
-calibrate 3
+confirm
+perm_shared perm_class
+run 1

@@ -3,7 +3,7 @@
 Durable state for a long-running research mission. Anyone resuming, human or
 agent, starts here, then reads `docs/CHARTER.md`.
 
-**Last heartbeat:** 2026-11-04T06:10Z
+**Last heartbeat:** 2026-11-04T07:20Z
 **Working branch:** `research/bio-to-ai`
 **Phase:** 3, H1 negative, H2 and H2R closed untested, H4 stopped untested, H3 next
 
@@ -49,9 +49,9 @@ agent, starts here, then reads `docs/CHARTER.md`.
 
 ## In progress
 
-- H5 (overwriting or access, requested by the owner 2026-11-04) calibration on Actions. Read
-  `results/h5/calibration.json`, then set `.github/run-requests/h5` to `confirm` if any regime is
-  answerable. If none is, one `calibrate-retry` is allowed, logged in the Deviations first.
+- H5 (overwriting or access, requested by the owner 2026-11-04): `perm_shared` and `perm_class` passed
+  calibration and are confirming on Actions. Then `calibrate-retry` for `split_class` only (Deviation 3),
+  then its `confirm` if answerable. Request format: line 1 mode, line 2 regimes, line 3 free text.
 - **The Colab runtime is shared with work we do not own** (`experiments/thread_a.py`,
   `mechinterp`), possibly another session of the owner's. Never kill those processes or
   delete cells that are not ours. Use Colab only for small tests, and expect delays.

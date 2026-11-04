@@ -177,3 +177,12 @@ design guarantees is that the answer will be interpretable, which H2, H2R and H4
    is the same ridge on the first hidden layer, testing the claim that early layers keep more. `finetune10` is the
    first 10 steps of `finetune`, showing how cheap repair is. Each key's recovered share and interval is reported,
    as is the interval of naive retention minus `S_readout`, which is bet 3.
+3. **`split_class` calibration rerun, blind, logged before it runs.** On seeds 500 to 504, `perm_shared` and
+   `perm_class` passed every gate, with `m*` 5 and 1 and budget 5. `split_class` was excluded: no budget had
+   an advantage on `w_0` of at least 0.15, so a new 3-class task is too easy for a key to separate old from new.
+   As allowed, only `split_class` reruns on seeds 505 to 509, with budgets 1, 2, 5, 10, 20, 50 and all gates and
+   rules unchanged. If it still has no answerable budget, it stays excluded, and that itself is reported: on
+   these tasks a probe cannot tell a trained task from a new one. `perm_shared` and `perm_class` keep the
+   constants from seeds 500 to 504 and confirm on seeds 600 to 619 first. Only their code path for regimes and
+   output files changed, so their constants, keys and analysis are as they were. Raw results now go in one
+   file per regime, and `summary.json` is merged.

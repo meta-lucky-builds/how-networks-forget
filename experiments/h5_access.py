@@ -28,6 +28,7 @@ REGIMES = ("perm_shared", "perm_class", "split_class")
 LAGS = {"perm_shared": (1, 2, 5, 10, 20), "perm_class": (1, 2, 5, 10, 20), "split_class": (1, 2, 3)}
 GRID = tuple((lr, steps) for lr in (0.01, 0.03, 0.1, 0.3) for steps in (500, 2000))
 BUDGETS = (5, 10, 20, 50)
+SPLIT_BUDGETS = (1, 2, 5, 10, 20, 50)  # Deviation 3: a new 3-class task is too easy at 5 per class
 CAL_SEEDS, RETRY_SEEDS, CONFIRM_SEEDS = tuple(range(500, 505)), tuple(range(505, 510)), tuple(range(600, 620))
 MIN_ACC, MAX_S_NONE, MIN_ADVANTAGE = 0.85, 0.5, 0.15
 NULL_LIMIT, PLANT_MIN_S, PLANT_MAX_NONE, MATCHED_GAP = 0.15, 0.8, 0.6, 0.2
@@ -519,9 +520,13 @@ def choose_config(curves, regime):
     return None if best is None else best[1]
 
 
-def choose_budget(acc, seeds):
+def budgets_for(regime):
+    return SPLIT_BUDGETS if regime == "split_class" else BUDGETS
+
+
+def choose_budget(acc, seeds, budgets=BUDGETS):
     """The smallest budget whose readout and finetune advantages on w_0 have real range."""
-    for n in BUDGETS:
+    for n in budgets:
         values = {k: float(starting_advantage(acc, seeds, k, n).mean()) for k in ("readout", "finetune")}
         if min(values.values()) >= MIN_ADVANTAGE:
             return n, values
@@ -529,31 +534,39 @@ def choose_budget(acc, seeds):
 
 
 # ---- Entry points ----
-def calibrate(seeds, out_dir, cache, workers):
+def merged(path, new):
+    """Add this run's regimes to a results file, keeping those from earlier runs."""
+    old = json.loads(path.read_text()) if path.exists() else {}
+    old.update(new)
+    return old
+
+
+def calibrate(seeds, out_dir, cache, workers, regimes=REGIMES):
     _, provenance = load_data(cache)
     log.info("datasets %s", provenance)
-    jobs = [(regime, seed, lr, steps) for regime in REGIMES for lr, steps in GRID for seed in seeds]
-    curves = {regime: {} for regime in REGIMES}
+    jobs = [(regime, seed, lr, steps) for regime in regimes for lr, steps in GRID for seed in seeds]
+    curves = {regime: {} for regime in regimes}
     with ProcessPoolExecutor(workers, initializer=_init_worker, initargs=(str(cache),)) as pool:
         for regime, seed, lr, steps, curve in pool.map(_curve_job, jobs):
             curves[regime].setdefault((lr, steps), []).append(curve)
             log.info("curve %s lr=%s steps=%s seed=%s", regime, lr, steps, seed)
-        result = {"seeds": list(seeds), "notes": NOTES, "datasets": provenance, "regimes": {}}
-        chosen = {r: choose_config(curves[r], r) for r in REGIMES}
-        seed_jobs = [(r, s, c["lr"], c["steps"], c["m_star"], BUDGETS, True) for r, c in chosen.items() if c for s in seeds]
-        rows = {r: {} for r in REGIMES}
+        path = out_dir / "calibration.json"
+        result = json.loads(path.read_text()) if path.exists() else {"notes": NOTES, "datasets": provenance, "regimes": {}}
+        chosen = {r: choose_config(curves[r], r) for r in regimes}
+        seed_jobs = [(r, s, c["lr"], c["steps"], c["m_star"], budgets_for(r), True) for r, c in chosen.items() if c for s in seeds]
+        rows = {r: {} for r in regimes}
         for regime, seed, seed_rows in pool.map(_seed_job, seed_jobs):
             rows[regime][seed] = seed_rows
             log.info("calibration %s seed=%s", regime, seed)
-    for regime in REGIMES:
+    for regime in regimes:
         grid = {f"{lr}/{steps}": {k: float(np.mean([c[k] for c in per])) for k in per[0]} for (lr, steps), per in curves[regime].items()}
-        entry = {"config": chosen[regime], "grid_means": grid, "answerable": False}
+        entry = {"seeds": list(seeds), "config": chosen[regime], "grid_means": grid, "answerable": False}
         result["regimes"][regime] = entry
         if not chosen[regime]:
             entry["reason"] = "no config met the accuracy and forgetting rule"
             continue
         acc = index_rows(rows[regime])
-        n, advantages = choose_budget(acc, seeds)
+        n, advantages = choose_budget(acc, seeds, budgets_for(regime))
         entry["advantage_w0"] = advantages
         if n is None:
             entry["reason"] = "no budget gave a large enough advantage on w_0"
@@ -563,29 +576,30 @@ def calibrate(seeds, out_dir, cache, workers):
         if not entry["answerable"]:
             entry["reason"] = "failed: " + ", ".join(k for k, c in checks.items() if not c["pass"])
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "calibration.json").write_text(json.dumps(result, indent=2))
-    log.info("answerable: %s", [r for r in REGIMES if result["regimes"][r]["answerable"]])
+    path.write_text(json.dumps(result, indent=2))
+    log.info("answerable: %s", [r for r, e in result["regimes"].items() if e["answerable"]])
 
 
-def confirm(out_dir, cache, workers):
+def confirm(out_dir, cache, workers, wanted=REGIMES):
     calibration = json.loads((out_dir / "calibration.json").read_text())
-    regimes = {r: e for r, e in calibration["regimes"].items() if e["answerable"]}
+    regimes = {r: e for r, e in calibration["regimes"].items() if e["answerable"] and r in wanted}
     if not regimes:
         raise SystemExit("no regime passed calibration")
-    jobs = [(r, s, e["config"]["lr"], e["config"]["steps"], e["config"]["m_star"], BUDGETS, False)
+    jobs = [(r, s, e["config"]["lr"], e["config"]["steps"], e["config"]["m_star"], budgets_for(r), False)
             for r, e in regimes.items() for s in CONFIRM_SEEDS]
     rows = {r: {} for r in regimes}
     with ProcessPoolExecutor(workers, initializer=_init_worker, initargs=(str(cache),)) as pool:
         for regime, seed, seed_rows in pool.map(_seed_job, jobs):
             rows[regime][seed] = seed_rows
             log.info("confirm %s seed=%s", regime, seed)
-    with open(out_dir / "raw_results.csv", "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(("regime", "seed", "net", "lag", "task", "key", "n", "acc"))
-        for regime, per in rows.items():
+    for regime, per in rows.items():
+        with open(out_dir / f"raw_{regime}.csv", "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(("regime", "seed", "net", "lag", "task", "key", "n", "acc"))
             for seed, seed_rows in per.items():
                 writer.writerows((regime, seed, *row) for row in seed_rows)
-    (out_dir / "summary.json").write_text(json.dumps(analyse(rows, regimes), indent=2))
+    path = out_dir / "summary.json"
+    path.write_text(json.dumps(merged(path, analyse(rows, regimes)), indent=2))
 
 
 def analyse(rows, regimes):
@@ -607,7 +621,7 @@ def analyse(rows, regimes):
             "trained_task_by_lag": {str(lag): {k: float(column(acc, seeds, "real", lag, "A", k, n).mean()) for k in keys_for(regime)}
                                     for lag in (0, *LAGS[regime])},
             "by_lag": {str(lag): decompose(acc, seeds, lag, n, counts) for lag in LAGS[regime]},
-            "by_budget": {str(b): decompose(acc, seeds, m_star, b, counts) for b in BUDGETS},
+            "by_budget": {str(b): decompose(acc, seeds, m_star, b, counts) for b in budgets_for(regime)},
         }
     return summary
 
@@ -618,15 +632,16 @@ def main():
     parser.add_argument("--out", default="results/h5")
     parser.add_argument("--cache", default=str(Path.home() / ".cache" / "clu"))
     parser.add_argument("--workers", type=int, default=2)
+    parser.add_argument("--regimes", nargs="*", default=list(REGIMES))
     args = parser.parse_args()
     out_dir, cache = Path(args.out), Path(args.cache)
     out_dir.mkdir(parents=True, exist_ok=True)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s",
                         handlers=[logging.StreamHandler(), logging.FileHandler(out_dir / "run.log")])
     if args.mode == "confirm":
-        confirm(out_dir, cache, args.workers)
+        confirm(out_dir, cache, args.workers, args.regimes)
     else:
-        calibrate(CAL_SEEDS if args.mode == "calibrate" else RETRY_SEEDS, out_dir, cache, args.workers)
+        calibrate(CAL_SEEDS if args.mode == "calibrate" else RETRY_SEEDS, out_dir, cache, args.workers, args.regimes)
 
 
 if __name__ == "__main__":
