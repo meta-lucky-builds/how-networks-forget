@@ -1,0 +1,568 @@
+{
+  "overall_pass": false,
+  "retry": false,
+  "lr_multiplier": 1.0,
+  "plan": {
+    "tasks": 100,
+    "tune_tasks": 40,
+    "steps": 1000,
+    "n_configs": 10,
+    "tune_seeds": [
+      200,
+      201
+    ],
+    "stage0_seeds": [
+      300,
+      301,
+      302
+    ],
+    "eval_seeds": [
+      400,
+      401,
+      402,
+      403,
+      404,
+      405,
+      406,
+      407,
+      408,
+      409
+    ],
+    "n_bootstrap": 10000,
+    "per_class": 600
+  },
+  "mnist_sha256": "42b4dd1fdc4aeaf78d7f341d059059703743dca760ae471a638c5936df76a794",
+  "notes": [
+    "tuning precedes Stage 0: Stage 0 runs at the tuned configs of sgd, protect and both_util, which the full run reuses; the preregistration gives Stage 0 no other source of hyperparameters",
+    "within-layer means within each of the 6 weight and bias arrays",
+    "ties in a trace (dead units, silent pixels) are broken at random, so every refresh of every condition has the exact same gate multiset; the gate SD check therefore cannot fail, and random tie-breaks can only lower the Spearman check",
+    "the first refresh is at step 1, so a gate exists from the first update; traces update each step",
+    "both_perm: P comes from the real u, exactly as in both_util; only R is the re-permuted gate, so the contrast isolates the coordination of noise with protection (Deviation 1)",
+    "no bias correction or sigmoid: rank is scale-invariant, so neither can change u",
+    "reuse = steps(repeat) - mean(steps(two nearest non-repeat tasks)), so lower is better; gain = -reuse in contrasts; a repeat's source counts as non-repeat; distance ties go to the earlier task",
+    "steps are on 100-sample rolling online accuracy, floor 100; an event is censored if the repeat or either comparator misses 0.75; censored tasks count as task length and stay in, which shrinks differences toward 0",
+    "accuracy at the end of a source task is its last 100-sample rolling online accuracy",
+    "Stage 0 checks without 'all 3 seeds' in the preregistration use the mean over seeds",
+    "probe AUC quarters are by task index: first quarter task < 25, last quarter task >= 75, which holds 2 and 3 of the 10 probes; the verdict's probe AUC is the mean of all 10, as in H2",
+    "the retry multiplies every condition's tuned rate by 3 and reruns all of Stage 0's conditions; after a retry pass the full run does the same (Deviation 2)",
+    "a retry is allowed only when every failed check is plasticity or tension",
+    "Stage 0 has its own image pool, so it shares images with neither tuning nor evaluation",
+    "both_perm tunes over both_util's candidates; the primary contrast is at both_util's config, its own best is a sensitivity block, as in H2",
+    "retention in verdicts averages short and long gaps, as in H2; the manipulation check is either retention measure with a plain 95% CI, as in H2",
+    "Holm intervals: step-down percentile intervals, level 0.025 for the smaller bootstrap p, then 0.05 only if the first excludes 0; p = 2 min(P(b<=0), P(b>=0))",
+    "noise and ties use numpy's generator, keyed by seed, condition and task; tied order is independent of which SIMD sort a CPU dispatches, but floating point can still differ between CPUs"
+  ],
+  "checks": {
+    "retention_short": {
+      "item": "retention",
+      "statement": "oracle minus sgd zero-shot, short gap",
+      "value": 0.23933333333333331,
+      "aggregate": "mean",
+      "op": ">=",
+      "threshold": 0.5,
+      "per_seed": [
+        0.19399999999999995,
+        0.31000000000000005,
+        0.21399999999999997
+      ],
+      "pass": false
+    },
+    "retention_long": {
+      "item": "retention",
+      "statement": "oracle minus sgd zero-shot, long gap",
+      "value": 0.5966666666666667,
+      "aggregate": "mean",
+      "op": ">=",
+      "threshold": 0.5,
+      "per_seed": [
+        0.6020000000000001,
+        0.6039999999999999,
+        0.5840000000000001
+      ],
+      "pass": true
+    },
+    "forgetting": {
+      "item": "forgetting",
+      "statement": "sgd accuracy at source end minus long-gap zero-shot",
+      "value": 0.558,
+      "aggregate": "mean",
+      "op": ">=",
+      "threshold": 0.1,
+      "per_seed": [
+        0.54,
+        0.568,
+        0.5660000000000001
+      ],
+      "pass": true
+    },
+    "plasticity_below_1": {
+      "item": "plasticity",
+      "statement": "sgd last-quarter probe AUC, every seed",
+      "value": 0.9374362113861365,
+      "aggregate": "max",
+      "op": "<",
+      "threshold": 1.0,
+      "per_seed": [
+        0.7449812844759655,
+        0.9374362113861365,
+        0.8725858390303042
+      ],
+      "pass": true
+    },
+    "plasticity_below_first": {
+      "item": "plasticity",
+      "statement": "sgd last minus first quarter probe AUC, every seed",
+      "value": -0.17265364980005382,
+      "aggregate": "max",
+      "op": "<",
+      "threshold": 0.0,
+      "per_seed": [
+        -0.28813129830549145,
+        -0.19115012142554844,
+        -0.17265364980005382
+      ],
+      "pass": true
+    },
+    "tension": {
+      "item": "tension",
+      "statement": "protect minus sgd last-quarter probe AUC, every seed",
+      "value": 0.6760443966192712,
+      "aggregate": "max",
+      "op": "<",
+      "threshold": 0.0,
+      "per_seed": [
+        0.6760443966192712,
+        0.2797808905083847,
+        0.3075072759204466
+      ],
+      "pass": false
+    },
+    "reuse_measurable": {
+      "item": "reuse",
+      "statement": "fraction of sgd reuse events censored at target 0.75",
+      "value": 0.0,
+      "aggregate": "mean",
+      "op": "<",
+      "threshold": 0.2,
+      "per_seed": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": true
+    },
+    "gate_sd": {
+      "item": "gate",
+      "statement": "both_util gate SD",
+      "value": 0.5773499849154479,
+      "aggregate": "mean",
+      "op": ">=",
+      "threshold": 0.05,
+      "per_seed": [
+        0.5773499849154479,
+        0.5773499849154479,
+        0.5773499849154479
+      ],
+      "pass": true
+    },
+    "gate_stability": {
+      "item": "gate",
+      "statement": "both_util Spearman between consecutive refreshes",
+      "value": 0.9751878984076559,
+      "aggregate": "mean",
+      "op": ">=",
+      "threshold": 0.5,
+      "per_seed": [
+        0.9754043565957565,
+        0.9751391488900443,
+        0.9750201897371664
+      ],
+      "pass": true
+    }
+  },
+  "chosen": {
+    "sgd": {
+      "config_index": 7,
+      "config": {
+        "lr": 0.014818523290198116
+      }
+    },
+    "protect": {
+      "config_index": 9,
+      "config": {
+        "lr": 0.005390735351822053,
+        "tau": 2662.526276166262
+      }
+    },
+    "both_util": {
+      "config_index": 9,
+      "config": {
+        "lr": 0.007183113326924725,
+        "tau": 517.2921069033358,
+        "sigma": 0.03483947046857558
+      }
+    },
+    "both_perm": {
+      "config_index": 9,
+      "config": {
+        "lr": 0.007183113326924725,
+        "tau": 517.2921069033358,
+        "sigma": 0.03483947046857558
+      }
+    },
+    "oracle": {
+      "config_index": 7,
+      "config": {
+        "lr": 0.014818523290198116
+      }
+    }
+  },
+  "diagnostics": {
+    "per_seed": {
+      "sgd": {
+        "online_acc": [
+          0.65474,
+          0.65405,
+          0.65534
+        ],
+        "zs_short": [
+          0.6100000000000001,
+          0.42800000000000005,
+          0.5940000000000001
+        ],
+        "zs_long": [
+          0.22599999999999998,
+          0.192,
+          0.21600000000000003
+        ],
+        "reuse_short": [
+          -397.3,
+          -320.0,
+          -424.3
+        ],
+        "reuse_long": [
+          -228.1,
+          -237.9,
+          -173.5
+        ],
+        "reuse_censored_frac": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "forget_long": [
+          0.54,
+          0.568,
+          0.5660000000000001
+        ],
+        "probe_auc": [
+          0.8775756781911206,
+          0.9716102430072293,
+          0.916539393458417
+        ],
+        "auc_first": [
+          1.033112582781457,
+          1.128586332811685,
+          1.045239488830358
+        ],
+        "auc_last": [
+          0.7449812844759655,
+          0.9374362113861365,
+          0.8725858390303042
+        ],
+        "gate_mean": [
+          null,
+          null,
+          null
+        ],
+        "gate_std": [
+          null,
+          null,
+          null
+        ],
+        "gate_spearman": [
+          null,
+          null,
+          null
+        ]
+      },
+      "protect": {
+        "online_acc": [
+          0.69931,
+          0.70034,
+          0.70539
+        ],
+        "zs_short": [
+          0.5820000000000001,
+          0.5700000000000001,
+          0.5980000000000001
+        ],
+        "zs_long": [
+          0.148,
+          0.16199999999999998,
+          0.21999999999999997
+        ],
+        "reuse_short": [
+          -265.1,
+          -275.7,
+          -242.2
+        ],
+        "reuse_long": [
+          -117.2,
+          -75.6,
+          -71.6
+        ],
+        "reuse_censored_frac": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "forget_long": [
+          0.658,
+          0.604,
+          0.5599999999999999
+        ],
+        "probe_auc": [
+          1.3409887344649865,
+          1.279222526141862,
+          1.2421125876741868
+        ],
+        "auc_first": [
+          1.4230465042708003,
+          1.4600574025352788,
+          1.3371376811594202
+        ],
+        "auc_last": [
+          1.4210256810952366,
+          1.2172171018945213,
+          1.1800931149507508
+        ],
+        "gate_mean": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "gate_std": [
+          0.5773499849154479,
+          0.5773499849154479,
+          0.5773499849154479
+        ],
+        "gate_spearman": [
+          0.9932307379470064,
+          0.99315815594204,
+          0.9932254248312715
+        ]
+      },
+      "both_util": {
+        "online_acc": [
+          0.67512,
+          0.67265,
+          0.67819
+        ],
+        "zs_short": [
+          0.4920000000000001,
+          0.40800000000000003,
+          0.54
+        ],
+        "zs_long": [
+          0.14800000000000002,
+          0.132,
+          0.17
+        ],
+        "reuse_short": [
+          -321.8,
+          -277.6,
+          -236.6
+        ],
+        "reuse_long": [
+          16.2,
+          -0.9,
+          -78.3
+        ],
+        "reuse_censored_frac": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "forget_long": [
+          0.626,
+          0.6220000000000001,
+          0.622
+        ],
+        "probe_auc": [
+          1.1569208934810693,
+          1.1806878001537613,
+          1.1475110388112326
+        ],
+        "auc_first": [
+          1.237492660011744,
+          1.3517997750281214,
+          1.294952876984127
+        ],
+        "auc_last": [
+          1.1738720285133393,
+          1.1380597014925373,
+          1.1311270125223614
+        ],
+        "gate_mean": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "gate_std": [
+          0.5773499849154479,
+          0.5773499849154479,
+          0.5773499849154479
+        ],
+        "gate_spearman": [
+          0.9754043565957565,
+          0.9751391488900443,
+          0.9750201897371664
+        ]
+      },
+      "both_perm": {
+        "online_acc": [
+          0.67436,
+          0.67403,
+          0.68115
+        ],
+        "zs_short": [
+          0.47800000000000004,
+          0.472,
+          0.5120000000000001
+        ],
+        "zs_long": [
+          0.10800000000000001,
+          0.134,
+          0.154
+        ],
+        "reuse_short": [
+          -284.5,
+          -256.5,
+          -299.1
+        ],
+        "reuse_long": [
+          9.8,
+          -45.1,
+          48.6
+        ],
+        "reuse_censored_frac": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "forget_long": [
+          0.666,
+          0.632,
+          0.626
+        ],
+        "probe_auc": [
+          1.1108398164985258,
+          1.1004191895214777,
+          1.0886226042556606
+        ],
+        "auc_first": [
+          1.1870370370370371,
+          1.2415836169178416,
+          1.231602822580645
+        ],
+        "auc_last": [
+          1.1108194525460713,
+          1.0711210116873822,
+          1.0434336255231778
+        ],
+        "gate_mean": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "gate_std": [
+          0.5773499849154479,
+          0.5773499849154479,
+          0.5773499849154479
+        ],
+        "gate_spearman": [
+          0.9758308125464594,
+          0.9756888276894442,
+          0.974757035702265
+        ]
+      },
+      "oracle": {
+        "online_acc": [
+          0.68906,
+          0.67892,
+          0.68977
+        ],
+        "zs_short": [
+          0.804,
+          0.7380000000000001,
+          0.808
+        ],
+        "zs_long": [
+          0.8280000000000001,
+          0.7959999999999999,
+          0.8
+        ],
+        "reuse_short": [
+          -435.3,
+          -422.4,
+          -393.7
+        ],
+        "reuse_long": [
+          -399.6,
+          -366.1,
+          -363.8
+        ],
+        "reuse_censored_frac": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "forget_long": [
+          -0.049999999999999954,
+          -0.024,
+          -0.021999999999999974
+        ],
+        "probe_auc": [
+          1.040388871723443,
+          1.0237382972630433,
+          1.020720208797375
+        ],
+        "auc_first": [
+          1.086092715231788,
+          1.1582159624413146,
+          1.0713588918154326
+        ],
+        "auc_last": [
+          0.9707496059889676,
+          1.020602353673474,
+          1.0075170310260633
+        ],
+        "gate_mean": [
+          null,
+          null,
+          null
+        ],
+        "gate_std": [
+          null,
+          null,
+          null
+        ],
+        "gate_spearman": [
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "ms_per_step": {
+      "sgd": 0.36918238993710695,
+      "protect": 1.7518867924528299,
+      "both_util": 2.2666666666666666,
+      "both_perm": 2.4606918238993707,
+      "oracle": 0.35283018867924526
+    },
+    "projected_full_minutes_on_2_workers": 287.42662473794553
+  },
+  "elapsed_seconds": 2952.039847612381
+}
