@@ -1,6 +1,6 @@
 # H2R: H2 redesigned so that it can answer
 
-**Status:** preregistered before any H2R code. H2 data informed this design, per
+**Status:** stopped at Stage 0, see `results/h2r/RESULT.md`. Preregistered before any H2R code. H2 data informed this design, per
 `results/h2_shared_state/RESULT.md`, so H2's evaluation seeds are not reused. Later
 changes go in the Deviations section.
 

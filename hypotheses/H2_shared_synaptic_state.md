@@ -1,6 +1,6 @@
 # H2: One synaptic state for protection and recycling
 
-**Status:** preregistered before any H2 code, and before H1 Stage A results were
+**Status:** complete, no conclusion, see `results/h2_shared_state/RESULT.md`. Preregistered before any H2 code, and before H1 Stage A results were
 seen. Independent of H1. Later changes go in the Deviations section.
 
 ## Hypothesis

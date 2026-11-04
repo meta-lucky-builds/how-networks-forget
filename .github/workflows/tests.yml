@@ -17,3 +17,21 @@ jobs:
           python-version: "3.12"
       - run: pip install -q -e ".[test]"
       - run: python -m pytest tests -q --tb=short
+
+  h6-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q numpy torch --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple
+      - name: Self-test the H6 experiment on CPU
+        working-directory: experiments
+        run: python -c "import h6_cifar; h6_cifar.selftest()"
+      - name: Stored H6 analysis and figure must rebuild exactly
+        run: |
+          python experiments/h6_audit.py > results/h6/audit.txt
+          python experiments/h6_figure.py
+          git diff --exit-code results/h6/audit.txt docs/figures/h6_probe_vs_memory.svg

@@ -1,6 +1,6 @@
 # H5: Is catastrophic forgetting mostly overwriting, or loss of access?
 
-**Status:** preregistered before any H5 code or data. Later changes go in the Deviations section.
+**Status:** complete, see `results/h5/RESULT.md`. Preregistered before any H5 code or data. Later changes go in the Deviations section.
 
 ## The question, made exact
 

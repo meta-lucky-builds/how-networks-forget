@@ -32,7 +32,7 @@ all plasticity, is weakened: a shared signal is contested in biology and the AI 
 
 ## How the work runs
 
-- All experiments and tests run on cloud machines, never on a local one: GitHub Actions, Colab, or a rented GPU.
+- All experiments and tests run on cloud machines, never on a local one: GitHub Actions, Colab, or a cloud GPU.
 - Every experiment is preregistered in `hypotheses/` first, and later changes are logged as deviations.
 - Long jobs resume from per-seed records and write to a log, so a dropped machine loses little.
 - No credentials go into notebooks. Code reaches Colab through notebook cells, checked by checksum.

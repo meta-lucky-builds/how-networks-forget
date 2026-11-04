@@ -42,7 +42,7 @@ A biological analogy earns nothing by itself. Each mapping must state:
 - **Report with uncertainty.** Per-seed results, bootstrap intervals, effect
   sizes. Null and negative results are recorded with the same care.
 - **Execute in the cloud only.** Experiments and tests run on cloud machines, never a
-  local one: GitHub Actions, Colab or a rented GPU.
+  local one: GitHub Actions, Colab or a cloud GPU.
 - **Cite only what was read.** No citation enters the repo unless its source was
   actually opened; `docs/literature/` records what each claim rests on.
 

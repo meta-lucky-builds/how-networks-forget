@@ -8,8 +8,9 @@
 Six hypotheses, each committed before its data. The main question: when a network "forgets" an old task, has the
 memory been overwritten, or is it still there and just hard to reach?
 
-**Short answer.** It depends on the setting and on how much is learned afterwards, and a common way of measuring it can
-mislead. No biology-to-AI mapping has been supported so far, and this repo records that plainly.
+**Short answer.** It depends on the setting, on how much is learned afterwards, and on how many labels you use to look for
+the memory. A common way of measuring it can mislead. No biology-to-AI mapping has been supported so far, and this repo records
+that plainly.
 
 ## Top findings
 
@@ -27,9 +28,14 @@ readout scores **0.317 on the trained task and 0.321 on never-seen tasks**, whil
 | All seen classes compete | 0.55 | 0.15 | **0.41** [0.35, 0.47] |
 | Task identity given | 0.59 | 0.04 | **0.56** [0.46, 0.67] |
 
-The gap was positive in all 20 seeds in both settings. **Limit: this was measured at 2 labelled images per class only**, and with
-task identity given the fresh readout is itself a weak key, so the gap against the strongest key at that test point is just 0.06.
-[Full result](results/h6/RESULT.md).
+The gap was positive in all 20 seeds in both settings. Measured against the strongest key instead, which is a harsher test, it grows
+with later learning: from 0.16 to 0.44 after 1 and 5 tasks with all seen classes competing, and from -0.01 to 0.29 with task identity
+given. So early on, with task identity given, there is no overstatement by that test.
+
+On permuted MNIST the same check found almost none (0.04 and -0.02). Those tasks share few features, so this fits the idea that
+overstatement comes from transferable features, though network and data changed together.
+
+**Limit: the CIFAR result is at 2 labelled images per class only.** [Full result](results/h6/RESULT.md).
 
 ### 2. Forgetting is not one thing
 
@@ -39,31 +45,60 @@ overwriting, not a measurement of it**.
 | Setting | Learned afterwards | Loss of access | Unrecovered, at most overwriting | Verdict |
 | --- | --- | --- | --- | --- |
 | Small MLP, permuted MNIST, tasks compete for outputs | 1 task | 0.96 [0.92, 0.99] | 0.04 | **Mostly access** |
-| Small MLP, permuted MNIST, shared outputs | 5 tasks | 0.46 [0.41, 0.51] | 0.53 | **No majority**, depends on baseline |
+| Small MLP, permuted MNIST, shared outputs | 5 tasks | 0.46 [0.41, 0.51] | 0.53 | **No majority**, depends on baseline and budget |
 | ResNet-18, Split CIFAR-100, all seen classes compete | 1 task | 0.15 [0.07, 0.21] | 0.61 | **Mostly unrecovered**, at 2 images per class |
 | ResNet-18, Split CIFAR-100, task identity given | 2 tasks | no valid reading | 0.80 | **Mostly unrecovered**, at 2 images per class |
 
-On the MLP, the MNIST verdict numbers replicated on fresh seeds, and access gives way to unrecovered damage as learning continues.
-The MLP and ResNet rows differ in network, data and budget all at once, so no single cause explains the difference.
-[MNIST result](results/h5/RESULT.md).
+Three things change the answer:
+
+- **More later learning.** On the MLP, access gives way to unrecovered damage. After 20 tasks with shared outputs, unrecovered is at
+  least 0.40 on either baseline at either learning rate, the firmest result here.
+- **More labels for the key.** With shared outputs, the MLP's label moves from no majority at 5 images per class to mostly repair at 10
+  and mostly access at 20 and 50. With competing outputs it stays mostly access throughout. So the CIFAR labels, at 2 images, may not hold at larger budgets.
+- **The baseline.** Same-network and fixed baselines can disagree widely. The same MLP point reads 0.46 access on one and 0.15 on the other.
+
+The MNIST verdict numbers replicated on fresh seeds. The MLP and ResNet rows differ in network, data and budget all at once, so no
+single cause explains the difference. [MNIST result](results/h5/RESULT.md).
 
 ### 3. The damage is in the body of the network, not the output layer
 
 Restoring the saved feature layers brings back 0.97 to 1.00 of the old task's advantage in the CIFAR experiment, at every lag.
-Restoring the output layer adds at most 0.07. On the MLP, late damage is likewise in the hidden layers. Batch norm
+Restoring the output layer adds at most 0.07. This locates the damage and is not a fix, since it needs the old weights. On the MLP, late
+damage is likewise in the hidden layers, and networks also got worse at learning new tasks as they aged. Batch norm
 recalibration, a zero-label fix that was predicted to help, added 0.03 at most at the test points.
 
 ### 4. A clean negative: holding back on surprise loses to hedging
 
 The idea was to delay learning from a surprising sample until something corroborates it. It failed its gate. A short derivation
 shows why: under squared error, when a jump could be a real change or a one-off, staying put costs **about twice** what the
-midpoint costs. The data match, 12.99 against 6.76. [Result](results/h1_stage_a/RESULT.md).
+midpoint costs. The data match, 12.99 against 6.76. It did win where it should, with the lowest error of any non-ceiling learner on
+outlier-only streams (1.30), and corroboration clearly beat no corroboration. [Result](results/h1_stage_a/RESULT.md).
 
 ### 5. Method: stopping early is a result too
 
 Three designs could not answer their questions, and the records say so rather than reporting their numbers as evidence. One had
 a ceiling of about 0.2 on its own metric, found only after 165 minutes. Pilots with positive controls then stopped two more
 designs, avoiding about 414 projected minutes of runs. [Lessons learned](docs/MAPPINGS.md#method-lessons-each-paid-for).
+
+### 6. From the literature: what AI versions of biological ideas tend to drop
+
+These come from five review threads and are not results of this repo. Each note records how deeply every source was read, and many
+are abstract-level.
+
+- **Surprise needs a cause.** In humans, surprise raised learning after a real change and lowered it after a one-off
+  ([Nassar et al. 2019, 39 subjects](docs/literature/neuromodulation.md)). AI surprise gates usually just raise learning with surprise.
+- **Fair tuning erases many gains.** No neuromodulation-inspired method in the notes beat well-tuned Adam on a standard benchmark, and
+  audited optimiser speedups [mostly shrank under fair tuning](docs/literature/neuromodulation.md).
+- **Stored-data replay is the robust result.** Most "smarter" replay gains against a tuned plain baseline are
+  [small, protocol-dependent or reversed](docs/literature/consolidation.md).
+- **Popular biological motivations are shakier than cited.** Adult human neurogenesis is
+  [contested](docs/literature/synaptic.md), and the "random" fly wiring AI papers copy has been
+  [revised](docs/literature/gating_metacognition.md).
+- **The H1 idea was not new as a principle.** Our [prior-art check](docs/literature/prior_art_corroboration.md) found deferral already
+  used in simpler models. Only a narrow gap survived, in deep online learners.
+
+**A pattern across threads, untested here:** what AI versions drop usually involves inferring what caused new data, rather than
+reacting to how surprising it is.
 
 ## All experiments
 
@@ -97,7 +132,8 @@ task on a later network with any key but "nothing".
 - **That the biological analogies are right.** [The ledger](docs/MAPPINGS.md) lists zero supported mappings.
 - **That published probe studies are wrong.** H6 used one small network at a very low label budget.
 - **How much is truly overwritten.** Only an upper limit is measured, and it depends on which keys were tried.
-- **Results at larger budgets on CIFAR.** That sweep was cut to save compute, and it is the main open question.
+- **Results at larger budgets on CIFAR.** That sweep was cut to save compute, and given how the MLP's label moved with budget, it is
+  the main open question.
 
 ## Reproduce
 
@@ -115,11 +151,13 @@ python -m pytest tests -q
 | H2R | `python experiments/h2r.py --stage0` | CPU, about 49 minutes |
 | H4 | `python experiments/h4_schema.py --stage0` | CPU, a few minutes |
 | H5 | `python experiments/h5_access.py calibrate`, then `confirm`, then `sensitivity` | CPU, hours |
-| H6 | `pip install torch`, then `python experiments/h6_cifar.py run` | RTX 5090, 72 minutes |
+| H6 | `pip install -e ".[h6]"`, then `python experiments/h6_cifar.py run` | RTX 5090, 72 minutes |
 
 H6 is one self-contained file: it downloads and verifies CIFAR-100, tests itself, and resumes if interrupted. It needs a GPU, and GPU
-runs are not bit-for-bit reproducible. `experiments/h6_audit.py` and `experiments/h6_figure.py` rebuild the post hoc numbers and the
-figure from the stored data, with no training. H1's per-seed files were not kept, so rerun it to regenerate them.
+runs are not bit-for-bit reproducible. H1's per-seed files were not kept, so rerun it to regenerate them.
+
+Continuous integration checks more than the code. It runs H6's self-test on CPU, rebuilds H6's post hoc numbers and this figure from
+the stored data and fails if they differ, and fails if a headline number or a link in this README stops matching the stored results.
 
 ## Repository map
 

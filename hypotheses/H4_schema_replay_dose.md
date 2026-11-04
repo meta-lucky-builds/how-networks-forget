@@ -1,6 +1,6 @@
 # H4: Does schema consistency add anything beyond gradient interference?
 
-**Status:** preregistered before any H4 code. H2 was running and no H2 results had
+**Status:** stopped at Stage 0, see `results/h4/RESULT.md`. Preregistered before any H4 code. H2 was running and no H2 results had
 been seen. Later changes go in the Deviations section.
 
 ## Biological claim under test

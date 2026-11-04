@@ -88,5 +88,6 @@ for regime, e in summ.items():
         for lag in (m,):
             diff = bratio(S(regime, lag, k, n)) - bratio(S(regime, lag, ref, n))
             print(f"   {k} minus {ref} at m*: {diff.mean():.3f} {ci(diff)}")
-    pos = [float((col(regime, m, "A", "readout", n)[i] / col(regime, 0, "A", "readout", n)[i]) - ((col(regime, m, "A", "readout", n)[i] - new(regime, m, "readout", n)[i]) / (col(regime, 0, "A", "readout", n)[i] - new(regime, 0, "readout", n)[i]))) for i in range(20)]
+    now, then = col(regime, m, "A", "readout", n), col(regime, 0, "A", "readout", n)
+    pos = (now / then - (now - new(regime, m, "readout", n)) / (then - new(regime, 0, "readout", n))).tolist()
     print("   per-seed H6a gap min/median/max", round(min(pos), 3), round(float(np.median(pos)), 3), round(max(pos), 3), "seeds positive", sum(p > 0 for p in pos))
