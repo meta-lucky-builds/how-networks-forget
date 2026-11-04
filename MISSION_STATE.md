@@ -49,9 +49,9 @@ agent, starts here, then reads `docs/CHARTER.md`.
 
 ## In progress
 
-- H5 (overwriting or access, requested by the owner 2026-11-04): `perm_class` confirmed mostly access, `perm_shared` no majority (`results/h5/RESULT.md`). `split_class`
-  calibration and are confirming on Actions. Then `calibrate-retry` for `split_class` only (Deviation 3),
-  then its `confirm` if answerable. Request format: line 1 mode, line 2 regimes, line 3 free text.
+- H5 (overwriting or access, requested by the owner 2026-11-04): `perm_class` confirmed mostly access,
+  `perm_shared` no majority, in `results/h5/RESULT.md`. `split_class` is on its one blind `calibrate-retry`
+  (Deviation 3), then `confirm` if answerable. Request format: line 1 mode, line 2 regimes, line 3 free text.
 - **The Colab runtime is shared with work we do not own** (`experiments/thread_a.py`,
   `mechinterp`), possibly another session of the owner's. Never kill those processes or
   delete cells that are not ours. Use Colab only for small tests, and expect delays.

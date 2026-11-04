@@ -62,7 +62,7 @@ Random erasure is not the same as overwriting by gradient steps, so this is a co
 A readout on the first hidden layer recovered 1.09 of the loss in `perm_shared` at 5 tasks, against 0.46 for the
 last hidden layer, and 0.53 against 0.08 at 20 tasks. This fits published claims about early layers. It is
 partly inflated: the new-task score on that layer also falls, from 0.42 to 0.28, and at 20 tasks the trained
-task (0.43) barely exceeds what a new task scored on the untrained-by-others `w_0` (0.42). The advantage on the
+task (0.43) barely exceeds what a new task scored on `w_0` (0.42). The advantage on the
 same network is still 0.15, and sham null says this is memory.
 
 ### Bet 3 so far
