@@ -3,9 +3,9 @@
 Durable state for a long-running research mission. Anyone resuming, human or
 agent, starts here, then reads `docs/CHARTER.md`.
 
-**Last heartbeat:** 2026-11-04T01:09Z
+**Last heartbeat:** 2026-11-04T01:34Z
 **Working branch:** `research/bio-to-ai`
-**Phase:** 3, H1 negative, H2 no conclusion (design failure), H2R and H4 being implemented
+**Phase:** 3, H1 negative, H2 no conclusion (design failure), Stage 0 running for H2R and H4
 
 ## Standing instructions from the project owner
 
@@ -46,8 +46,10 @@ agent, starts here, then reads `docs/CHARTER.md`.
 
 ## In progress
 
-- Implementing H2R and H4, Stage 0 first for each. Long runs use GitHub Actions: edit the
-  file under `.github/run-requests/` and push. Check with `gh run list -R meta-lucky-builds/clu`.
+- Stage 0 of H2R (run 41754260090) and H4 (run 41754959933) on GitHub Actions, requested
+  2026-11-04. On a pass, set the file under `.github/run-requests/` to `full` and push. On a
+  failure, apply the preregistration's stop rule. Check with
+  `gh run list -R meta-lucky-builds/clu`.
 - **The Colab runtime is shared with work we do not own** (`experiments/thread_a.py`,
   `mechinterp`), possibly another session of the owner's. Never kill those processes or
   delete cells that are not ours. Use Colab only for small tests, and expect delays.
