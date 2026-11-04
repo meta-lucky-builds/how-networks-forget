@@ -873,8 +873,3 @@ def test_parse_idx():
     assert h4.parse_idx(labels, 2).tolist() == [3, 7]
     with pytest.raises(ValueError):
         h4.parse_idx(labels, 3)
-
-
-def test_run_request_names_a_mode():
-    first = (ROOT / ".github" / "run-requests" / "h4").read_text().split()[0]
-    assert first in {"stage0", "full"}

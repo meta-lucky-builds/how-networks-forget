@@ -603,10 +603,6 @@ def test_rows_with_different_phase_or_config_are_distinct_jobs(tmp_path, monkeyp
     store.close()
 
 
-def test_request_file_names_a_mode():
-    assert (ROOT / ".github" / "run-requests" / "h2r").read_text().split()[0] in ("stage0", "stage0-retry", "full")
-
-
 def test_stage0_then_full_end_to_end_and_resume(tmp_path):
     plan = h2r.Plan(TASKS, 12, STEPS, 2, (200,), (300, 301), (400, 401), 100, PER_CLASS)
     X, y = synthetic()

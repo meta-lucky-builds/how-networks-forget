@@ -1,0 +1,19 @@
+# Runs the test suite. Experiments are run by hand, as listed in the README.
+name: tests
+on:
+  push:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q -e ".[test]"
+      - run: python -m pytest tests -q --tb=short

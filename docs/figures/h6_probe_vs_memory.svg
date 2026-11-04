@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 444" width="880" role="img" aria-label="Two line charts. Naive probe retention stays between about 0.5 and 0.7 as later tasks are learned, while the controlled measures fall towards zero.">
+<style>
+.surface { fill: #fcfcfb } .title { fill: #0b0b0b; font-weight: 600 } .text { fill: #52514e } .grid { stroke: #e4e3df } .zero { stroke: #a8a7a1 }
+.s1 { stroke: #2a78d6; fill: #2a78d6 } .s2 { stroke: #eb6834; fill: #eb6834 } .s3 { stroke: #1baf7a; fill: #1baf7a }
+@media (prefers-color-scheme: dark) {
+  .surface { fill: #1a1a19 } .title { fill: #f0efec } .text { fill: #c3c2b7 } .grid { stroke: #33332f } .zero { stroke: #6b6a64 }
+  .s1 { stroke: #3987e5; fill: #3987e5 } .s2 { stroke: #d95926; fill: #d95926 } .s3 { stroke: #199e70; fill: #199e70 }
+}
+text { font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 13px }
+</style>
+<rect class="surface" width="880" height="444" rx="8"/>
+<text class="title" x="44" y="26" style="font-size:16px">A plain probe keeps reading about half retained while controlled memory falls</text>
+<line class="s1" stroke-width="2" x1="44" x2="64" y1="49" y2="49"/><circle class="s1" cx="54" cy="49" r="4"/>
+<text class="text" x="70" y="53">Naive probe retention</text>
+<line class="s2" stroke-width="2" x1="239.20000000000002" x2="259.20000000000005" y1="49" y2="49"/><circle class="s2" cx="249.20000000000002" cy="49" r="4"/>
+<text class="text" x="265.20000000000005" y="53">Controlled, best key</text>
+<line class="s3" stroke-width="2" x1="427.20000000000005" x2="447.20000000000005" y1="49" y2="49"/><circle class="s3" cx="437.20000000000005" cy="49" r="4"/>
+<text class="text" x="453.20000000000005" y="53">Controlled, same readout</text>
+<text class="title" x="44" y="80">All seen classes compete (cifar_class)</text>
+<line class="zero" x1="44" x2="384" y1="350.1" y2="350.1"/>
+<text class="text" text-anchor="end" x="36" y="354.1">0.0</text>
+<line class="grid" x1="44" x2="384" y1="286.6" y2="286.6"/>
+<text class="text" text-anchor="end" x="36" y="290.6">0.2</text>
+<line class="grid" x1="44" x2="384" y1="223.1" y2="223.1"/>
+<text class="text" text-anchor="end" x="36" y="227.1">0.4</text>
+<line class="grid" x1="44" x2="384" y1="159.5" y2="159.5"/>
+<text class="text" text-anchor="end" x="36" y="163.5">0.6</text>
+<line class="grid" x1="44" x2="384" y1="96.0" y2="96.0"/>
+<text class="text" text-anchor="end" x="36" y="100.0">0.8</text>
+<text class="text" text-anchor="middle" x="44.0" y="386">1</text>
+<text class="text" text-anchor="middle" x="129.0" y="386">2</text>
+<text class="text" text-anchor="middle" x="214.0" y="386">3</text>
+<text class="text" text-anchor="middle" x="384.0" y="386">5</text>
+<text class="text" text-anchor="middle" x="214.0" y="406">Tasks learned afterwards</text>
+<polyline class="s1" style="fill:none" stroke-width="2" stroke-linejoin="round" points="44.0,174.7 129.0,182.0 214.0,179.2 384.0,194.3"/>
+<circle class="s1" cx="44.0" cy="174.7" r="4.5"><title>Naive probe retention, 1 later: 0.55</title></circle>
+<circle class="s1" cx="129.0" cy="182.0" r="4.5"><title>Naive probe retention, 2 later: 0.53</title></circle>
+<circle class="s1" cx="214.0" cy="179.2" r="4.5"><title>Naive probe retention, 3 later: 0.54</title></circle>
+<circle class="s1" cx="384.0" cy="194.3" r="4.5"><title>Naive probe retention, 5 later: 0.49</title></circle>
+<text class="text" x="393.0" y="198.3">0.49</text>
+<polyline class="s2" style="fill:none" stroke-width="2" stroke-linejoin="round" points="44.0,226.1 129.0,292.3 214.0,310.6 384.0,333.8"/>
+<circle class="s2" cx="44.0" cy="226.1" r="4.5"><title>Controlled, best key, 1 later: 0.39</title></circle>
+<circle class="s2" cx="129.0" cy="292.3" r="4.5"><title>Controlled, best key, 2 later: 0.18</title></circle>
+<circle class="s2" cx="214.0" cy="310.6" r="4.5"><title>Controlled, best key, 3 later: 0.12</title></circle>
+<circle class="s2" cx="384.0" cy="333.8" r="4.5"><title>Controlled, best key, 5 later: 0.05</title></circle>
+<text class="text" x="393.0" y="337.8">0.05</text>
+<polyline class="s3" style="fill:none" stroke-width="2" stroke-linejoin="round" points="44.0,303.7 129.0,328.2 214.0,328.3 384.0,353.9"/>
+<circle class="s3" cx="44.0" cy="303.7" r="4.5"><title>Controlled, same readout, 1 later: 0.15</title></circle>
+<circle class="s3" cx="129.0" cy="328.2" r="4.5"><title>Controlled, same readout, 2 later: 0.07</title></circle>
+<circle class="s3" cx="214.0" cy="328.3" r="4.5"><title>Controlled, same readout, 3 later: 0.07</title></circle>
+<circle class="s3" cx="384.0" cy="353.9" r="4.5"><title>Controlled, same readout, 5 later: -0.01</title></circle>
+<text class="text" x="393.0" y="357.9">-0.01</text>
+<text class="title" x="448" y="80">Task identity given (cifar_task)</text>
+<line class="zero" x1="448" x2="788" y1="350.1" y2="350.1"/>
+<text class="text" text-anchor="end" x="440" y="354.1">0.0</text>
+<line class="grid" x1="448" x2="788" y1="286.6" y2="286.6"/>
+<text class="text" text-anchor="end" x="440" y="290.6">0.2</text>
+<line class="grid" x1="448" x2="788" y1="223.1" y2="223.1"/>
+<text class="text" text-anchor="end" x="440" y="227.1">0.4</text>
+<line class="grid" x1="448" x2="788" y1="159.5" y2="159.5"/>
+<text class="text" text-anchor="end" x="440" y="163.5">0.6</text>
+<line class="grid" x1="448" x2="788" y1="96.0" y2="96.0"/>
+<text class="text" text-anchor="end" x="440" y="100.0">0.8</text>
+<text class="text" text-anchor="middle" x="448.0" y="386">1</text>
+<text class="text" text-anchor="middle" x="533.0" y="386">2</text>
+<text class="text" text-anchor="middle" x="618.0" y="386">3</text>
+<text class="text" text-anchor="middle" x="788.0" y="386">5</text>
+<text class="text" text-anchor="middle" x="618.0" y="406">Tasks learned afterwards</text>
+<polyline class="s1" style="fill:none" stroke-width="2" stroke-linejoin="round" points="448.0,136.3 533.0,161.4 618.0,147.1 788.0,156.3"/>
+<circle class="s1" cx="448.0" cy="136.3" r="4.5"><title>Naive probe retention, 1 later: 0.67</title></circle>
+<circle class="s1" cx="533.0" cy="161.4" r="4.5"><title>Naive probe retention, 2 later: 0.59</title></circle>
+<circle class="s1" cx="618.0" cy="147.1" r="4.5"><title>Naive probe retention, 3 later: 0.64</title></circle>
+<circle class="s1" cx="788.0" cy="156.3" r="4.5"><title>Naive probe retention, 5 later: 0.61</title></circle>
+<text class="text" x="797.0" y="160.3">0.61</text>
+<polyline class="s2" style="fill:none" stroke-width="2" stroke-linejoin="round" points="448.0,132.8 533.0,179.9 618.0,208.9 788.0,249.9"/>
+<circle class="s2" cx="448.0" cy="132.8" r="4.5"><title>Controlled, best key, 1 later: 0.68</title></circle>
+<circle class="s2" cx="533.0" cy="179.9" r="4.5"><title>Controlled, best key, 2 later: 0.54</title></circle>
+<circle class="s2" cx="618.0" cy="208.9" r="4.5"><title>Controlled, best key, 3 later: 0.44</title></circle>
+<circle class="s2" cx="788.0" cy="249.9" r="4.5"><title>Controlled, best key, 5 later: 0.32</title></circle>
+<text class="text" x="797.0" y="253.9">0.32</text>
+<polyline class="s3" style="fill:none" stroke-width="2" stroke-linejoin="round" points="448.0,259.1 533.0,338.2 618.0,306.3 788.0,344.9"/>
+<circle class="s3" cx="448.0" cy="259.1" r="4.5"><title>Controlled, same readout, 1 later: 0.29</title></circle>
+<circle class="s3" cx="533.0" cy="338.2" r="4.5"><title>Controlled, same readout, 2 later: 0.04</title></circle>
+<circle class="s3" cx="618.0" cy="306.3" r="4.5"><title>Controlled, same readout, 3 later: 0.14</title></circle>
+<circle class="s3" cx="788.0" cy="344.9" r="4.5"><title>Controlled, same readout, 5 later: 0.02</title></circle>
+<text class="text" x="797.0" y="348.9">0.02</text>
+<text class="text" x="44" y="432">Split CIFAR-100, 20 seeds, 2 labelled images per class. 1.0 is the old task's full advantage. Best key is chosen after the fact, so it favours recovery.</text>
+</svg>

@@ -3,3 +3,6 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 results/*_smoke/
+h6_results*/
+h6_results.zip
+cifar/

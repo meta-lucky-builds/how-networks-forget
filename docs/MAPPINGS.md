@@ -40,4 +40,4 @@ These are about how to run this work, and they are the most reliable output so f
 ## Open synthesis, not a finding
 
 Each thread's dropped property involved inferring what caused new data rather than reacting to how
-surprising it is (`MISSION_STATE.md`). No experiment here has tested this yet.
+surprising it is (`STATUS.md`). No experiment here has tested this yet.

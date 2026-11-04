@@ -41,8 +41,8 @@ A biological analogy earns nothing by itself. Each mapping must state:
   Tuning seeds and evaluation seeds are disjoint.
 - **Report with uncertainty.** Per-seed results, bootstrap intervals, effect
   sizes. Null and negative results are recorded with the same care.
-- **Execute in the cloud only.** Nothing runs on the local machine: Colab for
-  experiments and tests, GitHub Actions as the fallback.
+- **Execute in the cloud only.** Experiments and tests run on cloud machines, never a
+  local one: GitHub Actions, Colab or a rented GPU.
 - **Cite only what was read.** No citation enters the repo unless its source was
   actually opened; `docs/literature/` records what each claim rests on.
 
@@ -57,4 +57,4 @@ A biological analogy earns nothing by itself. Each mapping must state:
 | `tests/` | Unit and property tests, run in the cloud |
 | `experiments/` | Runnable experiment definitions |
 | `results/` | Raw per-seed outputs and analyses |
-| `MISSION_STATE.md` | Where the work stands, what is next, how to resume |
+| `docs/STATUS.md` | Where the work stands, what is next, how to resume |

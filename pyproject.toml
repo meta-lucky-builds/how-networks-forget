@@ -4,13 +4,16 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "clu"
-version = "0.0.1"
-description = "Biological learning mechanisms implemented and tested as AI methods"
+version = "0.1.0"
+description = "Preregistered experiments on how neural networks forget, and on biological ideas for AI"
+readme = "README.md"
+license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = ["numpy", "scipy"]
 
 [project.optional-dependencies]
-test = ["pytest>=7"]
+test = ["pytest>=7", "scikit-learn"]
+h6 = ["torch"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
