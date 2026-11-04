@@ -1,0 +1,39 @@
+# Runs the H5 experiment. Change .github/run-requests/h5 to start it. Its first word selects the
+# mode: `calibrate`, `calibrate-retry` or `confirm`. GITHUB_TOKEN pushes do not retrigger workflows.
+name: h5
+on:
+  push:
+    branches: [research/bio-to-ai]
+    paths: [.github/run-requests/h5]
+permissions:
+  contents: write
+concurrency:
+  group: h5
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q numpy pytest
+      - run: python -m pytest tests/test_h5.py -q --tb=short
+        timeout-minutes: 15
+      - name: Run experiment
+        run: |
+          mode=$(awk 'NR==1 {print $1}' .github/run-requests/h5)
+          timeout 270m python experiments/h5_access.py "$mode" || echo "exit code $?"
+      - name: Commit results
+        if: always()
+        run: |
+          [ -d results/h5 ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results/h5
+          git diff --cached --quiet && exit 0
+          git commit -m "Record H5 results from run ${GITHUB_RUN_ID}"
+          git pull --rebase origin research/bio-to-ai
+          git push origin HEAD:research/bio-to-ai

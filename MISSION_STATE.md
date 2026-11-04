@@ -49,7 +49,9 @@ agent, starts here, then reads `docs/CHARTER.md`.
 
 ## In progress
 
-- No runs in flight. H3 design is next.
+- H5 (overwriting or access, requested by the owner 2026-11-04) calibration on Actions. Read
+  `results/h5/calibration.json`, then set `.github/run-requests/h5` to `confirm` if any regime is
+  answerable. If none is, one `calibrate-retry` is allowed, logged in the Deviations first.
 - **The Colab runtime is shared with work we do not own** (`experiments/thread_a.py`,
   `mechinterp`), possibly another session of the owner's. Never kill those processes or
   delete cells that are not ours. Use Colab only for small tests, and expect delays.
@@ -63,6 +65,7 @@ agent, starts here, then reads `docs/CHARTER.md`.
 | H2R | H2 with input permutation, rank gates of mean 1, a repeat-versus-novel metric | **Stopped at Stage 0, H2 line closed.** No retry allowed. Claim untested |
 | H3 | Gates must be self-generated, without task labels or blocks (`gating_metacognition.md` Exp 1) | Not started, next |
 | H4 | Does schema consistency add anything beyond gradient interference? | **Stopped at Stage 0.** Claim untested |
+| H5 | Forgetting is mostly overwriting or mostly loss of access, by old-versus-new on one network | Preregistered, calibrating |
 
 Kill rules live in each preregistration. H1 failing its gate does not end the
 mission: record it and move to H2.
