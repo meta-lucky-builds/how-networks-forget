@@ -46,7 +46,7 @@ agent, starts here, then reads `docs/CHARTER.md`.
 
 ## In progress
 
-- Stage 0 of H2R (run 41754260090) and H4 (run 41754959933) on GitHub Actions, requested
+- Stage 0 of H2R (run 41754260090) and H4 on GitHub Actions, requested
   2026-11-04. On a pass, set the file under `.github/run-requests/` to `full` and push. On a
   failure, apply the preregistration's stop rule. Check with
   `gh run list -R meta-lucky-builds/clu`.

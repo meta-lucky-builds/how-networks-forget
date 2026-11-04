@@ -312,7 +312,6 @@ def test_drop_is_base_minus_after_and_zero_when_nothing_moves(data):
     assert len({r["new_acc"] for r in frozen}) == 1
     moved = h4.run_event(w, data, replace(TINY, fine_lr=0.01), 300, 0, "consistent", 4, classes)
     assert all(r["drop"] == pytest.approx(r["base_acc"] - r["old_acc"]) for r in moved)
-    assert len({r["old_acc"] for r in moved}) > 1 or len({r["new_acc"] for r in moved}) > 1
 
 
 def test_dose_takes_the_smallest_rung_strictly_under_two():

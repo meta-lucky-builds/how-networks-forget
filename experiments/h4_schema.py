@@ -618,7 +618,7 @@ def size_and_depth(rows):
     """Schema size and log steps to criterion, leaving out a column that does not vary."""
     columns = [np.array([r["n_old"] for r in rows], dtype=np.float64),
                np.log(np.array([r["schema_steps"] for r in rows], dtype=np.float64))]
-    return [c for c in columns if c.std() > 0.0]
+    return [c for c in columns if np.ptp(c) > 0.0]
 
 
 def adjusted_model(rows, seeds, res, extra=()):
