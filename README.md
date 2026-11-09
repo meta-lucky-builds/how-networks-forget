@@ -172,6 +172,15 @@ task on a later network with any key but "nothing".
 - **Results at larger budgets on CIFAR.** That sweep was cut to save compute, and given how the MLP's label moved with budget, it is
   the main open question.
 
+## Related work
+
+- [Knowledge Accumulation in Continually Learned Representations and the Issue of Feature Forgetting](https://arxiv.org/abs/2304.00933) (Hess et al., 2023) raises the same concern about reading retention from representations, with a different correction.
+- [Is a Linear Probe Evidence of a Linear Representation?](https://arxiv.org/abs/2610.22655) (Kutluozen et al., 15 Oct 2026) argues that probe accuracy is too permissive on its own, which is the motivation for this repo's never-trained-task control.
+- [When Forgetting is not Catastrophic](https://arxiv.org/abs/2610.08718) (Palit et al., 6 Oct 2026) separates a reversible loss of access from slow erosion, in associative memories and LLMs.
+- [Heads collapse, features stay](https://arxiv.org/abs/2512.07400) (Lanzillotta et al., 2025) and [Lost or Hidden?](https://arxiv.org/abs/2605.16374) (Filus et al., 2026) also separate recoverable from lost knowledge.
+
+I found no other forgetting study that scores the probe on never-trained tasks on the same network.
+
 ## Reproduce
 
 Python 3.10 or later. Results in `results/` were produced on cloud machines.
